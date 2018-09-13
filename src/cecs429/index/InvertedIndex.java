@@ -33,12 +33,11 @@ public class InvertedIndex implements Index
     public List<Posting> getPostings(String term)
     {
         List<Posting> results = new ArrayList<>();
-
-        for (int i = 0; i < mIndex.get(term).size(); i++)
-        {
-            results.add(new Posting(mIndex.get(term).get(i)));
+        if (mIndex.containsKey(term)) {
+            for (int i = 0; i < mIndex.get(term).size(); i++) {
+                results.add(new Posting(mIndex.get(term).get(i)));
+            }
         }
-
         return results;
     }
 

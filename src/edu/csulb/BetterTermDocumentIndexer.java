@@ -13,13 +13,17 @@ import cecs429.text.TokenProcessor;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Scanner;
 
 public class BetterTermDocumentIndexer {
 	public static void main(String[] args) throws IOException {
-		DocumentCorpus corpus = DirectoryCorpus.loadTextDirectory(Paths.get("").toAbsolutePath(), ".txt");
+		Path currentPath = Paths.get(System.getProperty("user.dir"));
+		Path corpusPath = Paths.get(currentPath.toString(), "corpora", "all-nps-sites");
+
+		DocumentCorpus corpus = DirectoryCorpus.loadTextDirectory(corpusPath, ".txt");
 		((DirectoryCorpus) corpus).registerFileDocumentFactory(".json", JsonFileDocument::loadJsonFileDocument);
 		Index index = indexCorpus(corpus) ;
 
