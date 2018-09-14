@@ -13,6 +13,7 @@ import java.util.List;
 public class PositionalInvertedIndex implements Index {
 
     private HashMap<String, ArrayList<Posting>> index = new HashMap<>();
+	private BasicTokenProcessor processor = new BasicTokenProcessor();
 
     public PositionalInvertedIndex() {
     }
@@ -42,7 +43,6 @@ public class PositionalInvertedIndex implements Index {
 
     public void addTerm(String term, int documentId, Reader document) {
         int positionCounter = 1, docIdIndex;
-        BasicTokenProcessor processor = new BasicTokenProcessor();
         // creating new instance of getTokens to avoid advancing the main's stream
         Iterator<String> iterator = (new EnglishTokenStream(document).getTokens().iterator());
 
