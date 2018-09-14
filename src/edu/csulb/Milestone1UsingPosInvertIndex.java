@@ -61,7 +61,7 @@ public class Milestone1UsingPosInvertIndex
                         for (Posting p : index.getPostings(word))
                         {
                             //System.out.println("Document ID " + p.getDocumentId());
-                            System.out.println("Document Title: " + corpus.getDocument(p.getDocumentId()).getTitle());
+                            System.out.println("Document Title: " + corpus.getDocument(p.getDocumentId()).getTitle() + " " + p.getPositions);
                         }
                         System.out.print("Enter term to search (or \"quit\" to exit): ");
                         word = processor.processToken(keyboard.next());
@@ -95,8 +95,8 @@ public class Milestone1UsingPosInvertIndex
         BasicTokenProcessor processor = new BasicTokenProcessor();
         Iterable<Document> itrDoc = corpus.getDocuments();
         // TODO: @Michael I'm going to use InvertedIndex for now, when you're ready, uncomment the line below or change to whatever you want to call it??
-        //PositionalInvertedIndex posInvertIndex = new PositionalInvertedIndex();
-        InvertedIndex invertIndex = new InvertedIndex();
+        PositionalInvertedIndex posInvertIndex = new PositionalInvertedIndex();
+        //InvertedIndex invertIndex = new InvertedIndex();
         for (Document doc : itrDoc)
         {
             Reader readDoc = doc.getContent();
@@ -105,7 +105,7 @@ public class Milestone1UsingPosInvertIndex
             for(String engTok : engTokens)
             {
                 String word = processor.processToken(engTok);
-                invertIndex.addTerm(word,doc.getId());
+                invertIndex.addTerm(word,doc.getId(), doc.getContent());
             }
             ets.close();
         }
