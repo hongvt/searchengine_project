@@ -110,6 +110,6 @@ public class Milestone1UsingPosInvertIndex
             ets.close();
         }
 
-        return invertIndex;
+        return posInvertIndex;
     }
 }
