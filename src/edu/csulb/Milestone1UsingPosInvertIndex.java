@@ -5,10 +5,10 @@ import cecs429.documents.Document;
 import cecs429.documents.DocumentCorpus;
 import cecs429.documents.JsonFileDocument;
 import cecs429.index.Index;
-import cecs429.index.InvertedIndex;
+import cecs429.index.PositionalInvertedIndex;
 import cecs429.index.Posting;
-import cecs429.text.BasicTokenProcessor;
 import cecs429.text.EnglishTokenStream;
+import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
 
 import java.io.File;
@@ -23,7 +23,7 @@ public class Milestone1UsingPosInvertIndex
     public static void main(String[] args) throws IOException
     {
         Scanner keyboard = new Scanner(System.in);
-        TokenProcessor processor = new BasicTokenProcessor();
+        TokenProcessor processor = new Milestone1TokenProcessor();
 
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
@@ -92,11 +92,10 @@ public class Milestone1UsingPosInvertIndex
 
     private static Index indexCorpus(DocumentCorpus corpus) throws IOException
     {
-        BasicTokenProcessor processor = new BasicTokenProcessor();
+        TokenProcessor processor = new Milestone1TokenProcessor();
         Iterable<Document> itrDoc = corpus.getDocuments();
-        // TODO: @Michael I'm going to use InvertedIndex for now, when you're ready, uncomment the line below or change to whatever you want to call it??
         PositionalInvertedIndex posInvertIndex = new PositionalInvertedIndex();
-        //InvertedIndex invertIndex = new InvertedIndex();
+
         for (Document doc : itrDoc)
         {
             Reader readDoc = doc.getContent();
@@ -105,7 +104,8 @@ public class Milestone1UsingPosInvertIndex
             for(String engTok : engTokens)
             {
                 String word = processor.processToken(engTok);
-                posInvertIndex.addTerm(word, doc.getId(), doc.getContent());
+                //posInvertIndex.addTerm(word, doc.getId(), doc.getContent());
+                posInvertIndex.addTerm(word, doc.getId(), readDoc);
             }
             ets.close();
         }

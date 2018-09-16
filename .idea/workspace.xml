@@ -2,6 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0bbfda8a-61d5-4cfe-9f2d-25f07ba9b7d3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/java.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/cecs429/text/Milestone1TokenProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libstemmer_java/MANIFEST" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libstemmer_java/README" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/Among.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/SnowballProgram.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/SnowballStemmer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/TestApp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/ext/englishStemmer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Project/cecs429/index/Posting.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Project/cecs429/index/Posting.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Project/cecs429/text/BasicTokenProcessor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Project/cecs429/text/BasicTokenProcessor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Project/cecs429/text/TokenProcessor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Project/cecs429/text/TokenProcessor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Project/edu/csulb/Milestone1UsingPosInvertIndex.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Project/edu/csulb/Milestone1UsingPosInvertIndex.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/text/BasicTokenProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/text/BasicTokenProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/text/TokenProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/text/TokenProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -40,41 +57,50 @@
     <session id="-200011843">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.open.time.1" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.1" value="2" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="6" />
+          <entry key="java" value="38" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="6" />
+          <entry key="JAVA" value="38" />
           <entry key="PLAIN_TEXT" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="1310" />
+          <entry key="java" value="2694" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1310" />
+          <entry key="JAVA" value="2693" />
+          <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
+      <usages-collector id="statistics.vcs.git.usages" />
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/csulb/Hw4UsingInvertedIndexer.java">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/text/Milestone1TokenProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="28" lean-forward="true" selection-end-line="74" />
+            <state relative-caret-position="675">
+              <caret line="45" column="5" lean-forward="true" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#375#376#0" expanded="true" />
+                <element signature="e#439#440#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -82,8 +108,32 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="86" column="13" lean-forward="true" selection-start-line="86" selection-start-column="13" selection-end-line="86" selection-end-column="13" />
+            <state relative-caret-position="371">
+              <caret line="107" column="65" selection-start-line="107" selection-start-column="65" selection-end-line="107" selection-end-column="65" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-94">
+              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="188">
+              <caret line="48" selection-start-line="48" selection-end-line="48" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -103,18 +153,28 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/cecs429/text/BasicTokenProcessor.java" />
         <option value="$PROJECT_DIR$/src/csulb/BetterTermDocumentIndexer.java" />
         <option value="$PROJECT_DIR$/src/edu/csulb/BetterTermDocumentIndexer.java" />
         <option value="$PROJECT_DIR$/src/cecs429/index/InvertedIndex.java" />
         <option value="$PROJECT_DIR$/src/edu/csulb/Hw4UsingInvertedIndexer.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/text/TokenProcessor.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/text/BasicTokenProcessor.java" />
+        <option value="$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/TestApp.java" />
+        <option value="$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/SnowballStemmer.java" />
+        <option value="$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/SnowballProgram.java" />
+        <option value="$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/ext/englishStemmer.java" />
+        <option value="$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/ext/dutchStemmer.java" />
+        <option value="$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/ext/danishStemmer.java" />
+        <option value="$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/ext/englishStemmer.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/text/Milestone1TokenProcessor.java" />
         <option value="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="y" value="23" />
     <option name="width" value="1680" />
-    <option name="height" value="1050" />
+    <option name="height" value="953" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -127,11 +187,6 @@
             <path>
               <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
               <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
-              <item name="corpora" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
@@ -153,32 +208,19 @@
             </path>
             <path>
               <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="cecs429" type="462c0819:PsiDirectoryNode" />
-              <item name="text" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="csulb" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536873159379" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537140761559" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -186,10 +228,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/corpora/moby-dick" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/corpora" />
       <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/corpora/moby-dick" />
+      <recent name="$PROJECT_DIR$/corpora" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -244,14 +286,44 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestApp (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="libstemmer_java.java.org.tartarus.snowball.TestApp" />
+      <module name="Project" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="libstemmer_java.java.org.tartarus.snowball.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.tartarus.snowball.TestApp" />
+      <module name="Project" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.tartarus.snowball.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Hw4UsingInvertedIndexer" />
       <item itemvalue="Application.BetterTermDocumentIndexer" />
       <item itemvalue="Application.Milestone1UsingPosInvertIndex" />
+      <item itemvalue="Application.TestApp" />
+      <item itemvalue="Application.TestApp (1)" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Milestone1UsingPosInvertIndex" />
+        <item itemvalue="Application.TestApp (1)" />
+        <item itemvalue="Application.TestApp" />
         <item itemvalue="Application.Hw4UsingInvertedIndexer" />
         <item itemvalue="Application.BetterTermDocumentIndexer" />
       </list>
@@ -283,17 +355,16 @@
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25885227" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26495728" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" weight="0.32959184" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32959184" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.37448978" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -301,6 +372,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32959184" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32959184" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32959184" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -327,13 +399,7 @@
     <entry file="file://$PROJECT_DIR$/src/cecs429/index/TermDocumentIndex.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/text/TokenProcessor.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/text/TokenStream.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/text/BasicTokenProcessor.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/csulb/TermDocumentIndexer.java">
@@ -348,16 +414,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="74" column="43" lean-forward="true" selection-start-line="74" selection-start-column="43" selection-end-line="74" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -394,15 +450,179 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/csulb/Hw4UsingInvertedIndexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="28" lean-forward="true" selection-end-line="74" />
+        <state>
+          <caret line="28" selection-end-line="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/text/BasicTokenProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="14" column="36" lean-forward="true" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
+          <folding>
+            <element signature="e#409#410#0" expanded="true" />
+            <element signature="e#436#437#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/text/TokenProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="42" lean-forward="true" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/libstemmer_java/java/org/tartarus/snowball/SnowballStemmer.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/libstemmer_java/java/org/tartarus/snowball/TestApp.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/libstemmer_java/java/org/tartarus/snowball/SnowballProgram.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/libstemmer_java/java/org/tartarus/snowball/ext/englishStemmer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="4" lean-forward="true" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/org/tartarus/snowball/Among.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/org/tartarus/snowball/TestApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-17" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/ext/dutchStemmer.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/SnowballStemmer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/SnowballProgram.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2878">
+          <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/Among.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/ext/englishStemmer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="45" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libstemmer_java/java/org/tartarus/snowball/TestApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="22" lean-forward="true" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/ext/swedishStemmer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/ext/danishStemmer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" selection-start-line="4" selection-end-line="5" selection-end-column="66" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/ext/dutchStemmer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/TestApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="49">
+          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/libstemmer_java/java/org/tartarus/snowball/ext/englishStemmer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="71" selection-start-line="9" selection-start-column="71" selection-end-line="9" selection-end-column="71" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/text/EnglishTokenStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="18" column="39" selection-start-line="18" selection-start-column="39" selection-end-line="18" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="48" selection-start-line="48" selection-end-line="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/text/Milestone1TokenProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="45" column="5" lean-forward="true" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#375#376#0" expanded="true" />
+            <element signature="e#439#440#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-94">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="86" column="13" lean-forward="true" selection-start-line="86" selection-start-column="13" selection-end-line="86" selection-end-column="13" />
+        <state relative-caret-position="371">
+          <caret line="107" column="65" selection-start-line="107" selection-start-column="65" selection-end-line="107" selection-end-column="65" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -470,6 +690,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
+          <last-edited>java</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

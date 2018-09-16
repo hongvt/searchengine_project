@@ -16,5 +16,14 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="java">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libstemmer_java/java" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
