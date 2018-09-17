@@ -41,10 +41,8 @@ public class PositionalInvertedIndex implements Index {
         return Collections.unmodifiableList(sortedVocab);
     }
 
-    public void addTerm(String term, int documentId, Reader document) {
-        int positionCounter = 1, docIdIndex;
-        // creating new instance of getTokens to avoid advancing the main's stream
-        Iterator<String> iterator = (new EnglishTokenStream(document).getTokens().iterator());
+    public void addTerm(String term, int documentId, int position) {
+        int docIdIndex;
 
         if (index.containsKey(term)) {
             if (index.get(term).get(index.get(term).size() - 1).getDocumentId() != documentId) {
@@ -58,15 +56,7 @@ public class PositionalInvertedIndex implements Index {
         // find the index at which the documentId parameter starts at
         for (docIdIndex = 0; docIdIndex < index.get(term).size(); docIdIndex++) {
             if (index.get(term).get(docIdIndex).getDocumentId() == documentId) {
-                break;
-            }
-        }
-        if (index.get(term).get(docIdIndex).getPositions().isEmpty()) {
-            while (iterator.hasNext()) {
-                if (term.equals(processor.processToken(iterator.next()))) {
-                    index.get(term).get(docIdIndex).getPositions().add(positionCounter);
-                }
-                positionCounter++;
+                index.get(term).get(docIdIndex).getPositions().add(position);
             }
         }
     }
