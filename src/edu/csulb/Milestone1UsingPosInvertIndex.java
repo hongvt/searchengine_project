@@ -44,14 +44,16 @@ public class Milestone1UsingPosInvertIndex {
                     currentPath = Paths.get(corpusFolder.toString(), files[Integer.parseInt(dir) - 1].getName());
                     DocumentCorpus corpus = DirectoryCorpus.loadTextDirectory(currentPath, ".txt");
                     ((DirectoryCorpus) corpus).registerFileDocumentFactory(".json", JsonFileDocument::loadJsonFileDocument);
+                    long startTime = System.currentTimeMillis();
                     Index index = indexCorpus(corpus);
-
+                    long endTime = System.currentTimeMillis();
+                    int numSeconds = ((int)((endTime - startTime) / 1000));
+                    System.out.println("Indexing took " + numSeconds + " seconds");
                     System.out.print("Enter term to search (or \"quit\" to exit): ");
                     String word = processor.processToken(keyboard.next());
 
                     while (!word.equals("quit")) {
                         for (Posting p : index.getPostings(word)) {
-                            //System.out.println("Document ID " + p.getDocumentId());
                             System.out.println("Document Title: " + corpus.getDocument(p.getDocumentId()).getTitle() + " " + p.getPositions());
                         }
                         System.out.print("Enter term to search (or \"quit\" to exit): ");
@@ -73,8 +75,6 @@ public class Milestone1UsingPosInvertIndex {
                 dir = processor.processToken(keyboard.next());
             }
         }
-
-
     }
 
     private static Index indexCorpus(DocumentCorpus corpus) throws IOException {
