@@ -1,20 +1,14 @@
 package cecs429.index;
 
-import cecs429.text.BasicTokenProcessor;
-import cecs429.text.EnglishTokenStream;
-
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class PositionalInvertedIndex implements Index {
 
     private HashMap<String, ArrayList<Posting>> index = new HashMap<>();
-    private BasicTokenProcessor processor = new BasicTokenProcessor();
 
     public PositionalInvertedIndex() {
     }
