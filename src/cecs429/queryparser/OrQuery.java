@@ -3,6 +3,7 @@ package cecs429.queryparser;
 import cecs429.index.Index;
 import cecs429.index.Posting;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,14 +20,14 @@ public class OrQuery implements QueryComponent {
 	
 	@Override
 	public List<Posting> getPostings(Index index) {
-		List<Posting> result = new List<>();
-		
+		List<Posting> result = new ArrayList<>();
+
+
+
 		// TODO: program the merge for an OrQuery, by gathering the postings of the composed QueryComponents and
 		// unioning the resulting postings.
-		results.addAll(index.getPostings())
-		for(QueryComponent component: components)
-			if(!index.getPostings().contains(component))
-				results.add(component.getPostings());
+
+
 		
 		// no dupes in sorted order
 		// result.sort()

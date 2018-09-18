@@ -21,11 +21,10 @@ public class AndQuery implements QueryComponent {
     public List<Posting> getPostings(Index index) {
         List<Posting> result = new ArrayList<>();
 
-
         for (int i = 0; i < mComponents.size(); i++) {
             for (int j = 0; j < index.getVocabulary().size(); j++) {
                 for (int k = 0; k < index.getPostings(index.getVocabulary().get(j)).size(); k++) {
-                    if (index.getPostings(index.getVocabulary().get(j)).contains(mComponents.get(i).getPostings(index))) {
+                    if (mComponents.get(i).getPostings(index).contains(index.getPostings(index.getVocabulary().get(j)).get(k))) {
                         result.add(new Posting(index.getPostings(index.getVocabulary().get(j)).get(k).getDocumentId()));
                     }
                 }
