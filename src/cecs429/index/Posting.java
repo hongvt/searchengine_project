@@ -20,6 +20,11 @@ public class Posting {
     }
 
     public List<Integer> getPositions() {
-        return positions;
+        return new ArrayList<>(positions);
+    }
+
+    public void addPosition(Integer pos)
+    {
+        positions.add(pos);
     }
 }
