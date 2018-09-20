@@ -1,14 +1,9 @@
 package cecs429.index;
 
-import cecs429.text.BasicTokenProcessor;
-import cecs429.text.EnglishTokenStream;
-
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class PositionalInvertedIndex implements Index {
@@ -54,7 +49,7 @@ public class PositionalInvertedIndex implements Index {
         // find the index at which the documentId parameter starts at
         for (int docIdIndex = 0; docIdIndex < index.get(term).size(); docIdIndex++) {
             if (index.get(term).get(docIdIndex).getDocumentId() == documentId) {
-                index.get(term).get(docIdIndex).addPosition(position);
+                index.get(term).get(docIdIndex).getPositions().add(position);
             }
         }
     }
