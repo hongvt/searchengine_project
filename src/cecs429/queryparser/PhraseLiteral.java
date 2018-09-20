@@ -30,7 +30,12 @@ public class PhraseLiteral implements QueryComponent {
 	
 	@Override
 	public List<Posting> getPostings(Index index) {
-		return null;
+
+		for(String x: mTerms){
+			for(Posting y: index.getPostings(x)){
+
+			}
+		}
 		// TODO: program this method. Retrieve the postings for the individual terms in the phrase,
 		// and positional merge them together.
 	}

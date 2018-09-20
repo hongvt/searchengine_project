@@ -20,20 +20,24 @@ public class AndQuery implements QueryComponent {
     @Override
     public List<Posting> getPostings(Index index) {
         List<Posting> result = new ArrayList<>();
+        List<Posting> list_one = mComponents.get(0).getPostings(index);
+        List<Posting> list_two = mComponents.get(1).getPostings(index);
+        int i = 0, j = 0;
 
-        for (int i = 0; i < mComponents.size(); i++) {
-            for (int j = 0; j < index.getVocabulary().size(); j++) {
-                for (int k = 0; k < index.getPostings(index.getVocabulary().get(j)).size(); k++) {
-                    if (mComponents.get(i).getPostings(index).contains(index.getPostings(index.getVocabulary().get(j)).get(k))) {
-                        result.add(new Posting(index.getPostings(index.getVocabulary().get(j)).get(k).getDocumentId()));
-                    }
-                }
+        while (true) {
+            if (i == list_one.size() || j == list_two.size())
+                return result;
+            else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
+                result.add(list_one.get(i));
+                i++;
+                j++;
+            } else {
+                if (list_one.get(i).getDocumentId() < list_two.get(j).getDocumentId())
+                    i++;
+                else
+                    j++;
             }
         }
-        // TODO: program the merge for an AndQuery, by gathering the postings of the composed QueryComponents and
-        // intersecting the resulting postings.
-
-        return result;
     }
 
     @Override
