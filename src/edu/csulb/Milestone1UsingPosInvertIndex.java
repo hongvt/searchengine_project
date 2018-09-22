@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Milestone1UsingPosInvertIndex {
-
     private static void printDirectoryList(Path corpusFolder)
     {
         System.out.println("Directories");
@@ -40,7 +39,8 @@ public class Milestone1UsingPosInvertIndex {
         while (!dir.equals("quit") && !dir.equals(":q"))
         {
             if (hasDirectory(corpusFolder, dir)) { return dir; }
-            System.out.print("\nEnter the name of the corpus to index (or \"quit\" to exit): ");
+            else { System.out.println("Please recheck spelling of directory"); }
+            System.out.print("Enter the name of the corpus to index (or \"quit\" to exit): ");
             dir = keyboard.nextLine();
         }
         return "quit";
@@ -62,6 +62,11 @@ public class Milestone1UsingPosInvertIndex {
 
     public static void main(String[] args) throws IOException
     {
+        /*String temp = "$" + "revive" + "$";
+        for (int i = 0; i < temp.length()-2; i++)
+        {
+            System.out.println(temp.substring(i,i+3));
+        }*/
         Scanner keyboard = new Scanner(System.in);
         TokenProcessor processor = new Milestone1TokenProcessor();
         Path currentPath = Paths.get(System.getProperty("user.dir"));
@@ -94,30 +99,24 @@ public class Milestone1UsingPosInvertIndex {
                         dir = words[1];
                         changeDirectory = true;
                     }
+                    else
+                    {
+                        System.out.println("Please recheck spelling of directory");
+                    }
                 }
                 else
                 {
                     if (words[0].equals(":stem"))
                     {
-                        if (words.length > 2)
+                        String[] stems = processor.processTokens(words[1]);
+                        for (int i = 0; i < stems.length; i++)
                         {
-                            System.out.println("Term to stem must be 1 word");
-                        }
-                        else
-                        {
-                            String query = "";
-                            for (int i = 1; i < words.length; i++) {
-                                query += (words[i] + "--");
-                            }
-                            String[] stems = processor.processTokens(query);
-                            for (int i = 0; i < stems.length; i++) {
-                                System.out.println(i + ":" + stems[i]);
-                            }
+                            System.out.println(i + ":" + stems[i]);
                         }
                     }
                     else if (words[0].equals(":vocab"))
                     {
-                        for (int i = 0; i < 1000; i ++)
+                        for (int i = 0; i < 1000; i++)
                         {
                             System.out.println(index.getVocabulary().get(i));
                         }
@@ -125,15 +124,20 @@ public class Milestone1UsingPosInvertIndex {
                     else
                     {
                         String[] stems = processor.processTokens(word);
-                        for (int i = 0; i < stems.length; i++) {
-                            for (Posting p : index.getPostings(stems[i])) {
+                        int j = 0;
+                        for (int i = 0; i < stems.length; i++)
+                        {
+                            for (Posting p : index.getPostings(stems[i]))
+                            {
                                 System.out.println("Document Title: " + corpus.getDocument(p.getDocumentId()).getTitle() + " " + p.getPositions());
+                                j++;
                             }
                         }
+                        System.out.println(j+" documents were found");
                     }
-                    System.out.print("Enter term to search (or \"quit\" to exit): ");
-                    word = keyboard.nextLine();
                 }
+                System.out.print("Enter term to search (or \"quit\" to exit): ");
+                word = keyboard.nextLine();
             }
             if (!word.equals(":q")) { //word must equal "quit" to go in here
                 if (!changeDirectory) {dir = getDirectoryName(keyboard, corpusFolder);}
@@ -145,7 +149,6 @@ public class Milestone1UsingPosInvertIndex {
         }
         keyboard.close();
     }
-
 
     private static Index indexCorpus(DocumentCorpus corpus) throws IOException {
         TokenProcessor processor = new Milestone1TokenProcessor();

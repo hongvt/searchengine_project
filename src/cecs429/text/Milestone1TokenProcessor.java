@@ -4,14 +4,13 @@ import libstemmer_java.java.org.tartarus.snowball.SnowballStemmer;
 import libstemmer_java.java.org.tartarus.snowball.ext.englishStemmer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * A BasicTokenProcessor creates terms from tokens by removing all non-alphanumeric characters from the token, and
  * converting it to all lowercase.
+ * The token must not have any whitespace
  */
 public class Milestone1TokenProcessor implements TokenProcessor {
     @Override

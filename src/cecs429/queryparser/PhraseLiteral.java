@@ -42,11 +42,12 @@ public class PhraseLiteral implements QueryComponent {
             } else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
                 k = 0;
                 while (true) {
-                    if (k == list_one.get(0).getPositions().size() || k == list_two.get(1).getPositions().size()) {
+                    if (k == list_one.get(i).getPositions().size() || k == list_two.get(j).getPositions().size()) {
                         break;
                     } else if (list_one.get(i).getPositions().get(k) + 1 == list_two.get(j).getPositions().get(k)) {
                         result.add(new Posting(list_one.get(i).getDocumentId()));
                         result.get(result.size() - 1).getPositions().add(list_one.get(i).getPositions().get(k));
+                        k++;
                     } else
                         k++;
                 }
