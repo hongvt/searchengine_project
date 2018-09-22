@@ -2,16 +2,56 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61512046-025b-4221-96cf-e133c8265c5a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/cecs429/queryparser/KGramIndex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/gson_2_8_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/searchengine_project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/index/PositionalInvertedIndex.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/index/PositionalInvertedIndex.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/Milestone1TokenProcessor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/Milestone1TokenProcessor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/edu/csulb/Milestone1UsingPosInvertIndex.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/searchengine_project/edu/csulb/Milestone1UsingPosInvertIndex.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/text/Milestone1TokenProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/text/Milestone1TokenProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/DirectoryCorpus$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/DirectoryCorpus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/Document.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/DocumentCorpus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/FileDocument.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/FileDocumentFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/JsonFileDocument$JsonArticle.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/JsonFileDocument.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/documents/TextFileDocument.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/index/Index.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/index/InvertedIndex.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/index/PositionalInvertedIndex.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/index/Posting.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/index/TermDocumentIndex.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/AndQuery.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/BooleanQueryParser$Literal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/BooleanQueryParser$StringBounds.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/BooleanQueryParser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/KGramIndex$KGram.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/KGramIndex.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/OrQuery.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/PhraseLiteral.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/QueryComponent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/TermLiteral.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/queryparser/WildcardLiteral.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/BasicTokenProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/EnglishTokenStream$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/EnglishTokenStream$EnglishTokenIterator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/EnglishTokenStream.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/Milestone1TokenProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/TokenProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/cecs429/text/TokenStream.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/edu/csulb/BetterTermDocumentIndexer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/edu/csulb/Hw4UsingInvertedIndexer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/edu/csulb/Milestone1UsingPosInvertIndex.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/edu/csulb/TermDocumentIndexer$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/edu/csulb/TermDocumentIndexer$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/edu/csulb/TermDocumentIndexer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/libstemmer_java/MANIFEST" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/libstemmer_java/README" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/libstemmer_java/java/org/tartarus/snowball/Among.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/libstemmer_java/java/org/tartarus/snowball/SnowballProgram.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/libstemmer_java/java/org/tartarus/snowball/SnowballStemmer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/libstemmer_java/java/org/tartarus/snowball/TestApp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/searchengine_project/libstemmer_java/java/org/tartarus/snowball/ext/englishStemmer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/queryparser/BooleanQueryParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/queryparser/BooleanQueryParser.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -53,32 +93,42 @@
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
     </session>
+    <session id="-1480516458">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="java" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JAVA" value="2" />
+          <entry key="Scratch" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="747">
-              <caret line="59" column="9" lean-forward="true" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
+            <state relative-caret-position="374">
+              <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/QueryComponent.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="12" column="7" lean-forward="true" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1950">
-              <caret line="130" column="28" selection-start-line="130" selection-start-column="28" selection-end-line="130" selection-end-column="28" />
+            <state relative-caret-position="136">
+              <caret line="8" column="26" lean-forward="true" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -86,17 +136,39 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/KGramIndex.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/QueryComponent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="106" column="47" lean-forward="true" selection-start-line="106" selection-start-column="47" selection-end-line="106" selection-end-column="47" />
+            <state relative-caret-position="136">
+              <caret line="10" column="7" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1054">
+              <caret line="62" column="27" selection-start-line="62" selection-start-column="23" selection-end-line="62" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#942#943#0" expanded="true" />
-                <element signature="e#978#979#0" expanded="true" />
-                <element signature="e#1015#1016#0" expanded="true" />
-                <element signature="e#1047#1048#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/documents/Document.java">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/KGramIndex.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="864">
+              <caret line="106" column="47" selection-start-line="106" selection-start-column="47" selection-end-line="106" selection-end-column="47" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -105,31 +177,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/BooleanQueryParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-806">
-              <caret line="34" column="5" lean-forward="true" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#235#236#0" expanded="true" />
-                <element signature="e#262#263#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/AndQuery.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="39" column="9" lean-forward="true" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
+            <state relative-caret-position="477">
+              <caret line="177" column="9" selection-start-line="177" selection-start-column="9" selection-end-line="177" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -137,7 +186,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
+            <state relative-caret-position="255">
               <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
             </state>
           </provider>
@@ -146,7 +195,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
+            <state relative-caret-position="595">
               <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
             </state>
           </provider>
@@ -160,6 +209,11 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>main</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -176,15 +230,18 @@
         <option value="$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java" />
         <option value="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" />
         <option value="$PROJECT_DIR$/src/cecs429/queryparser/KGramIndex.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/queryparser/BooleanQueryParser.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1680" />
-    <option name="height" value="1050" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="232" />
+    <option name="y" value="-38" />
+    <option name="width" value="2736" />
+    <option name="height" value="1824" />
   </component>
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="PackagesPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -221,16 +278,62 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="searchengine_project" type="58d84e3e:PackageViewProjectNode" />
+              <item name="searchengine_project" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="searchengine_project" type="58d84e3e:PackageViewProjectNode" />
+              <item name="searchengine_project" type="616d4139:PackageViewModuleNode" />
+              <item name="cecs429" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="searchengine_project" type="58d84e3e:PackageViewProjectNode" />
+              <item name="searchengine_project" type="616d4139:PackageViewModuleNode" />
+              <item name="cecs429" type="1f31426a:PackageElementNode" />
+              <item name="documents" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="searchengine_project" type="58d84e3e:PackageViewProjectNode" />
+              <item name="searchengine_project" type="616d4139:PackageViewModuleNode" />
+              <item name="cecs429" type="1f31426a:PackageElementNode" />
+              <item name="index" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="searchengine_project" type="58d84e3e:PackageViewProjectNode" />
+              <item name="searchengine_project" type="616d4139:PackageViewModuleNode" />
+              <item name="cecs429" type="1f31426a:PackageElementNode" />
+              <item name="queryparser" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="searchengine_project" type="58d84e3e:PackageViewProjectNode" />
+              <item name="searchengine_project" type="616d4139:PackageViewModuleNode" />
+              <item name="edu.csulb" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="searchengine_project" type="58d84e3e:PackageViewProjectNode" />
+              <item name="searchengine_project" type="616d4139:PackageViewModuleNode" />
+              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
       <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537647417601" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537649249027" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gson-2.8.5.jar!/" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -279,10 +382,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <frame x="66" y="-6" width="1309" height="925" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2802198" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25819343" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -291,7 +394,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32959184" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32871535" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -299,7 +402,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32959184" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32871535" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -351,16 +454,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
+        <state relative-caret-position="68">
           <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -372,59 +468,82 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/AndQuery.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="39" column="9" lean-forward="true" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
+        <state relative-caret-position="544">
+          <caret line="39" column="9" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
+        <state relative-caret-position="255">
           <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java">
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="747">
-          <caret line="59" column="9" lean-forward="true" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/QueryComponent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="12" column="7" lean-forward="true" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/BooleanQueryParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-806">
-          <caret line="34" column="5" lean-forward="true" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
+        <state relative-caret-position="595">
+          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1950">
-          <caret line="130" column="28" selection-start-line="130" selection-start-column="28" selection-end-line="130" selection-end-column="28" />
+        <state relative-caret-position="1054">
+          <caret line="62" column="27" selection-start-line="62" selection-start-column="23" selection-end-line="62" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/documents/Document.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/KGramIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="106" column="47" lean-forward="true" selection-start-line="106" selection-start-column="47" selection-end-line="106" selection-end-column="47" />
+        <state relative-caret-position="864">
+          <caret line="106" column="47" selection-start-line="106" selection-start-column="47" selection-end-line="106" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#942#943#0" expanded="true" />
-            <element signature="e#978#979#0" expanded="true" />
-            <element signature="e#1015#1016#0" expanded="true" />
-            <element signature="e#1047#1048#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/QueryComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="10" column="7" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/BooleanQueryParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="477">
+          <caret line="177" column="9" selection-start-line="177" selection-start-column="9" selection-end-line="177" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="26" lean-forward="true" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -493,6 +612,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
+          <last-edited>gson-2.8.5</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
