@@ -156,7 +156,7 @@ public class BooleanQueryParser {
                         new StringBounds(startIndex + 1, lengthOut),
                         new PhraseLiteral(subquery.substring(startIndex + 1, startIndex + 1 + lengthOut)));
 
-            } else {    // else there is still another component infront of the PhraseLiteral
+            } else {    // else there is still another component in front of the PhraseLiteral
                 lengthOut = nextDoubleQuote - startIndex + 1;
                 return new Literal(
                         new StringBounds(startIndex + 1, lengthOut),

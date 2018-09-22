@@ -17,6 +17,8 @@ public class PhraseLiteral implements QueryComponent {
     /**
      * Constructs a PhraseLiteral with the given individual phrase terms.
      */
+
+
     public PhraseLiteral(List<String> terms) {
         mTerms.addAll(terms);
     }
@@ -28,11 +30,7 @@ public class PhraseLiteral implements QueryComponent {
         mTerms.addAll(Arrays.asList(terms.split(" ")));
     }
 
-    @Override
-    public List<Posting> getPostings(Index index) {
-
-        List<Posting> list_one = index.getPostings(mTerms.get(0));
-        List<Posting> list_two = index.getPostings(mTerms.get(1));
+    private List<Posting> postIntersection(List<Posting> list_one, List<Posting> list_two) {
         List<Posting> result = new ArrayList<>();
         int i = 0, j = 0, k;
 
@@ -45,8 +43,8 @@ public class PhraseLiteral implements QueryComponent {
                     if (k == list_one.get(i).getPositions().size() || k == list_two.get(j).getPositions().size()) {
                         break;
                     } else if (list_one.get(i).getPositions().get(k) + 1 == list_two.get(j).getPositions().get(k)) {
-                        result.add(new Posting(list_one.get(i).getDocumentId()));
-                        result.get(result.size() - 1).getPositions().add(list_one.get(i).getPositions().get(k));
+                        result.add(new Posting(list_one.get(j).getDocumentId()));
+                        result.get(result.size() - 1).getPositions().add(list_one.get(j).getPositions().get(k));
                         k++;
                     } else
                         k++;
@@ -58,6 +56,21 @@ public class PhraseLiteral implements QueryComponent {
                     j++;
             }
         }
+    }
+
+    @Override
+    public List<Posting> getPostings(Index index) {
+        List<List<Posting>> postingList = new ArrayList<>();
+
+        for (String x : mTerms)
+            postingList.add(index.getPostings(x));
+
+        List<Posting> result = postingList.get(0);
+
+        for (int i = 1; i < postingList.size(); i++)
+            result = postIntersection(result, postingList.get(i));
+
+        return result;
         // TODO: program this method. Retrieve the postings for the individual terms in the phrase,
         // and positional merge them together.
     }
