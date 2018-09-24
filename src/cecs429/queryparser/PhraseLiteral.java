@@ -17,6 +17,8 @@ public class PhraseLiteral implements QueryComponent {
     /**
      * Constructs a PhraseLiteral with the given individual phrase terms.
      */
+
+
     public PhraseLiteral(List<String> terms) {
         mTerms.addAll(terms);
     }
@@ -28,28 +30,41 @@ public class PhraseLiteral implements QueryComponent {
         mTerms.addAll(Arrays.asList(terms.split(" ")));
     }
 
-    @Override
-    public List<Posting> getPostings(Index index) {
-
-        List<Posting> list_one = index.getPostings(mTerms.get(0));
-        List<Posting> list_two = index.getPostings(mTerms.get(1));
+    private List<Posting> positionMerge(List<Posting> list_one, List<Posting> list_two) {
         List<Posting> result = new ArrayList<>();
-        int i = 0, j = 0, k;
+        int i = 0, j = 0, k, m;
 
+        // first loop attempts to find the indexes where the document id's match
         while (true) {
-            if (i == list_one.size() || j == list_two.size()) {
+            if (i >= list_one.size() || j >= list_two.size())
                 return result;
-            } else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
+            else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
+                // when matched we attempt to find any positions that are off by 1 and add them accordingly
                 k = 0;
+                m = 0;
                 while (true) {
-                    if (k == list_one.get(i).getPositions().size() || k == list_two.get(j).getPositions().size()) {
+                    if (k >= list_one.get(i).getPositions().size() || m >= list_two.get(j).getPositions().size()) {
+                        i++;
+                        j++;
                         break;
-                    } else if (list_one.get(i).getPositions().get(k) + 1 == list_two.get(j).getPositions().get(k)) {
-                        result.add(new Posting(list_one.get(i).getDocumentId()));
-                        result.get(result.size() - 1).getPositions().add(list_one.get(i).getPositions().get(k));
+                    } else if (list_one.get(i).getPositions().get(k) + 1 == list_two.get(j).getPositions().get(m)) {
+                        // check if empty first to avoid null pointer exception
+                        if (result.isEmpty()) {
+                            result.add(new Posting(list_two.get(j).getDocumentId()));
+                            result.get(0).getPositions().add(list_two.get(j).getPositions().get(m));
+                        } else if (result.get(result.size() - 1).getDocumentId() == list_two.get(j).getDocumentId()) {
+                            result.get(result.size() - 1).getPositions().add(list_two.get(j).getPositions().get(m));
+                        } else {
+                            result.add(new Posting(list_two.get(j).getDocumentId()));
+                            result.get(result.size() - 1).getPositions().add(list_two.get(j).getPositions().get(m));
+                        }
                         k++;
-                    } else
-                        k++;
+                    } else {
+                        if (list_one.get(i).getPositions().get(k) + 1 < list_two.get(j).getPositions().get(m))
+                            k++;
+                        else
+                            m++;
+                    }
                 }
             } else {
                 if (list_one.get(i).getDocumentId() < list_two.get(j).getDocumentId())
@@ -58,6 +73,21 @@ public class PhraseLiteral implements QueryComponent {
                     j++;
             }
         }
+    }
+
+    @Override
+    public List<Posting> getPostings(Index index) {
+        List<List<Posting>> postingList = new ArrayList<>();
+
+        for (String x : mTerms)
+            postingList.add(index.getPostings(x));
+
+        List<Posting> result = postingList.get(0);
+
+        for (int i = 1; i < postingList.size(); i++)
+            result = positionMerge(result, postingList.get(i));
+
+        return result;
         // TODO: program this method. Retrieve the postings for the individual terms in the phrase,
         // and positional merge them together.
     }

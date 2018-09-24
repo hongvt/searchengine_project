@@ -17,12 +17,9 @@ public class AndQuery implements QueryComponent {
         mComponents = components;
     }
 
-    @Override
-    public List<Posting> getPostings(Index index) {
-        List<Posting> result = new ArrayList<>();
-        List<Posting> list_one = mComponents.get(0).getPostings(index);
-        List<Posting> list_two = mComponents.get(1).getPostings(index);
+    private List<Posting> andMerge(List<Posting> list_one, List<Posting> list_two){
         int i = 0, j = 0;
+        List<Posting> result = new ArrayList<>();
 
         while (true) {
             if (i == list_one.size() || j == list_two.size())
@@ -38,6 +35,21 @@ public class AndQuery implements QueryComponent {
                     j++;
             }
         }
+    }
+
+    @Override
+    public List<Posting> getPostings(Index index) {
+        List<List<Posting>> postingList = new ArrayList<>();
+
+        for (QueryComponent x : mComponents)
+            postingList.add(x.getPostings(index));
+
+        List<Posting> result = postingList.get(0);
+
+        for (int i = 1; i < postingList.size(); i++)
+            result = andMerge(result, postingList.get(i));
+
+        return result;
     }
 
     @Override

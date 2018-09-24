@@ -143,21 +143,40 @@ public class BooleanQueryParser {
         while (subquery.charAt(startIndex) == ' ') {
             ++startIndex;
         }
-
+        char quoteCheck = subquery.substring(startIndex).charAt(0);
         // Locate the next space to find the end of this literal.
-        int nextSpace = subquery.indexOf(' ', startIndex);
-        if (nextSpace < 0) {
-            // No more literals in this subquery.
-            lengthOut = subLength - startIndex;
+
+        // check to see if first character of the substring is a " , indicating a phrase literal
+        if (quoteCheck == '\"') {
+            // find the index of the ending "
+            int nextDoubleQuote = subquery.indexOf('"', startIndex + 1);
+            // PhraseLiteral is the last component in the substring
+            if (nextDoubleQuote + 1 == subquery.length()) {
+                lengthOut = (subLength - 1) - (startIndex + 1);
+            } else {    // else there is still another component in front of the PhraseLiteral
+                lengthOut = (nextDoubleQuote - 1) - startIndex + 1;
+            }
+
+            // This is a phrase literal containing multiple terms
+            return new Literal(
+                    new StringBounds(startIndex + 1, lengthOut),
+                    new PhraseLiteral(subquery.substring(startIndex + 1, startIndex + 1 + lengthOut)));
         } else {
-            lengthOut = nextSpace - startIndex;
+            int nextSpace = subquery.indexOf(' ', startIndex);
+
+            if (nextSpace < 0) {
+                // No more literals in this subquery.
+                lengthOut = subLength - startIndex;
+            } else {
+                lengthOut = nextSpace - startIndex;
+            }
+
+            // This is a term literal containing a single term.
+            return new Literal(
+                    new StringBounds(startIndex, lengthOut),
+                    new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
         }
 
-        // This is a term literal containing a single term.
-        return new Literal(
-                new StringBounds(startIndex, lengthOut),
-                new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
-		
 		/*
 		TODO:
 		Instead of assuming that we only have single-term literals, modify this method so it will create a PhraseLiteral

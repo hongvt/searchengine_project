@@ -2,6 +2,7 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,8 @@ public class OrQuery implements QueryComponent {
         mComponents = components;
     }
 
-    @Override
-    public List<Posting> getPostings(Index index) {
-
+    private List<Posting> orMerge(List<Posting> list_one, List<Posting> list_two){
         List<Posting> result = new ArrayList<>();
-        List<Posting> list_one = mComponents.get(0).getPostings(index);
-        List<Posting> list_two = mComponents.get(1).getPostings(index);
         int i = 0, j = 0;
 
         while (true) {
@@ -43,6 +40,21 @@ public class OrQuery implements QueryComponent {
                 }
             }
         }
+    }
+    @Override
+    public List<Posting> getPostings(Index index) {
+        List<List<Posting>> postingList = new ArrayList<>();
+
+        for (QueryComponent x : mComponents)
+            postingList.add(x.getPostings(index));
+
+        List<Posting> result = postingList.get(0);
+
+        for (int i = 1; i < postingList.size(); i++)
+            result = orMerge(result, postingList.get(i));
+
+        return result;
+
     }
 
     @Override
