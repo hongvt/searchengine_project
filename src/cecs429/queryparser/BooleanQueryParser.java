@@ -146,24 +146,24 @@ public class BooleanQueryParser {
         char quoteCheck = subquery.substring(startIndex).charAt(0);
         // Locate the next space to find the end of this literal.
 
-
+        // check to see if first character of the substring is a " , indicating a phrase literal
         if (quoteCheck == '\"') {
+            // find the index of the ending "
             int nextDoubleQuote = subquery.indexOf('"', startIndex + 1);
             // PhraseLiteral is the last component in the substring
-            if (nextDoubleQuote < 0) {
+            if (nextDoubleQuote + 1 == subquery.length()) {
                 lengthOut = (subLength - 1) - (startIndex + 1);
-                return new Literal(
-                        new StringBounds(startIndex + 1, lengthOut),
-                        new PhraseLiteral(subquery.substring(startIndex + 1, startIndex + 1 + lengthOut)));
-
             } else {    // else there is still another component in front of the PhraseLiteral
-                lengthOut = nextDoubleQuote - startIndex + 1;
-                return new Literal(
-                        new StringBounds(startIndex + 1, lengthOut),
-                        new PhraseLiteral(subquery.substring(startIndex + 1, startIndex + 1 + lengthOut)));
+                lengthOut = (nextDoubleQuote - 1) - startIndex + 1;
             }
+
+            // This is a phrase literal containing multiple terms
+            return new Literal(
+                    new StringBounds(startIndex + 1, lengthOut),
+                    new PhraseLiteral(subquery.substring(startIndex + 1, startIndex + 1 + lengthOut)));
         } else {
             int nextSpace = subquery.indexOf(' ', startIndex);
+
             if (nextSpace < 0) {
                 // No more literals in this subquery.
                 lengthOut = subLength - startIndex;
