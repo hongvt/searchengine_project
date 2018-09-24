@@ -14,8 +14,12 @@ import cecs429.text.TokenProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class Milestone1UsingPosInvertIndex {
@@ -62,12 +66,61 @@ public class Milestone1UsingPosInvertIndex {
 
     public static void main(String[] args) throws IOException
     {
-        /*String temp = "$" + "revive" + "$";
-        for (int i = 0; i < temp.length()-2; i++)
+        /*String wildcard = "fi*se*th";
+        HashMap kGramIndex = new HashMap<String, List<String>>();
+        ArrayList<String> middle = new ArrayList<>();
+        boolean isLeading = false;
+        boolean isTrailing = false;
+
+        String temp = "$" + wildcard + "$";
+
+        if (wildcard.charAt(0) == '*') //leading wildcard ex. *q
         {
-            System.out.println(temp.substring(i,i+3));
-        }*/
-        Scanner keyboard = new Scanner(System.in);
+            isLeading = true;
+            temp = temp.substring(1);
+            System.out.println("leading: "+temp);
+        }
+        if (wildcard.charAt(wildcard.length()-1) == '*') //trailing wildcard ex. q*
+        {
+            isTrailing = true;
+            temp = temp.substring(0,temp.length()-1);
+            System.out.println("trailing: "+temp);
+        }
+        System.out.println("temp: "+temp);
+        String[] grams = temp.split("\\*");
+        for (int i = 0; i < grams.length; i++)
+        {
+            if (!grams[i].equals(""))
+            {
+                if (isLeading)
+                {
+                    kGramIndex.put("*"+grams[i], new ArrayList<>());
+                    if (i != grams.length-1 || isTrailing)
+                    {
+                        kGramIndex.put(grams[i]+"*", new ArrayList<>());
+                    }
+                }
+                else
+                {
+                    if (i != 0)
+                    {
+                        kGramIndex.put("*"+grams[i], new ArrayList<>());
+                    }
+                    if ((i != grams.length-1 && !isTrailing) || (i == 0 || isTrailing))
+                    {
+                        kGramIndex.put(grams[i]+"*", new ArrayList<>());
+                    }
+                }
+            }
+        }
+        System.out.println(kGramIndex.keySet());*/
+        String component = "$fir";
+        for (int i = 0; i < component.length() - 2; i++)
+        {
+            System.out.println(component.substring(i, i+3));
+        }
+
+        /*Scanner keyboard = new Scanner(System.in);
         TokenProcessor processor = new Milestone1TokenProcessor();
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
@@ -147,7 +200,7 @@ public class Milestone1UsingPosInvertIndex {
                 dir = "quit";
             }
         }
-        keyboard.close();
+        keyboard.close();*/
     }
 
     private static Index indexCorpus(DocumentCorpus corpus) throws IOException {
