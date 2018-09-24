@@ -30,7 +30,7 @@ public class PhraseLiteral implements QueryComponent {
         mTerms.addAll(Arrays.asList(terms.split(" ")));
     }
 
-    private List<Posting> postIntersection(List<Posting> list_one, List<Posting> list_two) {
+    private List<Posting> positionMerge(List<Posting> list_one, List<Posting> list_two) {
         List<Posting> result = new ArrayList<>();
         int i = 0, j = 0, k, m;
 
@@ -85,7 +85,7 @@ public class PhraseLiteral implements QueryComponent {
         List<Posting> result = postingList.get(0);
 
         for (int i = 1; i < postingList.size(); i++)
-            result = postIntersection(result, postingList.get(i));
+            result = positionMerge(result, postingList.get(i));
 
         return result;
         // TODO: program this method. Retrieve the postings for the individual terms in the phrase,
