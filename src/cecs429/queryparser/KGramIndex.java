@@ -3,10 +3,11 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+import cecs429.text.TokenProcessor;
+
 import java.util.*;
 
-public class KGramIndex implements QueryComponent
-{
+public class KGramIndex implements QueryComponent {
     /**
      * Key is the kgram
      * Value is the list of vocab words that match that Key kgram
@@ -76,39 +77,29 @@ public class KGramIndex implements QueryComponent
         }
     }*/
 
-    public KGramIndex (String term)
-    {
+    public KGramIndex(String term) {
         wildcard = term;
         kGramIndex = new HashMap<String, List<String>>();
     }
 
 
-
     @Override
-    public List<Posting> getPostings(Index index)
-    {
+    public List<Posting> getPostings(Index index, TokenProcessor processor) {
         String temp = "$" + wildcard + "$";
         String[] components = temp.split("\\*");
         ArrayList<String> grams = new ArrayList<>();
 
-        for (int i = 0; i < components.length; i++)
-        {
-            if (!components[i].equals(""))
-            {
-                if (components[i].length() == 1 || components[i].length() == 2 || components[i].length() == 3)
-                {
+        for (int i = 0; i < components.length; i++) {
+            if (!components[i].equals("")) {
+                if (components[i].length() == 1 || components[i].length() == 2 || components[i].length() == 3) {
                     grams.add(components[i]);
-                }
-                else
-                {
-                    for (int j = 0; j < components[i].length()-2; j++)
-                    {
-                        grams.add(components[i].substring(j, j+3));
+                } else {
+                    for (int j = 0; j < components[i].length() - 2; j++) {
+                        grams.add(components[i].substring(j, j + 3));
                     }
                 }
             }
         }
-
 
 
         return null;

@@ -2,6 +2,7 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+import cecs429.text.TokenProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class AndQuery implements QueryComponent {
         mComponents = components;
     }
 
-    private List<Posting> andMerge(List<Posting> list_one, List<Posting> list_two){
+    private List<Posting> andMerge(List<Posting> list_one, List<Posting> list_two) {
         int i = 0, j = 0;
         List<Posting> result = new ArrayList<>();
 
@@ -25,7 +26,7 @@ public class AndQuery implements QueryComponent {
             if (i == list_one.size() || j == list_two.size())
                 return result;
             else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
-                result.add(list_one.get(i));
+                result.add(new Posting(list_one.get(i).getDocumentId()));
                 i++;
                 j++;
             } else {
@@ -38,11 +39,10 @@ public class AndQuery implements QueryComponent {
     }
 
     @Override
-    public List<Posting> getPostings(Index index) {
+    public List<Posting> getPostings(Index index, TokenProcessor processor) {
         List<List<Posting>> postingList = new ArrayList<>();
-
         for (QueryComponent x : mComponents)
-            postingList.add(x.getPostings(index));
+            postingList.add(x.getPostings(index, processor));
 
         List<Posting> result = postingList.get(0);
 

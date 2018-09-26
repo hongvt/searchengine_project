@@ -3,11 +3,15 @@ package cecs429.queryparser;
 import java.util.ArrayList;
 import java.util.List;
 
+import cecs429.text.Milestone1TokenProcessor;
+
 /**
  * Parses boolean queries according to the base requirements of the CECS 429 project.
  * Does not handle phrase queries, NOT queries, NEAR queries, or wildcard queries... yet.
  */
 public class BooleanQueryParser {
+    private Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
+
     /**
      * Identifies a portion of a string with a starting index and a length.
      */
@@ -150,17 +154,11 @@ public class BooleanQueryParser {
         if (quoteCheck == '\"') {
             // find the index of the ending "
             int nextDoubleQuote = subquery.indexOf('"', startIndex + 1);
-            // PhraseLiteral is the last component in the substring
-            if (nextDoubleQuote + 1 == subquery.length()) {
-                lengthOut = (subLength - 1) - (startIndex + 1);
-            } else {    // else there is still another component in front of the PhraseLiteral
-                lengthOut = (nextDoubleQuote - 1) - startIndex + 1;
-            }
-
+            System.out.println(subquery.substring(startIndex + 1, nextDoubleQuote));
             // This is a phrase literal containing multiple terms
             return new Literal(
-                    new StringBounds(startIndex + 1, lengthOut),
-                    new PhraseLiteral(subquery.substring(startIndex + 1, startIndex + 1 + lengthOut)));
+                    new StringBounds(startIndex + 1, nextDoubleQuote),
+                    new PhraseLiteral(subquery.substring(startIndex + 1, nextDoubleQuote)));
         } else {
             int nextSpace = subquery.indexOf(' ', startIndex);
 
@@ -171,10 +169,15 @@ public class BooleanQueryParser {
                 lengthOut = nextSpace - startIndex;
             }
 
-            // This is a term literal containing a single term.
-            return new Literal(
-                    new StringBounds(startIndex, lengthOut),
-                    new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
+            if (subquery.substring(startIndex, startIndex + lengthOut).contains("*")) {
+                return new Literal(
+                        new StringBounds(startIndex, lengthOut),
+                        new WildcardLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
+            } else {
+                return new Literal(
+                        new StringBounds(startIndex, lengthOut),
+                        new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
+            }
         }
 
 		/*

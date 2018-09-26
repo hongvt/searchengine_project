@@ -27,4 +27,10 @@ public class Posting {
     {
         positions.add(pos);
     }
+
+    @Override
+    public String toString(){
+
+        return mDocumentId + "-> " + positions.toString();
+    }
 }
