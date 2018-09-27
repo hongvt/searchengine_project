@@ -32,10 +32,10 @@ public class Posting {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        /*if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;*/
         Posting posting = (Posting) o;
-        if (this.positions.size() == posting.positions.size())
+        /*if (this.positions.size() == posting.positions.size())
         {
             for (int i = 0; i < this.positions.size(); i++)
             {
@@ -44,7 +44,7 @@ public class Posting {
                     return false;
                 }
             }
-        }
+        }*/
         return mDocumentId == posting.mDocumentId;
     }
 

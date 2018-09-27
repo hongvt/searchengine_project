@@ -106,25 +106,12 @@ public class Milestone1UsingPosInvertIndex {
                         }
                     } else //TODO:: ADD BOOLEAN QUERY PARSER HERE
                     {
-
                         BooleanQueryParser pa = new BooleanQueryParser();
                         QueryComponent c = pa.parseQuery(word);
-                        System.out.println("posting size: " + c.getPostings(index, processor).size());
-                        for (Posting x : c.getPostings(index, processor)) {
+                        System.out.println("posting size: " + c.getPostings(index).size());
+                        for (Posting x : c.getPostings(index)) {
                             System.out.println(x.getDocumentId() + " " + x.getPositions());
                         }
-                        /*
-                        String[] stems = processor.processTokens(word);
-                        int j = 0;
-                        for (int i = 0; i < stems.length; i++)
-                        {
-                            for (Posting p : index.getPostings(stems[i]))
-                            {
-                                System.out.println("Document Title: " + corpus.getDocument(p.getDocumentId()).getTitle() + " " + p.getPositions());
-                                j++;
-                            }
-                        }
-                        System.out.println(j+" documents were found");*/
                     }
                 }
                 System.out.print("Enter term to search (or \"quit\" to exit): ");

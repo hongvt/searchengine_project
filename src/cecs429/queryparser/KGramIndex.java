@@ -27,7 +27,7 @@ public class KGramIndex implements QueryComponent {
     }
 
     @Override
-    public List<Posting> getPostings(Index index, TokenProcessor processor)
+    public List<Posting> getPostings(Index index)
     {
         ArrayList<Posting> orPosts = new ArrayList<>();
         String temp = wildcard;

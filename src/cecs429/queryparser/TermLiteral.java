@@ -5,6 +5,7 @@ import cecs429.index.Posting;
 import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 import libstemmer_java.java.org.tartarus.snowball.SnowballStemmer;
 import libstemmer_java.java.org.tartarus.snowball.ext.englishStemmer;
@@ -14,7 +15,6 @@ import libstemmer_java.java.org.tartarus.snowball.ext.englishStemmer;
  */
 public class TermLiteral implements QueryComponent {
     private String mTerm;
-    private SnowballStemmer snowballStemmer = new englishStemmer();
 
     public TermLiteral(String term) {
         mTerm = term;
@@ -25,13 +25,21 @@ public class TermLiteral implements QueryComponent {
     }
 
     @Override
-    public List<Posting> getPostings(Index index, TokenProcessor processor) {
-        snowballStemmer.setCurrent(processor.processToken(mTerm));
+    public List<Posting> getPostings(Index index) {
+        Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
 
-        if(snowballStemmer.stem())
-            return index.getPostings(snowballStemmer.getCurrent());
+        String[] stemmedStuff = processor.processTokens(mTerm);
 
-        return null;
+        ArrayList<QueryComponent> words = new ArrayList<>();
+        if (stemmedStuff.length == 1)
+        {
+            return index.getPostings(stemmedStuff[0]);
+        }
+        for(int i = 0; i < stemmedStuff.length; i++)
+        {
+            words.add(new TermLiteral(stemmedStuff[i]));
+        }
+        return (new OrQuery(words)).getPostings(index);
     }
 
     @Override

@@ -39,10 +39,10 @@ public class AndQuery implements QueryComponent {
     }
 
     @Override
-    public List<Posting> getPostings(Index index, TokenProcessor processor) {
+    public List<Posting> getPostings(Index index) {
         List<List<Posting>> postingList = new ArrayList<>();
         for (QueryComponent x : mComponents)
-            postingList.add(x.getPostings(index, processor));
+            postingList.add(x.getPostings(index));
 
         List<Posting> result = postingList.get(0);
 

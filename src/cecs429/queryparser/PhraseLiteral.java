@@ -2,6 +2,7 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
 import libstemmer_java.java.org.tartarus.snowball.SnowballStemmer;
 import libstemmer_java.java.org.tartarus.snowball.ext.englishStemmer;
@@ -80,13 +81,12 @@ public class PhraseLiteral implements QueryComponent {
     }
 
     @Override
-    public List<Posting> getPostings(Index index, TokenProcessor processor) {
+    public List<Posting> getPostings(Index index) {
         List<List<Posting>> postingList = new ArrayList<>();
-
-        for (String x : mTerms){
-            snowballStemmer.setCurrent(processor.processToken(x));
-            if(snowballStemmer.stem())
-                postingList.add(index.getPostings(snowballStemmer.getCurrent()));
+        Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
+        for (int i = 0; i < mTerms.size(); i++)
+        {
+            postingList.add(index.getPostings(processor.getStem(processor.removeNonAlphaNumCharBegEndAndQuotes(mTerms.get(i)))));
         }
 
         List<Posting> result = postingList.get(0);

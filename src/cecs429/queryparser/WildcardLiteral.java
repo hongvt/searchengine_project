@@ -16,7 +16,7 @@ public class WildcardLiteral implements QueryComponent {
 
     @Override
     // pass in tokenprocessor to getpostings
-    public List<Posting> getPostings(Index index, TokenProcessor processor) {
+    public List<Posting> getPostings(Index index) {
         return null;
     }
 }
