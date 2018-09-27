@@ -4,11 +4,10 @@ package cecs429.queryparser;
 import cecs429.index.Index;
 import cecs429.index.Posting;
 import cecs429.text.Milestone1TokenProcessor;
-
+import cecs429.text.TokenProcessor;
 import java.util.*;
 
-public class KGramIndex implements QueryComponent
-{
+public class KGramIndex implements QueryComponent {
     /**
      * Key is the kgram
      * Value is the list of vocab types that match that Key kgram
@@ -28,7 +27,7 @@ public class KGramIndex implements QueryComponent
     }
 
     @Override
-    public List<Posting> getPostings(Index index)
+    public List<Posting> getPostings(Index index, TokenProcessor processor)
     {
         ArrayList<Posting> orPosts = new ArrayList<>();
         String temp = wildcard;
@@ -130,12 +129,10 @@ public class KGramIndex implements QueryComponent
         }
         return orPosts;
     }
-
     private void andVocabTypes(List<String> a, List<String> b, ArrayList<String> anded)
     {
         List<String> bigger = a.size() > b.size() ? a : b;
         List<String> smaller = a.size() <= b.size() ? a : b;
-
         for (int i = 0; i < smaller.size(); i++)
         {
             if (bigger.contains(smaller.get(i)))
@@ -157,26 +154,18 @@ public class KGramIndex implements QueryComponent
      */
     private void addKGramsToList(ArrayList<String> list, String typeOrQuery)
     {
-        if (!typeOrQuery.equals(""))
-        {
-            if (typeOrQuery.length() == 1 || typeOrQuery.length() == 2 || typeOrQuery.length() == 3)
-            {
-                if (!list.contains(typeOrQuery))
-                {
+        if (!typeOrQuery.equals("")) {
+            if (typeOrQuery.length() == 1 || typeOrQuery.length() == 2 || typeOrQuery.length() == 3) {
+                if (!list.contains(typeOrQuery)) {
                     list.add(typeOrQuery);
                 }
-            }
-            else
-            {
-                for (int j = 0; j < typeOrQuery.length()-2; j++)
-                {
-                    if (!list.contains(typeOrQuery))
-                    {
-                        list.add(typeOrQuery.substring(j, j+3));
+            } else {
+                for (int j = 0; j < typeOrQuery.length() - 2; j++) {
+                    if (!list.contains(typeOrQuery)) {
+                        list.add(typeOrQuery.substring(j, j + 3));
                     }
                 }
             }
         }
     }
-
 }

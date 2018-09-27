@@ -3,11 +3,15 @@ package cecs429.queryparser;
 import java.util.ArrayList;
 import java.util.List;
 
+import cecs429.text.Milestone1TokenProcessor;
+
 /**
  * Parses boolean queries according to the base requirements of the CECS 429 project.
  * Does not handle phrase queries, NOT queries, NEAR queries, or wildcard queries... yet.
  */
 public class BooleanQueryParser {
+    private Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
+
     /**
      * Identifies a portion of a string with a starting index and a length.
      */
@@ -27,7 +31,6 @@ public class BooleanQueryParser {
     private static class Literal {
         StringBounds bounds;
         QueryComponent literalComponent;
-        int hyphenId;
 
         Literal(StringBounds bounds, QueryComponent literalComponent) {
             this.bounds = bounds;
@@ -58,23 +61,12 @@ public class BooleanQueryParser {
             // Store all the individual components of this subquery.
             List<QueryComponent> subqueryLiterals = new ArrayList<>(0);
 
-            /**
-             * int nextHyphenID = 1;
-             */
             do {
                 // Extract the next literal from the subquery.
                 Literal lit = findNextLiteral(subquery, subStart);
-                /**
-                 * Literal[] lit = findNextLiteral(subquery, subStart, nextHyphenID);
-                 */
-
-                /**
-                 * add each element in lit to subqueryLIterals
-                 */
 
                 // Add the literal component to the conjunctive list.
                 subqueryLiterals.add(lit.literalComponent);
-
 
                 // Set the next index to start searching for a literal.
                 subStart = lit.bounds.start + lit.bounds.length;
@@ -90,12 +82,6 @@ public class BooleanQueryParser {
             if (subqueryLiterals.size() == 1) {
                 allSubqueries.add(subqueryLiterals.get(0));
             } else {
-                /**
-                 * for each element in subqueryLiterals, check hyphenID. if hyphenID is greater than 0, it is part of a hyphen set!!!
-                 * example, subqueryLiterals might contain
-                 * [{"smoothie",smoothieBounds,hyphenID:1},{"banana",bananaBounds,hyphenID:1},{"smoothiebanana",smoothiebananaBounds,hyphenID:1}]
-                 * if it is part of the same hyphen set, OR THEM and add to the allSubqueries list
-                 */
                 // With more than one literal, we must wrap them in an AndQuery component.
                 allSubqueries.add(new AndQuery(subqueryLiterals));
             }
@@ -153,7 +139,6 @@ public class BooleanQueryParser {
     /**
      * Locates and returns the next literal from the given subquery string.
      */
-    //private Literal[] findNextLiteral(String subquery, int startIndex, int nextHyphenID) {
     private Literal findNextLiteral(String subquery, int startIndex) {
         int subLength = subquery.length();
         int lengthOut;
@@ -169,7 +154,7 @@ public class BooleanQueryParser {
         if (quoteCheck == '\"') {
             // find the index of the ending "
             int nextDoubleQuote = subquery.indexOf('"', startIndex + 1);
-
+            System.out.println(subquery.substring(startIndex + 1, nextDoubleQuote));
             // This is a phrase literal containing multiple terms
             return new Literal(
                     new StringBounds(startIndex + 1, nextDoubleQuote),
@@ -184,15 +169,15 @@ public class BooleanQueryParser {
                 lengthOut = nextSpace - startIndex;
             }
 
-            // This is a term literal containing a single term.
-            //TODO:: processTokens HERE!!!!!!!
-            return new Literal(
-                    new StringBounds(startIndex, lengthOut),
-                    new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
-            /*return new Literal(
-                    new StringBounds(startIndex, lengthOut),
-                    new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)),
-                    nextHyphenID);*/
+            if (subquery.substring(startIndex, startIndex + lengthOut).contains("*")) {
+                return new Literal(
+                        new StringBounds(startIndex, lengthOut),
+                        new WildcardLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
+            } else {
+                return new Literal(
+                        new StringBounds(startIndex, lengthOut),
+                        new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
+            }
         }
 
 		/*
