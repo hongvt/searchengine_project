@@ -154,7 +154,7 @@ public class BooleanQueryParser {
         if (quoteCheck == '\"') {
             // find the index of the ending "
             int nextDoubleQuote = subquery.indexOf('"', startIndex + 1);
-            System.out.println(subquery.substring(startIndex + 1, nextDoubleQuote));
+            //System.out.println(subquery.substring(startIndex + 1, nextDoubleQuote));
             // This is a phrase literal containing multiple terms
             return new Literal(
                     new StringBounds(startIndex + 1, nextDoubleQuote),

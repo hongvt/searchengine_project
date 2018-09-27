@@ -4,7 +4,6 @@ package cecs429.queryparser;
 import cecs429.index.Index;
 import cecs429.index.Posting;
 import cecs429.text.Milestone1TokenProcessor;
-import cecs429.text.TokenProcessor;
 import java.util.*;
 
 public class KGramIndex implements QueryComponent {
@@ -33,7 +32,6 @@ public class KGramIndex implements QueryComponent {
         String temp = wildcard;
         boolean isTrailingONE = false;
         boolean isLeading = false;
-        boolean isTrailing = false;
         String[] typesStems;
 
         if (wildcard.charAt(0) != '*') //not a leading wildcard
@@ -60,25 +58,20 @@ public class KGramIndex implements QueryComponent {
             {
                 isTrailingONE = true;
             }
-            isTrailing = true;
         }
         String[] components = temp.split("\\*");
         ArrayList<String> grams = new ArrayList<>();
         List<String> vocabTypes = index.getVocabularyTypes();
-        ArrayList<String> andedVocabTypes = new ArrayList<>();
+        List<String> andedVocabTypes = new ArrayList<>();
 
         for (int i = 0; i < components.length; i++)
         {
-            //System.out.println("component["+i+"]: "+ components[i]);
             addKGramsToList(grams, components[i]);
         }
-        System.out.print("vocabTypes: ");
-        System.out.println(vocabTypes);
         for(int i = 0; i < vocabTypes.size(); i++)
         {
             for (int j = 0; j < grams.size(); j++)
             {
-                //System.out.println(vocabTypes);
                 String tempGram = grams.get(j);
                 if (grams.get(j).contains("$"))
                 {
@@ -86,7 +79,6 @@ public class KGramIndex implements QueryComponent {
                     {
                         tempGram = grams.get(j).substring(1);
                         if (vocabTypes.get(i).length() >= tempGram.length())
-                            //System.out.println(vocabTypes.get(i).substring(0,tempGram.length()));
                         if (vocabTypes.get(i).length() >= tempGram.length() && vocabTypes.get(i).substring(0,tempGram.length()).equals(tempGram))
                         {
                             if (!kGramIndex.containsKey(grams.get(j)))
@@ -99,16 +91,16 @@ public class KGramIndex implements QueryComponent {
                     else if (tempGram.charAt(tempGram.length()-1) == '$')
                     {
                         tempGram = grams.get(j).substring(0,grams.get(j).length()-1);
-                        if (vocabTypes.get(i).substring(vocabTypes.get(i).length()-tempGram.length()).equals(tempGram))
+                        if (vocabTypes.get(i).length() >= tempGram.length() && vocabTypes.get(i).substring(vocabTypes.get(i).length()-tempGram.length()).equals(tempGram))
                         {
-                            if (!kGramIndex.containsKey(tempGram))
+                            if (!kGramIndex.containsKey(grams.get(j)))
                             {
                                 kGramIndex.put(grams.get(j), new ArrayList<>());
                             }
                             kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
                         }
                     }
-                    //System.out.println("tempGram: " + tempGram);
+
 
                 }
                 else
@@ -125,47 +117,46 @@ public class KGramIndex implements QueryComponent {
 
             }
         }
-        System.out.print("kGramIndex: ");
-        System.out.println(kGramIndex);
-
-        if (grams.size() == 1)
+        andedVocabTypes.addAll(kGramIndex.get(grams.get(0)));
+        if (grams.size() == 2)
         {
-            andedVocabTypes.addAll(kGramIndex.get(grams.get(0)));
+            andedVocabTypes = andVocabTypes(andedVocabTypes, kGramIndex.get(grams.get(1)));
         }
-        else if (grams.size() == 2)
+        else if (grams.size() > 2)
         {
-            andVocabTypes(kGramIndex.get(grams.get(0)), kGramIndex.get(grams.get(1)), andedVocabTypes);
-        }
-        else
-        {
-            for (int i = 0; i < grams.size()-1; i++)
+            for (int i = 1; i < grams.size(); i++)
             {
-                andVocabTypes(kGramIndex.get(grams.get(i)), kGramIndex.get(grams.get(i+1)), andedVocabTypes);
+                andedVocabTypes = andVocabTypes(andedVocabTypes, kGramIndex.get(grams.get(i)));
             }
         }
-        System.out.print("andedVocabTypes: ");
-        System.out.println(andedVocabTypes);
+
+        ArrayList<Integer> removing = new ArrayList<>();
+
         if (isTrailingONE && !isLeading)
         {
             String leadingQ = temp.substring(1,temp.length()-1);
-            System.out.println("leadingQ: "+leadingQ);
+
             for (int i = 0; i < andedVocabTypes.size(); i++)
             {
                 if (!andedVocabTypes.get(i).substring(0,leadingQ.length()).equals(leadingQ))
                 {
-                    andedVocabTypes.remove(i);
+                    removing.add(i);
                 }
             }
         }
-
-        System.out.print("andedVocabTypes: ");
-        System.out.println(andedVocabTypes);
-
-        typesStems = new String[andedVocabTypes.size()];
-
+        System.out.print("Matches for words: ");
+        typesStems = new String[andedVocabTypes.size()-removing.size()];
+        int k = 0;
         for (int i = 0; i < andedVocabTypes.size(); i++)
         {
-            typesStems[i] = andedVocabTypes.get(i);
+            if (!removing.contains(i)) {
+                typesStems[k] = andedVocabTypes.get(i);
+                if (k <andedVocabTypes.size()-removing.size()-1)
+                    System.out.print(typesStems[k]+",");
+                else
+                    System.out.println(typesStems[k]);
+                k++;
+            }
         }
 
         typesStems = (new Milestone1TokenProcessor()).getStems(typesStems);
@@ -180,24 +171,22 @@ public class KGramIndex implements QueryComponent {
                 }
             }
         }
-        System.out.print("orPosts: ");
-        System.out.println(orPosts);
         return orPosts;
     }
-    private void andVocabTypes(List<String> a, List<String> b, ArrayList<String> anded)
+    private List<String> andVocabTypes(List<String> anded, List<String> a)
     {
-        List<String> bigger = a.size() > b.size() ? a : b;
-        List<String> smaller = a.size() <= b.size() ? a : b;
-        for (int i = 0; i < smaller.size(); i++)
+        ArrayList<String> result = new ArrayList<>();
+        List<String> small = anded.size() <= a.size() ? anded : a;
+        List<String> big = anded.size() > a.size() ? anded : a;
+
+        for (int i = 0; i < small.size(); i++)
         {
-            if (bigger.contains(smaller.get(i)))
+            if (big.contains(small.get(i)))
             {
-                if (anded.isEmpty() || !anded.contains(smaller.get(i)))
-                {
-                    anded.add(smaller.get(i));
-                }
+                result.add(small.get(i));
             }
         }
+        return result;
     }
 
     /**
@@ -217,7 +206,6 @@ public class KGramIndex implements QueryComponent {
             } else {
                 for (int j = 0; j < typeOrQuery.length() - 2; j++) {
                     if (!list.contains(typeOrQuery)) {
-                        System.out.println("adding: " + typeOrQuery.substring(j, j + 3));
                         list.add(typeOrQuery.substring(j, j + 3));
                     }
                 }
