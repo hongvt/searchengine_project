@@ -7,6 +7,8 @@ import cecs429.documents.JsonFileDocument;
 import cecs429.index.Index;
 import cecs429.index.PositionalInvertedIndex;
 import cecs429.index.Posting;
+import cecs429.queryparser.BooleanQueryParser;
+import cecs429.queryparser.QueryComponent;
 import cecs429.text.EnglishTokenStream;
 import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
@@ -19,8 +21,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Milestone1UsingPosInvertIndex {
-    private static void printDirectoryList(Path corpusFolder)
-    {
+    private static void printDirectoryList(Path corpusFolder) {
         System.out.println("Directories");
         System.out.println("------------------------------");
         File[] files = new File(corpusFolder.toString()).listFiles();
@@ -30,24 +31,25 @@ public class Milestone1UsingPosInvertIndex {
             }
         }
     }
-    private static String getDirectoryName(Scanner keyboard, Path corpusFolder)
-    {
+
+    private static String getDirectoryName(Scanner keyboard, Path corpusFolder) {
         printDirectoryList(corpusFolder);
         System.out.print("\nEnter the name of the corpus to index (or \"quit\" to exit): ");
         String dir = keyboard.nextLine();
 
-        while (!dir.equals("quit") && !dir.equals(":q"))
-        {
-            if (hasDirectory(corpusFolder, dir)) { return dir; }
-            else { System.out.println("Please recheck spelling of directory"); }
+        while (!dir.equals("quit") && !dir.equals(":q")) {
+            if (hasDirectory(corpusFolder, dir)) {
+                return dir;
+            } else {
+                System.out.println("Please recheck spelling of directory");
+            }
             System.out.print("Enter the name of the corpus to index (or \"quit\" to exit): ");
             dir = keyboard.nextLine();
         }
         return "quit";
     }
 
-    private static boolean hasDirectory(Path corpusFolder, String dir)
-    {
+    private static boolean hasDirectory(Path corpusFolder, String dir) {
         File[] files = new File(corpusFolder.toString()).listFiles();
 
         for (int i = 0; i < files.length; i++) {
@@ -60,16 +62,14 @@ public class Milestone1UsingPosInvertIndex {
         return false;
     }
 
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         Scanner keyboard = new Scanner(System.in);
         TokenProcessor processor = new Milestone1TokenProcessor();
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
 
         String dir = getDirectoryName(keyboard, corpusFolder);
-        while (!dir.equals("quit") && !dir.equals(":q"))
-        {
+        while (!dir.equals("quit") && !dir.equals(":q")) {
             boolean changeDirectory = false;
             currentPath = Paths.get(corpusFolder.toString(), dir);
             DocumentCorpus corpus = DirectoryCorpus.loadTextDirectory(currentPath, ".txt");
@@ -79,45 +79,41 @@ public class Milestone1UsingPosInvertIndex {
             long startTime = System.currentTimeMillis();
             Index index = indexCorpus(corpus);
             long endTime = System.currentTimeMillis();
-            int numSeconds = ((int)((endTime - startTime) / 1000));
+            int numSeconds = ((int) ((endTime - startTime) / 1000));
             System.out.println("Indexing took " + numSeconds + " seconds");
 
             System.out.print("Enter term to search (or \"quit\" to exit): ");
             String word = keyboard.nextLine();
             while (!word.equals("quit") && !word.equals(":q")) {
                 String[] words = word.split(" ");
-                if (words[0].equals(":index"))
-                {
-                    if (hasDirectory(corpusFolder, words[1]))
-                    {
+                if (words[0].equals(":index")) {
+                    if (hasDirectory(corpusFolder, words[1])) {
                         word = "quit";
                         dir = words[1];
                         changeDirectory = true;
-                    }
-                    else
-                    {
+                    } else {
                         System.out.println("Please recheck spelling of directory");
                     }
-                }
-                else
-                {
-                    if (words[0].equals(":stem"))
-                    {
+                } else {
+                    if (words[0].equals(":stem")) {
                         String[] stems = processor.processTokens(words[1]);
-                        for (int i = 0; i < stems.length; i++)
-                        {
+                        for (int i = 0; i < stems.length; i++) {
                             System.out.println(i + ":" + stems[i]);
                         }
-                    }
-                    else if (words[0].equals(":vocab"))
-                    {
-                        for (int i = 0; i < 1000; i++)
-                        {
+                    } else if (words[0].equals(":vocab")) {
+                        for (int i = 0; i < 1000; i++) {
                             System.out.println(index.getVocabulary().get(i));
                         }
-                    }
-                    else //TODO:: ADD BOOLEAN QUERY PARSER HERE
+                    } else //TODO:: ADD BOOLEAN QUERY PARSER HERE
                     {
+
+                        BooleanQueryParser pa = new BooleanQueryParser();
+                        QueryComponent c = pa.parseQuery(word);
+                        System.out.println("posting size: " + c.getPostings(index, processor).size());
+                        for (Posting x : c.getPostings(index, processor)) {
+                            System.out.println(x.getDocumentId() + " " + x.getPositions());
+                        }
+                        /*
                         String[] stems = processor.processTokens(word);
                         int j = 0;
                         for (int i = 0; i < stems.length; i++)
@@ -128,16 +124,17 @@ public class Milestone1UsingPosInvertIndex {
                                 j++;
                             }
                         }
-                        System.out.println(j+" documents were found");
+                        System.out.println(j+" documents were found");*/
                     }
                 }
                 System.out.print("Enter term to search (or \"quit\" to exit): ");
                 word = keyboard.nextLine();
             }
             if (!word.equals(":q")) { //word must equal "quit" to go in here
-                if (!changeDirectory) {dir = getDirectoryName(keyboard, corpusFolder);}
-            }
-            else if (word.equals(":q"))// word == :q so quit program
+                if (!changeDirectory) {
+                    dir = getDirectoryName(keyboard, corpusFolder);
+                }
+            } else if (word.equals(":q"))// word == :q so quit program
             {
                 dir = "quit";
             }
@@ -158,15 +155,13 @@ public class Milestone1UsingPosInvertIndex {
             Iterable<String> engTokens = ets.getTokens();
             for (String engTok : engTokens) {
                 String[] stems = processor.processTokens(engTok);
-                for (int i = 0; i < stems.length; i++)
-                {
+                for (int i = 0; i < stems.length; i++) {
                     if (stems.length > 1) {
                         if (i == 0) {
                             positionCounter++;
                         }
                         posInvertIndex.addTerm(stems[i], doc.getId(), positionCounter);
-                    }
-                    else {
+                    } else {
                         positionCounter++;
                         posInvertIndex.addTerm(stems[i], doc.getId(), positionCounter);
                     }

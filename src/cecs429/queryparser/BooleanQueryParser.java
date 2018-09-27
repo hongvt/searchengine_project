@@ -27,6 +27,7 @@ public class BooleanQueryParser {
     private static class Literal {
         StringBounds bounds;
         QueryComponent literalComponent;
+        int hyphenId;
 
         Literal(StringBounds bounds, QueryComponent literalComponent) {
             this.bounds = bounds;
@@ -57,12 +58,23 @@ public class BooleanQueryParser {
             // Store all the individual components of this subquery.
             List<QueryComponent> subqueryLiterals = new ArrayList<>(0);
 
+            /**
+             * int nextHyphenID = 1;
+             */
             do {
                 // Extract the next literal from the subquery.
                 Literal lit = findNextLiteral(subquery, subStart);
+                /**
+                 * Literal[] lit = findNextLiteral(subquery, subStart, nextHyphenID);
+                 */
+
+                /**
+                 * add each element in lit to subqueryLIterals
+                 */
 
                 // Add the literal component to the conjunctive list.
                 subqueryLiterals.add(lit.literalComponent);
+
 
                 // Set the next index to start searching for a literal.
                 subStart = lit.bounds.start + lit.bounds.length;
@@ -78,6 +90,12 @@ public class BooleanQueryParser {
             if (subqueryLiterals.size() == 1) {
                 allSubqueries.add(subqueryLiterals.get(0));
             } else {
+                /**
+                 * for each element in subqueryLiterals, check hyphenID. if hyphenID is greater than 0, it is part of a hyphen set!!!
+                 * example, subqueryLiterals might contain
+                 * [{"smoothie",smoothieBounds,hyphenID:1},{"banana",bananaBounds,hyphenID:1},{"smoothiebanana",smoothiebananaBounds,hyphenID:1}]
+                 * if it is part of the same hyphen set, OR THEM and add to the allSubqueries list
+                 */
                 // With more than one literal, we must wrap them in an AndQuery component.
                 allSubqueries.add(new AndQuery(subqueryLiterals));
             }
@@ -135,6 +153,7 @@ public class BooleanQueryParser {
     /**
      * Locates and returns the next literal from the given subquery string.
      */
+    //private Literal[] findNextLiteral(String subquery, int startIndex, int nextHyphenID) {
     private Literal findNextLiteral(String subquery, int startIndex) {
         int subLength = subquery.length();
         int lengthOut;
@@ -150,17 +169,11 @@ public class BooleanQueryParser {
         if (quoteCheck == '\"') {
             // find the index of the ending "
             int nextDoubleQuote = subquery.indexOf('"', startIndex + 1);
-            // PhraseLiteral is the last component in the substring
-            if (nextDoubleQuote + 1 == subquery.length()) {
-                lengthOut = (subLength - 1) - (startIndex + 1);
-            } else {    // else there is still another component in front of the PhraseLiteral
-                lengthOut = (nextDoubleQuote - 1) - startIndex + 1;
-            }
 
             // This is a phrase literal containing multiple terms
             return new Literal(
-                    new StringBounds(startIndex + 1, lengthOut),
-                    new PhraseLiteral(subquery.substring(startIndex + 1, startIndex + 1 + lengthOut)));
+                    new StringBounds(startIndex + 1, nextDoubleQuote),
+                    new PhraseLiteral(subquery.substring(startIndex + 1, nextDoubleQuote)));
         } else {
             int nextSpace = subquery.indexOf(' ', startIndex);
 
@@ -172,9 +185,14 @@ public class BooleanQueryParser {
             }
 
             // This is a term literal containing a single term.
+            //TODO:: processTokens HERE!!!!!!!
             return new Literal(
                     new StringBounds(startIndex, lengthOut),
                     new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)));
+            /*return new Literal(
+                    new StringBounds(startIndex, lengthOut),
+                    new TermLiteral(subquery.substring(startIndex, startIndex + lengthOut)),
+                    nextHyphenID);*/
         }
 
 		/*

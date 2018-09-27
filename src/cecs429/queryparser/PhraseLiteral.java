@@ -2,6 +2,9 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+import cecs429.text.TokenProcessor;
+import libstemmer_java.java.org.tartarus.snowball.SnowballStemmer;
+import libstemmer_java.java.org.tartarus.snowball.ext.englishStemmer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +16,7 @@ import java.util.List;
 public class PhraseLiteral implements QueryComponent {
     // The list of individual terms in the phrase.
     private List<String> mTerms = new ArrayList<>();
+    private SnowballStemmer snowballStemmer = new englishStemmer();
 
     /**
      * Constructs a PhraseLiteral with the given individual phrase terms.
@@ -36,14 +40,14 @@ public class PhraseLiteral implements QueryComponent {
 
         // first loop attempts to find the indexes where the document id's match
         while (true) {
-            if (i >= list_one.size() || j >= list_two.size())
+            if (i == list_one.size() || j == list_two.size())
                 return result;
             else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
                 // when matched we attempt to find any positions that are off by 1 and add them accordingly
                 k = 0;
                 m = 0;
                 while (true) {
-                    if (k >= list_one.get(i).getPositions().size() || m >= list_two.get(j).getPositions().size()) {
+                    if (k == list_one.get(i).getPositions().size() || m == list_two.get(j).getPositions().size()) {
                         i++;
                         j++;
                         break;
@@ -51,12 +55,12 @@ public class PhraseLiteral implements QueryComponent {
                         // check if empty first to avoid null pointer exception
                         if (result.isEmpty()) {
                             result.add(new Posting(list_two.get(j).getDocumentId()));
-                            result.get(0).getPositions().add(list_two.get(j).getPositions().get(m));
+                            result.get(0).addPosition(list_two.get(j).getPositions().get(m));
                         } else if (result.get(result.size() - 1).getDocumentId() == list_two.get(j).getDocumentId()) {
-                            result.get(result.size() - 1).getPositions().add(list_two.get(j).getPositions().get(m));
+                            result.get(result.size() - 1).addPosition(list_two.get(j).getPositions().get(m));
                         } else {
                             result.add(new Posting(list_two.get(j).getDocumentId()));
-                            result.get(result.size() - 1).getPositions().add(list_two.get(j).getPositions().get(m));
+                            result.get(result.size() - 1).addPosition(list_two.get(j).getPositions().get(m));
                         }
                         k++;
                     } else {
@@ -76,11 +80,14 @@ public class PhraseLiteral implements QueryComponent {
     }
 
     @Override
-    public List<Posting> getPostings(Index index) {
+    public List<Posting> getPostings(Index index, TokenProcessor processor) {
         List<List<Posting>> postingList = new ArrayList<>();
 
-        for (String x : mTerms)
-            postingList.add(index.getPostings(x));
+        for (String x : mTerms){
+            snowballStemmer.setCurrent(processor.processToken(x));
+            if(snowballStemmer.stem())
+                postingList.add(index.getPostings(snowballStemmer.getCurrent()));
+        }
 
         List<Posting> result = postingList.get(0);
 
