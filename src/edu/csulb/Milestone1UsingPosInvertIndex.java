@@ -141,6 +141,7 @@ public class Milestone1UsingPosInvertIndex {
             EnglishTokenStream ets = new EnglishTokenStream(readDoc);
             Iterable<String> engTokens = ets.getTokens();
             for (String engTok : engTokens) {
+                posInvertIndex.addVocabType(engTok);
                 String[] stems = processor.processTokens(engTok);
                 for (int i = 0; i < stems.length; i++) {
                     if (stems.length > 1) {

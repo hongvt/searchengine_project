@@ -32,11 +32,17 @@ public class KGramIndex implements QueryComponent {
         ArrayList<Posting> orPosts = new ArrayList<>();
         String temp = wildcard;
         boolean isTrailingONE = false;
+        boolean isLeading = false;
+        boolean isTrailing = false;
         String[] typesStems;
 
         if (wildcard.charAt(0) != '*') //not a leading wildcard
         {
             temp = "$" + wildcard;
+        }
+        else
+        {
+            isLeading = true;
         }
         if (wildcard.charAt(wildcard.length()-1) != '*') //not a trailing wildcard
         {
@@ -54,6 +60,7 @@ public class KGramIndex implements QueryComponent {
             {
                 isTrailingONE = true;
             }
+            isTrailing = true;
         }
         String[] components = temp.split("\\*");
         ArrayList<String> grams = new ArrayList<>();
@@ -62,23 +69,64 @@ public class KGramIndex implements QueryComponent {
 
         for (int i = 0; i < components.length; i++)
         {
+            //System.out.println("component["+i+"]: "+ components[i]);
             addKGramsToList(grams, components[i]);
         }
-
+        System.out.print("vocabTypes: ");
+        System.out.println(vocabTypes);
         for(int i = 0; i < vocabTypes.size(); i++)
         {
             for (int j = 0; j < grams.size(); j++)
             {
-                if (vocabTypes.get(i).contains(grams.get(j)))
+                //System.out.println(vocabTypes);
+                String tempGram = grams.get(j);
+                if (grams.get(j).contains("$"))
                 {
-                    if (!kGramIndex.containsKey(grams.get(j)))
+                    if (tempGram.charAt(0) == '$')
                     {
-                        kGramIndex.put(grams.get(j), new ArrayList<>());
+                        tempGram = grams.get(j).substring(1);
+                        if (vocabTypes.get(i).length() >= tempGram.length())
+                            //System.out.println(vocabTypes.get(i).substring(0,tempGram.length()));
+                        if (vocabTypes.get(i).length() >= tempGram.length() && vocabTypes.get(i).substring(0,tempGram.length()).equals(tempGram))
+                        {
+                            if (!kGramIndex.containsKey(grams.get(j)))
+                            {
+                                kGramIndex.put(grams.get(j), new ArrayList<>());
+                            }
+                            kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
+                        }
                     }
-                    kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
+                    else if (tempGram.charAt(tempGram.length()-1) == '$')
+                    {
+                        tempGram = grams.get(j).substring(0,grams.get(j).length()-1);
+                        if (vocabTypes.get(i).substring(vocabTypes.get(i).length()-tempGram.length()).equals(tempGram))
+                        {
+                            if (!kGramIndex.containsKey(tempGram))
+                            {
+                                kGramIndex.put(grams.get(j), new ArrayList<>());
+                            }
+                            kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
+                        }
+                    }
+                    //System.out.println("tempGram: " + tempGram);
+
                 }
+                else
+                {
+                    if (vocabTypes.get(i).contains(tempGram))
+                    {
+                        if (!kGramIndex.containsKey(tempGram))
+                        {
+                            kGramIndex.put(grams.get(j), new ArrayList<>());
+                        }
+                        kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
+                    }
+                }
+
             }
         }
+        System.out.print("kGramIndex: ");
+        System.out.println(kGramIndex);
 
         if (grams.size() == 1)
         {
@@ -95,24 +143,29 @@ public class KGramIndex implements QueryComponent {
                 andVocabTypes(kGramIndex.get(grams.get(i)), kGramIndex.get(grams.get(i+1)), andedVocabTypes);
             }
         }
-
-        if (isTrailingONE)
+        System.out.print("andedVocabTypes: ");
+        System.out.println(andedVocabTypes);
+        if (isTrailingONE && !isLeading)
         {
-            String leadingQ = temp.substring(0,temp.length()-1);
+            String leadingQ = temp.substring(1,temp.length()-1);
+            System.out.println("leadingQ: "+leadingQ);
             for (int i = 0; i < andedVocabTypes.size(); i++)
             {
-                if (!andedVocabTypes.get(i).contains(leadingQ))
+                if (!andedVocabTypes.get(i).substring(0,leadingQ.length()).equals(leadingQ))
                 {
                     andedVocabTypes.remove(i);
                 }
             }
         }
 
+        System.out.print("andedVocabTypes: ");
+        System.out.println(andedVocabTypes);
+
         typesStems = new String[andedVocabTypes.size()];
 
         for (int i = 0; i < andedVocabTypes.size(); i++)
         {
-            typesStems[i] = andedVocabTypes.get(i).substring(1,andedVocabTypes.get(i).length()-1);
+            typesStems[i] = andedVocabTypes.get(i);
         }
 
         typesStems = (new Milestone1TokenProcessor()).getStems(typesStems);
@@ -121,12 +174,14 @@ public class KGramIndex implements QueryComponent {
         {
             for (int j = 0; j < index.getPostings(typesStems[i]).size(); j++)
             {
-                if (!orPosts.contains(index.getPostings(typesStems[i]).get(i)))
+                if (orPosts.isEmpty() || !orPosts.contains(index.getPostings(typesStems[i]).get(j)))
                 {
-                    orPosts.add(index.getPostings(typesStems[i]).get(i));
+                    orPosts.add(index.getPostings(typesStems[i]).get(j));
                 }
             }
         }
+        System.out.print("orPosts: ");
+        System.out.println(orPosts);
         return orPosts;
     }
     private void andVocabTypes(List<String> a, List<String> b, ArrayList<String> anded)
@@ -137,7 +192,7 @@ public class KGramIndex implements QueryComponent {
         {
             if (bigger.contains(smaller.get(i)))
             {
-                if (!anded.contains(smaller.get(i)))
+                if (anded.isEmpty() || !anded.contains(smaller.get(i)))
                 {
                     anded.add(smaller.get(i));
                 }
@@ -162,6 +217,7 @@ public class KGramIndex implements QueryComponent {
             } else {
                 for (int j = 0; j < typeOrQuery.length() - 2; j++) {
                     if (!list.contains(typeOrQuery)) {
+                        System.out.println("adding: " + typeOrQuery.substring(j, j + 3));
                         list.add(typeOrQuery.substring(j, j + 3));
                     }
                 }
