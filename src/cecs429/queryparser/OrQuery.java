@@ -21,33 +21,25 @@ public class OrQuery implements QueryComponent {
     }
 
     private List<Posting> orMerge(List<Posting> list_one, List<Posting> list_two) {
-        int i = 0, j = 0;
-        List<Posting> result = new ArrayList<>();
 
-        while (true) {
-            if (i == list_one.size() || j == list_two.size())
-                return result;
-            else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
-                result.add(new Posting(list_one.get(i).getDocumentId()));
-                i++;
-                j++;
-            } else {
-                if (list_one.get(i).getDocumentId() < list_two.get(j).getDocumentId()) {
-                    result.add(new Posting(list_one.get(i).getDocumentId()));
-                    i++;
-                } else {
-                    result.add(new Posting(list_two.get(j).getDocumentId()));
-                    j++;
-                }
+        List<Posting> result = list_one.size() >= list_two.size() ? list_one : list_two;
+        List<Posting> small = list_one.size() < list_two.size() ? list_one : list_two;
+
+        for (int i = 0; i < small.size(); i++)
+        {
+            if (!result.contains(small.get(i)))
+            {
+                result.add(small.get(i));
             }
         }
+        return result;
     }
 
     @Override
-    public List<Posting> getPostings(Index index, TokenProcessor processor) {
+    public List<Posting> getPostings(Index index) {
         List<List<Posting>> postingList = new ArrayList<>();
         for (QueryComponent x : mComponents)
-            postingList.add(x.getPostings(index, processor));
+            postingList.add(x.getPostings(index));
 
         List<Posting> result = postingList.get(0);
 

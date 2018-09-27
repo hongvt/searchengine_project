@@ -46,4 +46,9 @@ public class InvertedIndex implements Index
         Collections.sort(mVocabulary);
         return Collections.unmodifiableList(mVocabulary);
     }
+
+    @Override
+    public List<String> getVocabularyTypes() {
+        return null;
+    }
 }

@@ -65,4 +65,9 @@ public class TermDocumentIndex implements Index {
 		return Collections.unmodifiableList(mVocabulary);
 	}
 
+	@Override
+	public List<String> getVocabularyTypes() {
+		return null;
+	}
+
 }

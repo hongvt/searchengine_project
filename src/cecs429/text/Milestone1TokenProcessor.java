@@ -18,8 +18,8 @@ public class Milestone1TokenProcessor implements TokenProcessor {
         return token.replaceAll("\\W", "").toLowerCase();
     }
 
-    @Override
-    public String[] processTokens(String token) {
+    public String[] processButDontStemTokensAKAGetType(String token)
+    {
         ArrayList<String> finalWords = new ArrayList<String>();
         String term = removeNonAlphaNumCharBegEndAndQuotes(token);
         String[] terms = term.split("-");
@@ -70,10 +70,22 @@ public class Milestone1TokenProcessor implements TokenProcessor {
         for (int i = 0; i < finalWords.size(); i++) {
             words[i] = finalWords.get(i);
         }
+        return words;
+    }
+
+    /**
+     *
+     * @param token
+     * @return the STEMMED TERM!!! AFTER NORMALIZATION
+     */
+    @Override
+    public String[] processTokens(String token)
+    {
+        String[] words = processButDontStemTokensAKAGetType(token);
         return getStems(words);
     }
 
-    private String removeNonAlphaNumCharBegEndAndQuotes(String term) {
+    public String removeNonAlphaNumCharBegEndAndQuotes(String term) {
         Pattern p = Pattern.compile("(\\w+)((\\W+)(\\w+))*");
         Matcher m = p.matcher(term);
         if (m.find()) {
@@ -84,16 +96,20 @@ public class Milestone1TokenProcessor implements TokenProcessor {
     }
 
 
-    private String[] getStems(String[] tokens) {
-        SnowballStemmer snowballStemmer = new englishStemmer();
+    public String[] getStems(String[] tokens) {
         String[] stems = new String[tokens.length];
         for (int i = 0; i < tokens.length; i++) {
-            snowballStemmer.setCurrent(tokens[i].toLowerCase());
-            snowballStemmer.stem();
-            stems[i] = snowballStemmer.getCurrent();
+            stems[i] = getStem(tokens[i]);
         }
         return stems;
     }
-}
 
+    public String getStem(String token)
+    {
+        SnowballStemmer snowballStemmer = new englishStemmer();
+        snowballStemmer.setCurrent(token.toLowerCase());
+        snowballStemmer.stem();
+        return snowballStemmer.getCurrent();
+    }
+}
 

@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Milestone1UsingPosInvertIndex {
@@ -106,28 +108,16 @@ public class Milestone1UsingPosInvertIndex {
                         }
                     } else //TODO:: ADD BOOLEAN QUERY PARSER HERE
                     {
-
                         BooleanQueryParser pa = new BooleanQueryParser();
                         QueryComponent c = pa.parseQuery(word);
-                        System.out.println("posting size: " + c.getPostings(index, processor).size());
-                        for (Posting x : c.getPostings(index, processor)) {
+                        List<Posting> posts = c.getPostings(index);
+                        for (Posting x : posts) {
                             System.out.println(x.getDocumentId() + " " + x.getPositions());
                         }
-                        /*
-                        String[] stems = processor.processTokens(word);
-                        int j = 0;
-                        for (int i = 0; i < stems.length; i++)
-                        {
-                            for (Posting p : index.getPostings(stems[i]))
-                            {
-                                System.out.println("Document Title: " + corpus.getDocument(p.getDocumentId()).getTitle() + " " + p.getPositions());
-                                j++;
-                            }
-                        }
-                        System.out.println(j+" documents were found");*/
+                        System.out.println("posting size: " + posts.size());
                     }
                 }
-                System.out.print("Enter term to search (or \"quit\" to exit): ");
+                System.out.print("\nEnter term to search (or \"quit\" to exit): ");
                 word = keyboard.nextLine();
             }
             if (!word.equals(":q")) { //word must equal "quit" to go in here
@@ -154,6 +144,7 @@ public class Milestone1UsingPosInvertIndex {
             EnglishTokenStream ets = new EnglishTokenStream(readDoc);
             Iterable<String> engTokens = ets.getTokens();
             for (String engTok : engTokens) {
+                posInvertIndex.addVocabType(engTok);
                 String[] stems = processor.processTokens(engTok);
                 for (int i = 0; i < stems.length; i++) {
                     if (stems.length > 1) {

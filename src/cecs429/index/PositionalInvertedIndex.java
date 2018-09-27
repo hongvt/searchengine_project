@@ -1,5 +1,8 @@
 package cecs429.index;
 
+import cecs429.text.Milestone1TokenProcessor;
+import cecs429.text.TokenProcessor;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -8,9 +11,34 @@ import java.util.List;
 
 public class PositionalInvertedIndex implements Index {
 
-    private HashMap<String, ArrayList<Posting>> index = new HashMap<>();
+    private HashMap<String, ArrayList<Posting>> index;
+    private ArrayList<String> vocabTypes;
 
     public PositionalInvertedIndex() {
+        index = new HashMap<>();
+        vocabTypes = new ArrayList<>();
+    }
+
+    /**
+     * NOTE: for wildcard queries, when you want the position of the vocab type, STEM IT and then look it up in the dictionary
+     * @return
+     */
+    @Override
+    public List<String> getVocabularyTypes()
+    {
+        return Collections.unmodifiableList(vocabTypes);
+    }
+
+    public void addVocabType(String vocabType)
+    {
+        String[] types = (new Milestone1TokenProcessor()).processButDontStemTokensAKAGetType(vocabType);
+        for (int i = 0; i < types.length; i++)
+        {
+            if (!vocabTypes.contains(types[i]))
+            {
+                vocabTypes.add(types[i]);
+            }
+        }
     }
 
     @Override
