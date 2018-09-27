@@ -3,6 +3,7 @@ package cecs429.queryparser;
 import cecs429.index.Index;
 import cecs429.index.Posting;
 import cecs429.text.Milestone1TokenProcessor;
+
 import java.util.ArrayList;
 import java.util.List;
 

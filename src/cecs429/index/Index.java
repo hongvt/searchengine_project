@@ -7,19 +7,16 @@ import java.util.List;
  * that contain them.
  */
 public interface Index {
-	/**
-	 * Retrieves a list of Postings of documents that contain the given term.
-	 */
-	List<Posting> getPostings(String term);
+    /**
+     * Retrieves a list of Postings of documents that contain the given term.
+     */
+    List<Posting> getPostings(String term);
 
-	/**
-	 * A (sorted) list of all terms in the index vocabulary.
-	 */
-	List<String> getVocabulary();
+    /**
+     * A (sorted) list of all terms in the index vocabulary.
+     */
+    List<String> getVocabulary();
 
-	List<String> getVocabularyTypes();
-<<<<<<< HEAD
+    List<String> getVocabularyTypes();
 }
-=======
-}
->>>>>>> 5556e44a38bb952076adfe65cbade427a449f1d7
+

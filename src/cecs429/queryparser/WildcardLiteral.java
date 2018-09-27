@@ -14,10 +14,6 @@ public class WildcardLiteral implements QueryComponent {
     }
 
     @Override
-<<<<<<< HEAD
-=======
-    // pass in tokenprocessor to getpostings
->>>>>>> 5556e44a38bb952076adfe65cbade427a449f1d7
     public List<Posting> getPostings(Index index) {
         return (new KGramIndex(mTerm)).getPostings(index);
     }

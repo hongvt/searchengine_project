@@ -28,7 +28,6 @@ public class TermLiteral implements QueryComponent {
         String[] stemmedStuff = processor.processTokens(mTerm);
 
         ArrayList<QueryComponent> words = new ArrayList<>();
-<<<<<<< HEAD
 
         if (stemmedStuff.length == 1)
             return index.getPostings(stemmedStuff[0]);
@@ -36,16 +35,12 @@ public class TermLiteral implements QueryComponent {
         for (int i = 0; i < stemmedStuff.length; i++)
             words.add(new TermLiteral(stemmedStuff[i]));
 
-=======
-        if (stemmedStuff.length == 1)
-        {
+        if (stemmedStuff.length == 1) {
             return index.getPostings(stemmedStuff[0]);
         }
-        for(int i = 0; i < stemmedStuff.length; i++)
-        {
+        for (int i = 0; i < stemmedStuff.length; i++) {
             words.add(new TermLiteral(stemmedStuff[i]));
         }
->>>>>>> 5556e44a38bb952076adfe65cbade427a449f1d7
         return (new OrQuery(words)).getPostings(index);
     }
 
