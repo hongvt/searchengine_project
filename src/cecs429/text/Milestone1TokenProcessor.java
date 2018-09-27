@@ -103,6 +103,18 @@ public class Milestone1TokenProcessor implements TokenProcessor {
         }
         return stems;
     }
+<<<<<<< HEAD
+=======
+
+    public String getStem(String token)
+    {
+        SnowballStemmer snowballStemmer = new englishStemmer();
+        snowballStemmer.setCurrent(token.toLowerCase());
+        snowballStemmer.stem();
+        return snowballStemmer.getCurrent();
+    }
+}
+>>>>>>> 5556e44a38bb952076adfe65cbade427a449f1d7
 
     public String getStem(String token)
     {

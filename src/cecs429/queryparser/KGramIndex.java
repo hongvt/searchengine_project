@@ -79,6 +79,7 @@ public class KGramIndex implements QueryComponent {
                     {
                         tempGram = grams.get(j).substring(1);
                         if (vocabTypes.get(i).length() >= tempGram.length())
+<<<<<<< HEAD
                             if (vocabTypes.get(i).length() >= tempGram.length() && vocabTypes.get(i).substring(0,tempGram.length()).equals(tempGram))
                             {
                                 if (!kGramIndex.containsKey(grams.get(j)))
@@ -87,6 +88,16 @@ public class KGramIndex implements QueryComponent {
                                 }
                                 kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
                             }
+=======
+                        if (vocabTypes.get(i).length() >= tempGram.length() && vocabTypes.get(i).substring(0,tempGram.length()).equals(tempGram))
+                        {
+                            if (!kGramIndex.containsKey(grams.get(j)))
+                            {
+                                kGramIndex.put(grams.get(j), new ArrayList<>());
+                            }
+                            kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
+                        }
+>>>>>>> 5556e44a38bb952076adfe65cbade427a449f1d7
                     }
                     else if (tempGram.charAt(tempGram.length()-1) == '$')
                     {
@@ -212,4 +223,8 @@ public class KGramIndex implements QueryComponent {
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 5556e44a38bb952076adfe65cbade427a449f1d7

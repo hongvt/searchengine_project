@@ -18,4 +18,8 @@ public interface Index {
 	List<String> getVocabulary();
 
 	List<String> getVocabularyTypes();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 5556e44a38bb952076adfe65cbade427a449f1d7
