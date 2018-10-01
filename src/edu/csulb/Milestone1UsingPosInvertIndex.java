@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -111,10 +110,17 @@ public class Milestone1UsingPosInvertIndex {
                         BooleanQueryParser pa = new BooleanQueryParser();
                         QueryComponent c = pa.parseQuery(word);
                         List<Posting> posts = c.getPostings(index);
-                        for (Posting x : posts) {
-                            System.out.println(x.getDocumentId() + " " + x.getPositions());
-                        }
+
+                        for (Posting x : posts)
+                            System.out.println("Doc ID: " + x.getDocumentId() + " " + corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
+
                         System.out.println("posting size: " + posts.size());
+                        System.out.println("Enter a Doc ID to view file's content");
+                        Reader fileContent = corpus.getDocument(Integer.parseInt(keyboard.nextLine())).getContent();
+                        EnglishTokenStream ets = new EnglishTokenStream(fileContent);
+
+                        for (String x : ets.getTokens())
+                            System.out.print(x + " ");
                     }
                 }
                 System.out.print("\nEnter term to search (or \"quit\" to exit): ");
