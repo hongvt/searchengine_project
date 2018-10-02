@@ -28,7 +28,7 @@ public class Milestone1UsingPosInvertIndex {
         File[] files = new File(corpusFolder.toString()).listFiles();
         for (int i = 0; i < files.length; i++) {
             if (files[i].isDirectory()) {
-                System.out.println(files[i].getName());
+                System.out.println(i + 1 + ": " + files[i].getName());
             }
         }
     }
@@ -110,20 +110,28 @@ public class Milestone1UsingPosInvertIndex {
                         BooleanQueryParser pa = new BooleanQueryParser();
                         QueryComponent c = pa.parseQuery(word);
                         List<Posting> posts = c.getPostings(index);
-                        for (Posting x : posts) {
-                            System.out.println(corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
-                        }
+
+                        for (Posting x : posts)
+                            System.out.println("Doc ID: " + x.getDocumentId() + " " + corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
+
                         System.out.println("posting size: " + posts.size());
+                        System.out.println("Enter a Doc ID to view file's content");
+                        Reader fileContent = corpus.getDocument(Integer.parseInt(keyboard.nextLine())).getContent();
+                        EnglishTokenStream ets = new EnglishTokenStream(fileContent);
+
+                        for (String x : ets.getTokens())
+                            System.out.print(x + " ");
                     }
                 }
                 System.out.print("\nEnter term to search (or \"quit\" to exit): ");
                 word = keyboard.nextLine();
             }
-            if (!word.equals(":q")) {
+            if (!word.equals(":q")) { //word must equal "quit" to go in here
                 if (!changeDirectory) {
                     dir = getDirectoryName(keyboard, corpusFolder);
                 }
-            } else if (word.equals(":q")) {
+            } else if (word.equals(":q"))// word == :q so quit program
+            {
                 dir = "quit";
             }
         }

@@ -2,8 +2,6 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
-import cecs429.text.TokenProcessor;
-import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +23,8 @@ public class OrQuery implements QueryComponent {
         List<Posting> result = list_one.size() >= list_two.size() ? list_one : list_two;
         List<Posting> small = list_one.size() < list_two.size() ? list_one : list_two;
 
-        for (int i = 0; i < small.size(); i++)
-        {
-            if (!result.contains(small.get(i)))
-            {
+        for (int i = 0; i < small.size(); i++) {
+            if (!result.contains(small.get(i))) {
                 result.add(small.get(i));
             }
         }

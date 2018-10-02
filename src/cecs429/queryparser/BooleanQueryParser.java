@@ -147,18 +147,47 @@ public class BooleanQueryParser {
         while (subquery.charAt(startIndex) == ' ') {
             ++startIndex;
         }
-        char quoteCheck = subquery.substring(startIndex).charAt(0);
+        char firstIndexCheck = subquery.substring(startIndex).charAt(0);
         // Locate the next space to find the end of this literal.
 
         // check to see if first character of the substring is a " , indicating a phrase literal
-        if (quoteCheck == '\"') {
+        if (firstIndexCheck == '\"') {
             // find the index of the ending "
             int nextDoubleQuote = subquery.indexOf('"', startIndex + 1);
-            //System.out.println(subquery.substring(startIndex + 1, nextDoubleQuote));
-            // This is a phrase literal containing multiple terms
+
             return new Literal(
                     new StringBounds(startIndex + 1, nextDoubleQuote),
                     new PhraseLiteral(subquery.substring(startIndex + 1, nextDoubleQuote)));
+
+        } else if (firstIndexCheck == '[') {
+            int startingBracket = subquery.indexOf('[', startIndex);
+            int endingBracket = subquery.indexOf(']', startIndex); // -> this is endbounds
+            int nextSpace = subquery.indexOf(' ', startIndex);
+            String leftTerm = subquery.substring(startingBracket + 1, nextSpace);
+            startIndex += leftTerm.length() + 1;
+
+            while (subquery.charAt(startIndex) == ' ') {
+                ++startIndex;
+            }
+
+            nextSpace = subquery.indexOf(' ', startIndex + 1);
+            String middleTerm = subquery.substring(startIndex, nextSpace);
+            String[] split = middleTerm.split("/");
+            int k = Integer.parseInt(split[split.length - 1]);
+
+            startIndex += middleTerm.length() + 1;
+
+            while (subquery.charAt(startIndex) == ' ') {
+                ++startIndex;
+            }
+
+            String rightTerm = subquery.substring(startIndex, endingBracket);
+
+            return new Literal(
+                    new StringBounds(startingBracket, endingBracket + 1),
+                    new NearLiteral(leftTerm, rightTerm, k));
+
+
         } else {
             int nextSpace = subquery.indexOf(' ', startIndex);
 

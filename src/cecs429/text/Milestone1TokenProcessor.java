@@ -18,8 +18,7 @@ public class Milestone1TokenProcessor implements TokenProcessor {
         return token.replaceAll("\\W", "").toLowerCase();
     }
 
-    public String[] processButDontStemTokensAKAGetType(String token)
-    {
+    public String[] processButDontStemTokensAKAGetType(String token) {
         ArrayList<String> finalWords = new ArrayList<String>();
         String term = removeNonAlphaNumCharBegEndAndQuotes(token);
         String[] terms = term.split("-");
@@ -74,13 +73,11 @@ public class Milestone1TokenProcessor implements TokenProcessor {
     }
 
     /**
-     *
      * @param token
      * @return the STEMMED TERM!!! AFTER NORMALIZATION
      */
     @Override
-    public String[] processTokens(String token)
-    {
+    public String[] processTokens(String token) {
         String[] words = processButDontStemTokensAKAGetType(token);
         return getStems(words);
     }
@@ -104,8 +101,7 @@ public class Milestone1TokenProcessor implements TokenProcessor {
         return stems;
     }
 
-    public String getStem(String token)
-    {
+    public String getStem(String token) {
         SnowballStemmer snowballStemmer = new englishStemmer();
         snowballStemmer.setCurrent(token.toLowerCase());
         snowballStemmer.stem();

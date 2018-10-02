@@ -3,9 +3,6 @@ package cecs429.queryparser;
 import cecs429.index.Index;
 import cecs429.index.Posting;
 import cecs429.text.Milestone1TokenProcessor;
-import cecs429.text.TokenProcessor;
-import libstemmer_java.java.org.tartarus.snowball.SnowballStemmer;
-import libstemmer_java.java.org.tartarus.snowball.ext.englishStemmer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +14,7 @@ import java.util.List;
 public class PhraseLiteral implements QueryComponent {
     // The list of individual terms in the phrase.
     private List<String> mTerms = new ArrayList<>();
-    private SnowballStemmer snowballStemmer = new englishStemmer();
+    Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
 
     /**
      * Constructs a PhraseLiteral with the given individual phrase terms.
@@ -83,9 +80,12 @@ public class PhraseLiteral implements QueryComponent {
     @Override
     public List<Posting> getPostings(Index index) {
         List<List<Posting>> postingList = new ArrayList<>();
-        Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
+
         for (int i = 0; i < mTerms.size(); i++)
-        {
+            postingList.add(index.getPostings(processor.getStem(processor.removeNonAlphaNumCharBegEndAndQuotes(mTerms.get(i)))));
+
+        Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
+        for (int i = 0; i < mTerms.size(); i++) {
             postingList.add(index.getPostings(processor.getStem(processor.removeNonAlphaNumCharBegEndAndQuotes(mTerms.get(i)))));
         }
 

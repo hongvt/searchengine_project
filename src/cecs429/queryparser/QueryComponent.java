@@ -1,6 +1,6 @@
 package cecs429.queryparser;
+
 import cecs429.index.*;
-import cecs429.text.TokenProcessor;
 
 import java.util.List;
 
