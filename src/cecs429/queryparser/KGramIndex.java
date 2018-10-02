@@ -1,32 +1,85 @@
 package cecs429.queryparser;
 
-
-import cecs429.index.Index;
-import cecs429.index.Posting;
-import cecs429.text.Milestone1TokenProcessor;
-
 import java.util.*;
 
-public class KGramIndex implements QueryComponent {
+public class KGramIndex {
     /**
      * Key is the kgram
-     * Value is the list of vocab types that match that Key kgram
+     * Value is the list of vocab types that contain that kgram
      */
     private HashMap<String, List<String>> kGramIndex;
-    private String wildcard;
 
     /**
-     * @param term NO WHITESPACE, wildcard
-     *             example hell*
+     *
      */
-    public KGramIndex(String term) {
-        wildcard = term;
+    public KGramIndex() {
         kGramIndex = new HashMap<String, List<String>>();
     }
 
-    @Override
-    public List<Posting> getPostings(Index index) {
-        ArrayList<Posting> orPosts = new ArrayList<>();
+    /**
+     *
+     * @param types
+     */
+    public void addToKGI(String[] types) {
+        for (int i = 0; i < types.length; i++) {
+            if (types[i].length() == 1) //add the 1-gram
+            {
+                addKGramIndex(types[i], types[i]);
+            } else {
+                //1-gram
+                for (int j = 0; j < types[i].length() - 1; j++) {
+                    addKGramIndex(types[i].substring(j, j + 1), types[i]);
+                }
+                //2,3-gram
+                String type = "$" + types[i] + "$";
+                for (int j = 2; j <= 3; j++) {
+                    ArrayList<String> kgrams = getKGrams(j, type);
+                    for (int k = 0; k < kgrams.size(); k++) {
+                        addKGramIndex(kgrams.get(k), types[i]);
+                    }
+                }
+
+            }
+        }
+    }
+
+    /**
+     *
+     * @param kgramKey
+     * @param type
+     */
+    private void addKGramIndex(String kgramKey, String type) {
+        if (!kGramIndex.containsKey(kgramKey)) {
+            kGramIndex.put(kgramKey, new ArrayList<String>());
+            kGramIndex.get(kgramKey).add(type);
+        } else {
+            if (!kGramIndex.get(kgramKey).contains(type)) {
+                kGramIndex.get(kgramKey).add(type);
+            }
+        }
+    }
+
+    /**
+     * @param len  - 2,3
+     * @param type
+     */
+    private ArrayList<String> getKGrams(int len, String type) {
+        ArrayList<String> kgrams = new ArrayList<String>();
+        for (int i = 0; i <= type.length() - len; i++) {
+            String temp = type.substring(i, i + len);
+            if (kgrams.isEmpty() || !kgrams.contains(temp)) {
+                kgrams.add(temp);
+            }
+        }
+        return kgrams;
+    }
+
+    /**
+     *
+     * @param wildcard
+     * @return
+     */
+    public String[] getWildcardMatches(String wildcard) {
         String temp = wildcard;
         boolean isTrailingONE = false;
         boolean isLeading = false;
@@ -54,59 +107,17 @@ public class KGramIndex implements QueryComponent {
         }
         String[] components = temp.split("\\*");
         ArrayList<String> grams = new ArrayList<>();
-        List<String> vocabTypes = index.getVocabularyTypes();
-        List<String> andedVocabTypes = new ArrayList<>();
+        ArrayList<String> andedVocab = new ArrayList<>();
+
 
         for (int i = 0; i < components.length; i++) {
             addKGramsToList(grams, components[i]);
         }
-        for (int i = 0; i < vocabTypes.size(); i++) {
-            for (int j = 0; j < grams.size(); j++) {
-                String tempGram = grams.get(j);
-                if (grams.get(j).contains("$")) {
-                    if (tempGram.charAt(0) == '$') {
-                        tempGram = grams.get(j).substring(1);
-                        if (vocabTypes.get(i).length() >= tempGram.length())
-                            if (vocabTypes.get(i).length() >= tempGram.length() && vocabTypes.get(i).substring(0, tempGram.length()).equals(tempGram)) {
-                                if (!kGramIndex.containsKey(grams.get(j))) {
-                                    kGramIndex.put(grams.get(j), new ArrayList<>());
-                                }
-                                kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
-                            }
-                        if (vocabTypes.get(i).length() >= tempGram.length() && vocabTypes.get(i).substring(0, tempGram.length()).equals(tempGram)) {
-                            if (!kGramIndex.containsKey(grams.get(j))) {
-                                kGramIndex.put(grams.get(j), new ArrayList<>());
-                            }
-                            kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
-                        }
-                    } else if (tempGram.charAt(tempGram.length() - 1) == '$') {
-                        tempGram = grams.get(j).substring(0, grams.get(j).length() - 1);
-                        if (vocabTypes.get(i).length() >= tempGram.length() && vocabTypes.get(i).substring(vocabTypes.get(i).length() - tempGram.length()).equals(tempGram)) {
-                            if (!kGramIndex.containsKey(grams.get(j))) {
-                                kGramIndex.put(grams.get(j), new ArrayList<>());
-                            }
-                            kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
-                        }
-                    }
 
-
-                } else {
-                    if (vocabTypes.get(i).contains(tempGram)) {
-                        if (!kGramIndex.containsKey(tempGram)) {
-                            kGramIndex.put(grams.get(j), new ArrayList<>());
-                        }
-                        kGramIndex.get(grams.get(j)).add(vocabTypes.get(i));
-                    }
-                }
-
-            }
-        }
-        andedVocabTypes.addAll(kGramIndex.get(grams.get(0)));
-        if (grams.size() == 2) {
-            andedVocabTypes = andVocabTypes(andedVocabTypes, kGramIndex.get(grams.get(1)));
-        } else if (grams.size() > 2) {
-            for (int i = 1; i < grams.size(); i++) {
-                andedVocabTypes = andVocabTypes(andedVocabTypes, kGramIndex.get(grams.get(i)));
+        for (int i = 0; i < grams.size(); i++) {
+            if (kGramIndex.containsKey(grams.get(i))) {
+                List<String> vocabTypes = kGramIndex.get(grams.get(i));
+                andedVocab = andVocabTypes(andedVocab, vocabTypes);
             }
         }
 
@@ -115,46 +126,48 @@ public class KGramIndex implements QueryComponent {
         if (isTrailingONE && !isLeading) {
             String leadingQ = temp.substring(1, temp.length() - 1);
 
-            for (int i = 0; i < andedVocabTypes.size(); i++) {
-                if (!andedVocabTypes.get(i).substring(0, leadingQ.length()).equals(leadingQ)) {
+            for (int i = 0; i < andedVocab.size(); i++) {
+                if (!andedVocab.get(i).substring(0, leadingQ.length()).equals(leadingQ)) {
                     removing.add(i);
                 }
             }
         }
         System.out.print("Matches for words: ");
-        typesStems = new String[andedVocabTypes.size() - removing.size()];
+        typesStems = new String[andedVocab.size() - removing.size()];
         int k = 0;
-        for (int i = 0; i < andedVocabTypes.size(); i++) {
+        for (int i = 0; i < andedVocab.size(); i++) {
             if (!removing.contains(i)) {
-                typesStems[k] = andedVocabTypes.get(i);
-                if (k < andedVocabTypes.size() - removing.size() - 1)
+                typesStems[k] = andedVocab.get(i);
+                if (k < andedVocab.size() - removing.size() - 1)
                     System.out.print(typesStems[k] + ",");
                 else
                     System.out.println(typesStems[k]);
                 k++;
             }
         }
-
-        typesStems = (new Milestone1TokenProcessor()).getStems(typesStems);
-
-        for (int i = 0; i < typesStems.length; i++) {
-            for (int j = 0; j < index.getPostings(typesStems[i]).size(); j++) {
-                if (orPosts.isEmpty() || !orPosts.contains(index.getPostings(typesStems[i]).get(j))) {
-                    orPosts.add(index.getPostings(typesStems[i]).get(j));
-                }
-            }
-        }
-        return orPosts;
+        return typesStems;
     }
 
-    private List<String> andVocabTypes(List<String> anded, List<String> a) {
+    /**
+     *
+     * @param anded
+     * @param a
+     * @return
+     */
+    private ArrayList<String> andVocabTypes(ArrayList<String> anded, List<String> a) {
         ArrayList<String> result = new ArrayList<>();
         List<String> small = anded.size() <= a.size() ? anded : a;
         List<String> big = anded.size() > a.size() ? anded : a;
 
-        for (int i = 0; i < small.size(); i++) {
-            if (big.contains(small.get(i))) {
-                result.add(small.get(i));
+        if (anded.size() == 0) {
+            for (int i = 0; i < a.size(); i++) {
+                result.add(a.get(i));
+            }
+        } else {
+            for (int i = 0; i < small.size(); i++) {
+                if (big.contains(small.get(i))) {
+                    result.add(small.get(i));
+                }
             }
         }
         return result;

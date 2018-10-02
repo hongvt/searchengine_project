@@ -14,4 +14,24 @@ public class BasicTokenProcessor implements TokenProcessor {
 	public String[] processTokens(String token) {
 		return new String[] {token};
 	}
+
+	@Override
+	public String[] processButDontStemTokensAKAGetType(String token) {
+		return new String[0];
+	}
+
+	@Override
+	public String[] getStems(String[] tokens) {
+		return new String[0];
+	}
+
+	@Override
+	public String removeNonAlphaNumCharBegEndAndQuotes(String term) {
+		return null;
+	}
+
+	@Override
+	public String getStem(String token) {
+		return null;
+	}
 }

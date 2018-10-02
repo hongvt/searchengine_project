@@ -1,5 +1,7 @@
 package cecs429.index;
 
+import cecs429.text.TokenProcessor;
+
 import java.util.List;
 
 /**
@@ -17,6 +19,10 @@ public interface Index {
      */
     List<String> getVocabulary();
 
-    List<String> getVocabularyTypes();
+    void addToKGI(String token);
+
+    String[] getWildcardMatches(String term);
+
+    TokenProcessor getProcessor();
 }
 

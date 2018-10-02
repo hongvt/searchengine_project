@@ -9,4 +9,8 @@ public interface TokenProcessor {
 	 */
 	String processToken(String token);
 	String[] processTokens (String token);
+	String[] processButDontStemTokensAKAGetType(String token);
+	String[] getStems(String[] tokens);
+	String removeNonAlphaNumCharBegEndAndQuotes(String term);
+	String getStem(String token);
 }

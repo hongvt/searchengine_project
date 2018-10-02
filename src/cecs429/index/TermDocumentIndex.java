@@ -1,5 +1,7 @@
 package cecs429.index;
 
+import cecs429.text.TokenProcessor;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -66,8 +68,19 @@ public class TermDocumentIndex implements Index {
 	}
 
 	@Override
-	public List<String> getVocabularyTypes() {
+	public void addToKGI(String token) {
+
+	}
+
+	@Override
+	public String[] getWildcardMatches(String term) {
+		return new String[0];
+	}
+
+	@Override
+	public TokenProcessor getProcessor() {
 		return null;
 	}
+
 
 }

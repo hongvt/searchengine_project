@@ -21,18 +21,31 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ *
+ */
 public class Milestone1UsingPosInvertIndex {
+    /**
+     *
+     * @param corpusFolder
+     */
     private static void printDirectoryList(Path corpusFolder) {
         System.out.println("Directories");
         System.out.println("------------------------------");
         File[] files = new File(corpusFolder.toString()).listFiles();
         for (int i = 0; i < files.length; i++) {
             if (files[i].isDirectory()) {
-                System.out.println(i + 1 + ": " + files[i].getName());
+                System.out.println(files[i].getName());
             }
         }
     }
 
+    /**
+     *
+     * @param keyboard
+     * @param corpusFolder
+     * @return
+     */
     private static String getDirectoryName(Scanner keyboard, Path corpusFolder) {
         printDirectoryList(corpusFolder);
         System.out.print("\nEnter the name of the corpus to index (or \"quit\" to exit): ");
@@ -50,6 +63,12 @@ public class Milestone1UsingPosInvertIndex {
         return "quit";
     }
 
+    /**
+     *
+     * @param corpusFolder
+     * @param dir
+     * @return
+     */
     private static boolean hasDirectory(Path corpusFolder, String dir) {
         File[] files = new File(corpusFolder.toString()).listFiles();
 
@@ -63,9 +82,13 @@ public class Milestone1UsingPosInvertIndex {
         return false;
     }
 
+    /**
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         Scanner keyboard = new Scanner(System.in);
-        TokenProcessor processor = new Milestone1TokenProcessor();
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
 
@@ -97,7 +120,7 @@ public class Milestone1UsingPosInvertIndex {
                     }
                 } else {
                     if (words[0].equals(":stem")) {
-                        String[] stems = processor.processTokens(words[1]);
+                        String[] stems = index.getProcessor().processTokens(words[1]);
                         for (int i = 0; i < stems.length; i++) {
                             System.out.println(i + ":" + stems[i]);
                         }
@@ -115,12 +138,17 @@ public class Milestone1UsingPosInvertIndex {
                             System.out.println("Doc ID: " + x.getDocumentId() + " " + corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
 
                         System.out.println("posting size: " + posts.size());
-                        System.out.println("Enter a Doc ID to view file's content");
-                        Reader fileContent = corpus.getDocument(Integer.parseInt(keyboard.nextLine())).getContent();
-                        EnglishTokenStream ets = new EnglishTokenStream(fileContent);
-
-                        for (String x : ets.getTokens())
-                            System.out.print(x + " ");
+                        if (posts.size() > 0)
+                        {
+                            System.out.print("Enter a Doc ID to view file's content: ");
+                            Reader fileContent = corpus.getDocument(Integer.parseInt(keyboard.nextLine())).getContent();
+                            EnglishTokenStream ets = new EnglishTokenStream(fileContent);
+                            System.out.println();
+                            for (String x : ets.getTokens())
+                                System.out.print(x + " ");
+                            ets.close();
+                            System.out.println();
+                        }
                     }
                 }
                 System.out.print("\nEnter term to search (or \"quit\" to exit): ");
@@ -138,10 +166,16 @@ public class Milestone1UsingPosInvertIndex {
         keyboard.close();
     }
 
+    /**
+     *
+     * @param corpus
+     * @return
+     * @throws IOException
+     */
     private static Index indexCorpus(DocumentCorpus corpus) throws IOException {
-        TokenProcessor processor = new Milestone1TokenProcessor();
         Iterable<Document> itrDoc = corpus.getDocuments();
-        PositionalInvertedIndex posInvertIndex = new PositionalInvertedIndex();
+        TokenProcessor processor = new Milestone1TokenProcessor();
+        PositionalInvertedIndex posInvertIndex = new PositionalInvertedIndex(processor);
         int positionCounter;
 
         for (Document doc : itrDoc) {
@@ -150,8 +184,8 @@ public class Milestone1UsingPosInvertIndex {
             EnglishTokenStream ets = new EnglishTokenStream(readDoc);
             Iterable<String> engTokens = ets.getTokens();
             for (String engTok : engTokens) {
-                posInvertIndex.addVocabType(engTok);
-                String[] stems = processor.processTokens(engTok);
+                posInvertIndex.addToKGI(engTok);
+                String[] stems = posInvertIndex.getProcessor().processTokens(engTok);
                 for (int i = 0; i < stems.length; i++) {
                     if (stems.length > 1) {
                         if (i == 0) {

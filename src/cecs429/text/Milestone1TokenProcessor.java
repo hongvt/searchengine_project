@@ -13,11 +13,22 @@ import java.util.regex.Pattern;
  * The token must not have any whitespace
  */
 public class Milestone1TokenProcessor implements TokenProcessor {
+    /**
+     *
+     * @param token
+     * @return
+     */
     @Override
     public String processToken(String token) {
         return token.replaceAll("\\W", "").toLowerCase();
     }
 
+    /**
+     *
+     * @param token
+     * @return
+     */
+    @Override
     public String[] processButDontStemTokensAKAGetType(String token) {
         ArrayList<String> finalWords = new ArrayList<String>();
         String term = removeNonAlphaNumCharBegEndAndQuotes(token);
@@ -82,6 +93,12 @@ public class Milestone1TokenProcessor implements TokenProcessor {
         return getStems(words);
     }
 
+    /**
+     *
+     * @param term
+     * @return
+     */
+    @Override
     public String removeNonAlphaNumCharBegEndAndQuotes(String term) {
         Pattern p = Pattern.compile("(\\w+)((\\W+)(\\w+))*");
         Matcher m = p.matcher(term);
@@ -92,7 +109,12 @@ public class Milestone1TokenProcessor implements TokenProcessor {
 
     }
 
-
+    /**
+     *
+     * @param tokens
+     * @return
+     */
+    @Override
     public String[] getStems(String[] tokens) {
         String[] stems = new String[tokens.length];
         for (int i = 0; i < tokens.length; i++) {
@@ -101,6 +123,12 @@ public class Milestone1TokenProcessor implements TokenProcessor {
         return stems;
     }
 
+    /**
+     *
+     * @param token
+     * @return
+     */
+    @Override
     public String getStem(String token) {
         SnowballStemmer snowballStemmer = new englishStemmer();
         snowballStemmer.setCurrent(token.toLowerCase());

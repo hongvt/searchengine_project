@@ -1,40 +1,41 @@
 package cecs429.index;
 
+import cecs429.queryparser.KGramIndex;
 import cecs429.text.Milestone1TokenProcessor;
+import cecs429.text.TokenProcessor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class PositionalInvertedIndex implements Index {
 
     private HashMap<String, ArrayList<Posting>> index;
-    private ArrayList<String> vocabTypes;
+    private HashSet<String> vocabTypes;
+    private KGramIndex kgi;
+    private TokenProcessor processor;
 
-    public PositionalInvertedIndex() {
+    public PositionalInvertedIndex(TokenProcessor processor) {
         index = new HashMap<>();
-        vocabTypes = new ArrayList<>();
+        vocabTypes = new HashSet<>();
+        kgi = new KGramIndex();
+        this.processor = processor;
     }
 
-    /**
-     * NOTE: for wildcard queries, when you want the position of the vocab type, STEM IT and then look it up in the dictionary
-     *
-     * @return
-     */
     @Override
-    public List<String> getVocabularyTypes() {
-        return Collections.unmodifiableList(vocabTypes);
+    public void addToKGI(String token)
+    {
+        kgi.addToKGI(processor.processButDontStemTokensAKAGetType(token));
     }
 
-    public void addVocabType(String vocabType) {
-        String[] types = (new Milestone1TokenProcessor()).processButDontStemTokensAKAGetType(vocabType);
-        for (int i = 0; i < types.length; i++) {
-            if (!vocabTypes.contains(types[i])) {
-                vocabTypes.add(types[i]);
-            }
-        }
+    @Override
+    public String[] getWildcardMatches(String term)
+    {
+        return kgi.getWildcardMatches(term);
+    }
+
+    @Override
+    public TokenProcessor getProcessor()
+    {
+        return this.processor;
     }
 
     @Override

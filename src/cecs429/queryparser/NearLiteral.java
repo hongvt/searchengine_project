@@ -2,22 +2,45 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
-import cecs429.text.Milestone1TokenProcessor;
+import cecs429.text.TokenProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 public class NearLiteral implements QueryComponent {
-    private String leftTerm, rightTerm;
+    /**
+     *
+     */
+    private String leftTerm;
+    /**
+     *
+     */
+    private String rightTerm;
+    /**
+     *
+     */
     private int k;
-    private Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
 
+    /**
+     * @param leftTerm
+     * @param rightTerm
+     * @param k
+     */
     public NearLiteral(String leftTerm, String rightTerm, int k) {
         this.leftTerm = leftTerm;
         this.rightTerm = rightTerm;
         this.k = k;
     }
 
+    /**
+     * @param list_one
+     * @param list_two
+     * @param nearK
+     * @return
+     */
     private List<Posting> nearMerge(List<Posting> list_one, List<Posting> list_two, int nearK) {
         List<Posting> result = new ArrayList<>();
         int i = 0, j = 0, k, m;
@@ -56,8 +79,12 @@ public class NearLiteral implements QueryComponent {
         }
     }
 
+    /**
+     * @param index
+     * @return
+     */
     @Override
     public List<Posting> getPostings(Index index) {
-        return nearMerge(index.getPostings(processor.getStem(leftTerm)), index.getPostings(processor.getStem(rightTerm)), k);
+        return nearMerge(index.getPostings(index.getProcessor().getStem(leftTerm)), index.getPostings(index.getProcessor().getStem(rightTerm)), k);
     }
 }

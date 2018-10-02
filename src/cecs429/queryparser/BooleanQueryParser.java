@@ -2,16 +2,13 @@ package cecs429.queryparser;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cecs429.text.Milestone1TokenProcessor;
+import cecs429.text.TokenProcessor;
 
 /**
  * Parses boolean queries according to the base requirements of the CECS 429 project.
  * Does not handle phrase queries, NOT queries, NEAR queries, or wildcard queries... yet.
  */
 public class BooleanQueryParser {
-    private Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
-
     /**
      * Identifies a portion of a string with a starting index and a length.
      */
