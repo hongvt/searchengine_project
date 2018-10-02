@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,7 +28,7 @@ public class Milestone1UsingPosInvertIndex {
         File[] files = new File(corpusFolder.toString()).listFiles();
         for (int i = 0; i < files.length; i++) {
             if (files[i].isDirectory()) {
-                System.out.println(i + 1 + ": " + files[i].getName());
+                System.out.println(files[i].getName());
             }
         }
     }
@@ -112,7 +111,7 @@ public class Milestone1UsingPosInvertIndex {
                         QueryComponent c = pa.parseQuery(word);
                         List<Posting> posts = c.getPostings(index);
                         for (Posting x : posts) {
-                            System.out.println(x.getDocumentId() + " " + x.getPositions());
+                            System.out.println(corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
                         }
                         System.out.println("posting size: " + posts.size());
                     }
@@ -120,12 +119,11 @@ public class Milestone1UsingPosInvertIndex {
                 System.out.print("\nEnter term to search (or \"quit\" to exit): ");
                 word = keyboard.nextLine();
             }
-            if (!word.equals(":q")) { //word must equal "quit" to go in here
+            if (!word.equals(":q")) {
                 if (!changeDirectory) {
                     dir = getDirectoryName(keyboard, corpusFolder);
                 }
-            } else if (word.equals(":q"))// word == :q so quit program
-            {
+            } else if (word.equals(":q")) {
                 dir = "quit";
             }
         }

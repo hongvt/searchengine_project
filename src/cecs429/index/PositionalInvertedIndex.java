@@ -1,7 +1,6 @@
 package cecs429.index;
 
 import cecs429.text.Milestone1TokenProcessor;
-import cecs429.text.TokenProcessor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,21 +20,18 @@ public class PositionalInvertedIndex implements Index {
 
     /**
      * NOTE: for wildcard queries, when you want the position of the vocab type, STEM IT and then look it up in the dictionary
+     *
      * @return
      */
     @Override
-    public List<String> getVocabularyTypes()
-    {
+    public List<String> getVocabularyTypes() {
         return Collections.unmodifiableList(vocabTypes);
     }
 
-    public void addVocabType(String vocabType)
-    {
+    public void addVocabType(String vocabType) {
         String[] types = (new Milestone1TokenProcessor()).processButDontStemTokensAKAGetType(vocabType);
-        for (int i = 0; i < types.length; i++)
-        {
-            if (!vocabTypes.contains(types[i]))
-            {
+        for (int i = 0; i < types.length; i++) {
+            if (!vocabTypes.contains(types[i])) {
                 vocabTypes.add(types[i]);
             }
         }
@@ -77,8 +73,7 @@ public class PositionalInvertedIndex implements Index {
         // find the index at which the documentId parameter starts at
         for (int docIdIndex = 0; docIdIndex < index.get(term).size(); docIdIndex++) {
             if (index.get(term).get(docIdIndex).getDocumentId() == documentId) {
-                //index.get(term).get(docIdIndex).getPositions().add(position);
-                index.get(term).get(docIdIndex).addPosition(position); //vhong
+                index.get(term).get(docIdIndex).addPosition(position);
             }
         }
     }
