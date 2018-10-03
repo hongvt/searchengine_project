@@ -10,44 +10,63 @@ import java.util.Objects;
  */
 public class Posting {
 
-    private int mDocumentId;
+    /**
+     *
+     */
+    private int documentId;
+    /**
+     *
+     */
     private ArrayList<Integer> positions = new ArrayList<>();
 
+    /**
+     *
+     * @param documentId
+     */
     public Posting(int documentId) {
-        mDocumentId = documentId;
+        this.documentId = documentId;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDocumentId() {
-        return mDocumentId;
+        return this.documentId;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Integer> getPositions() {
         return new ArrayList<>(positions);
     }
 
+    /**
+     *
+     * @param pos
+     */
     public void addPosition(Integer pos)
     {
         positions.add(pos);
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
-        /*if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;*/
         Posting posting = (Posting) o;
-        /*if (this.positions.size() == posting.positions.size())
-        {
-            for (int i = 0; i < this.positions.size(); i++)
-            {
-                if (positions.get(i) != posting.positions.get(i))
-                {
-                    return false;
-                }
-            }
-        }*/
-        return mDocumentId == posting.mDocumentId;
+        return this.documentId == posting.documentId;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString()
     {

@@ -26,7 +26,7 @@ import java.util.Scanner;
  */
 public class Milestone1UsingPosInvertIndex {
     /**
-     *
+     * Prints the names of the directories given the path of the corpus directory
      * @param corpusFolder
      */
     private static void printDirectoryList(Path corpusFolder) {
@@ -44,7 +44,7 @@ public class Milestone1UsingPosInvertIndex {
      *
      * @param keyboard
      * @param corpusFolder
-     * @return
+     * @return String the
      */
     private static String getDirectoryName(Scanner keyboard, Path corpusFolder) {
         printDirectoryList(corpusFolder);
@@ -184,8 +184,9 @@ public class Milestone1UsingPosInvertIndex {
             EnglishTokenStream ets = new EnglishTokenStream(readDoc);
             Iterable<String> engTokens = ets.getTokens();
             for (String engTok : engTokens) {
-                posInvertIndex.addToKGI(engTok);
-                String[] stems = posInvertIndex.getProcessor().processTokens(engTok);
+                String[] types = posInvertIndex.getProcessor().processButDontStemTokensAKAGetType(engTok);
+                posInvertIndex.addToKGI(types);
+                String[] stems = posInvertIndex.getProcessor().getStems(types);
                 for (int i = 0; i < stems.length; i++) {
                     if (stems.length > 1) {
                         if (i == 0) {
@@ -198,6 +199,7 @@ public class Milestone1UsingPosInvertIndex {
                     }
                 }
             }
+            System.out.println("finished indexing doc #"+doc.getId());
             ets.close();
         }
         return posInvertIndex;

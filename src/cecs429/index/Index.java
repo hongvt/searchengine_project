@@ -19,7 +19,7 @@ public interface Index {
      */
     List<String> getVocabulary();
 
-    void addToKGI(String token);
+    void addToKGI(String[] types);
 
     String[] getWildcardMatches(String term);
 

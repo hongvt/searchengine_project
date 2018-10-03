@@ -1,18 +1,35 @@
 package cecs429.index;
 
 import cecs429.queryparser.KGramIndex;
-import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
-
 import java.util.*;
 
+/**
+ *
+ */
 public class PositionalInvertedIndex implements Index {
 
+    /**
+     *
+     */
     private HashMap<String, ArrayList<Posting>> index;
+    /**
+     *
+     */
     private HashSet<String> vocabTypes;
+    /**
+     *
+     */
     private KGramIndex kgi;
+    /**
+     *
+     */
     private TokenProcessor processor;
 
+    /**
+     *
+     * @param processor
+     */
     public PositionalInvertedIndex(TokenProcessor processor) {
         index = new HashMap<>();
         vocabTypes = new HashSet<>();
@@ -20,24 +37,42 @@ public class PositionalInvertedIndex implements Index {
         this.processor = processor;
     }
 
+    /**
+     *
+     * @param types
+     */
     @Override
-    public void addToKGI(String token)
+    public void addToKGI(String[] types)
     {
-        kgi.addToKGI(processor.processButDontStemTokensAKAGetType(token));
+        kgi.addToKGI(types);
     }
 
+    /**
+     *
+     * @param term
+     * @return
+     */
     @Override
     public String[] getWildcardMatches(String term)
     {
         return kgi.getWildcardMatches(term);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public TokenProcessor getProcessor()
     {
         return this.processor;
     }
 
+    /**
+     *
+     * @param term
+     * @return
+     */
     @Override
     public List<Posting> getPostings(String term) {
         List<Posting> results = new ArrayList<>();
@@ -53,6 +88,10 @@ public class PositionalInvertedIndex implements Index {
         return results;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public List<String> getVocabulary() {
         Collection<String> unsortedVocab = index.keySet();
@@ -61,6 +100,12 @@ public class PositionalInvertedIndex implements Index {
         return Collections.unmodifiableList(sortedVocab);
     }
 
+    /**
+     *
+     * @param term
+     * @param documentId
+     * @param position
+     */
     public void addTerm(String term, int documentId, int position) {
         if (index.containsKey(term)) {
             if (index.get(term).get(index.get(term).size() - 1).getDocumentId() != documentId) {

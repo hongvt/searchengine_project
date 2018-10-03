@@ -44,6 +44,7 @@ public class JsonFileDocument implements FileDocument
             Gson gsonObj = new Gson();
             Reader r = Files.newBufferedReader(mFilePath);
             JsonArticle jArticle = gsonObj.fromJson(r,JsonArticle.class);
+            r.close();
             return new StringReader(jArticle.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -63,6 +64,7 @@ public class JsonFileDocument implements FileDocument
                 Gson gsonObj = new Gson();
                 Reader r = Files.newBufferedReader(mFilePath);
                 JsonArticle jArticle = gsonObj.fromJson(r,JsonArticle.class);
+                r.close();
                 setTitle(jArticle.getTitle());
                 return jArticle.getTitle();
             } catch (IOException e) {
