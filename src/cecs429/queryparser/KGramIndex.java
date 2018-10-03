@@ -17,34 +17,36 @@ public class KGramIndex {
     }
 
     /**
-     *
-     * @param types
+     * @param type
      */
-    public void addToKGI(String[] types) {
-        for (int i = 0; i < types.length; i++) {
-            if (types[i].length() == 1) //add the 1-gram
+    public void addToKGI(HashSet<String> type) {
+
+        List<String> types = new ArrayList<>(type);
+
+        for (int m = 0; m < types.size(); m++) {
+            String temp = types.get(m);
+            if (temp.length() == 1) //add the 1-gram
             {
-                addKGramIndex(types[i], types[i]);
+                addKGramIndex(temp, temp);
             } else {
                 //1-gram
-                for (int j = 0; j < types[i].length() - 1; j++) {
-                    addKGramIndex(types[i].substring(j, j + 1), types[i]);
+                for (int j = 0; j < temp.length() - 1; j++) {
+                    addKGramIndex(temp.substring(j, j + 1), temp);
                 }
                 //2,3-gram
-                String type = "$" + types[i] + "$";
+                String typez = "$" + temp + "$";
                 for (int j = 2; j <= 3; j++) {
-                    ArrayList<String> kgrams = getKGrams(j, type);
+                    ArrayList<String> kgrams = getKGrams(j, typez);
                     for (int k = 0; k < kgrams.size(); k++) {
-                        addKGramIndex(kgrams.get(k), types[i]);
+                        addKGramIndex(kgrams.get(k), temp);
                     }
                 }
-
             }
         }
     }
 
+
     /**
-     *
      * @param kgramKey
      * @param type
      */
@@ -75,7 +77,6 @@ public class KGramIndex {
     }
 
     /**
-     *
      * @param wildcard
      * @return
      */
@@ -149,7 +150,6 @@ public class KGramIndex {
     }
 
     /**
-     *
      * @param anded
      * @param a
      * @return

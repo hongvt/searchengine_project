@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -168,6 +169,7 @@ public class Milestone1UsingPosInvertIndex {
      * @throws IOException
      */
     private static Index indexCorpus(DocumentCorpus corpus) throws IOException {
+        HashSet<String> KGI = new HashSet<>();
         Iterable<Document> itrDoc = corpus.getDocuments();
         TokenProcessor processor = new Milestone1TokenProcessor();
         PositionalInvertedIndex posInvertIndex = new PositionalInvertedIndex(processor);
@@ -180,7 +182,10 @@ public class Milestone1UsingPosInvertIndex {
             Iterable<String> engTokens = ets.getTokens();
             for (String engTok : engTokens) {
                 String[] types = posInvertIndex.getProcessor().processButDontStemTokensAKAGetType(engTok);
-                posInvertIndex.addToKGI(types);
+                for(String x: types)
+                    KGI.add(x);
+
+                //posInvertIndex.addToKGI(types);
                 String[] stems = posInvertIndex.getProcessor().getStems(types);
                 for (int i = 0; i < stems.length; i++) {
                     if (stems.length > 1) {
@@ -197,6 +202,8 @@ public class Milestone1UsingPosInvertIndex {
             System.out.println("finished indexing doc #" + doc.getId());
             ets.close();
         }
+        // add the entire hashset to the KGI
+        posInvertIndex.addToKGI(KGI);
         return posInvertIndex;
     }
 }

@@ -42,7 +42,7 @@ public class PositionalInvertedIndex implements Index {
      * @param types
      */
     @Override
-    public void addToKGI(String[] types)
+    public void addToKGI(HashSet<String> types)
     {
         kgi.addToKGI(types);
     }
@@ -107,20 +107,23 @@ public class PositionalInvertedIndex implements Index {
      * @param position
      */
     public void addTerm(String term, int documentId, int position) {
-        if (index.containsKey(term)) {
-            if (index.get(term).get(index.get(term).size() - 1).getDocumentId() != documentId) {
-                index.get(term).add(new Posting(documentId));
-            }
-        } else {
-            index.put(term, new ArrayList<>());
-            index.get(term).add(new Posting(documentId));
-        }
 
-        // find the index at which the documentId parameter starts at
-        for (int docIdIndex = 0; docIdIndex < index.get(term).size(); docIdIndex++) {
-            if (index.get(term).get(docIdIndex).getDocumentId() == documentId) {
-                index.get(term).get(docIdIndex).addPosition(position);
+
+        if (index.containsKey(term)) {
+            List<Posting> postings = index.get(term);
+            if (postings.get(postings.size() - 1).getDocumentId() != documentId) {
+                Posting p = new Posting(documentId);
+                p.addPosition(position);
+                postings.add(new Posting(documentId));
+            } else {
+                postings.get(postings.size() - 1).addPosition(position);
             }
+
+        } else {
+            ArrayList<Posting> postings = new ArrayList<>();
+            postings.add(new Posting(documentId));
+            postings.get(postings.size() - 1).addPosition(position);
+            index.put(term, postings);
         }
     }
 }

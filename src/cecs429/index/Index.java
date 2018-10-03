@@ -2,6 +2,7 @@ package cecs429.index;
 
 import cecs429.text.TokenProcessor;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public interface Index {
      */
     List<String> getVocabulary();
 
-    void addToKGI(String[] types);
+    void addToKGI(HashSet<String> types);
 
     String[] getWildcardMatches(String term);
 

@@ -2,10 +2,7 @@ package cecs429.index;
 
 import cecs429.text.TokenProcessor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Implements an Index using a term-document matrix. Requires knowing the full corpus vocabulary and number of documents
@@ -68,7 +65,7 @@ public class TermDocumentIndex implements Index {
 	}
 
 	@Override
-	public void addToKGI(String[] types) {
+	public void addToKGI(HashSet<String> types) {
 
 	}
 
