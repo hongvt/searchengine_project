@@ -50,7 +50,7 @@ public class InvertedIndex implements Index
     }
 
     @Override
-    public void addToKGI(String token) {
+    public void addToKGI(String[] types) {
 
     }
 

@@ -27,6 +27,7 @@ import java.util.Scanner;
 public class Milestone1UsingPosInvertIndex {
     /**
      * Prints the names of the directories given the path of the corpus directory
+     *
      * @param corpusFolder
      */
     private static void printDirectoryList(Path corpusFolder) {
@@ -41,7 +42,6 @@ public class Milestone1UsingPosInvertIndex {
     }
 
     /**
-     *
      * @param keyboard
      * @param corpusFolder
      * @return String the
@@ -64,7 +64,6 @@ public class Milestone1UsingPosInvertIndex {
     }
 
     /**
-     *
      * @param corpusFolder
      * @param dir
      * @return
@@ -83,7 +82,6 @@ public class Milestone1UsingPosInvertIndex {
     }
 
     /**
-     *
      * @param args
      * @throws IOException
      */
@@ -128,8 +126,7 @@ public class Milestone1UsingPosInvertIndex {
                         for (int i = 0; i < 1000; i++) {
                             System.out.println(index.getVocabulary().get(i));
                         }
-                    } else //TODO:: ADD BOOLEAN QUERY PARSER HERE
-                    {
+                    } else {
                         BooleanQueryParser pa = new BooleanQueryParser();
                         QueryComponent c = pa.parseQuery(word);
                         List<Posting> posts = c.getPostings(index);
@@ -138,8 +135,7 @@ public class Milestone1UsingPosInvertIndex {
                             System.out.println("Doc ID: " + x.getDocumentId() + " " + corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
 
                         System.out.println("posting size: " + posts.size());
-                        if (posts.size() > 0)
-                        {
+                        if (posts.size() > 0) {
                             System.out.print("Enter a Doc ID to view file's content: ");
                             Reader fileContent = corpus.getDocument(Integer.parseInt(keyboard.nextLine())).getContent();
                             EnglishTokenStream ets = new EnglishTokenStream(fileContent);
@@ -167,7 +163,6 @@ public class Milestone1UsingPosInvertIndex {
     }
 
     /**
-     *
      * @param corpus
      * @return
      * @throws IOException
@@ -199,7 +194,7 @@ public class Milestone1UsingPosInvertIndex {
                     }
                 }
             }
-            System.out.println("finished indexing doc #"+doc.getId());
+            System.out.println("finished indexing doc #" + doc.getId());
             ets.close();
         }
         return posInvertIndex;

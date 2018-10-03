@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a990778b-cd0f-4129-b890-99e40247a1b1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/index/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/index/Posting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/Posting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/queryparser/AndQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/queryparser/AndQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/index/InvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/InvertedIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/index/TermDocumentIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/TermDocumentIndex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -21,14 +17,14 @@
     <session id="-200011843">
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="51" />
+          <entry key="java" value="53" />
           <entry key="json" value="1" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="51" />
+          <entry key="JAVA" value="53" />
           <entry key="JSON" value="1" />
           <entry key="XML" value="1" />
         </counts>
@@ -58,8 +54,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1838">
-              <caret line="46" column="25" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+            <state relative-caret-position="431">
+              <caret line="195" column="13" lean-forward="true" selection-start-line="195" selection-start-column="13" selection-end-line="195" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/index/TermDocumentIndex.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="371">
+              <caret line="72" column="5" selection-start-line="72" selection-start-column="5" selection-end-line="72" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/index/InvertedIndex.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="386">
+              <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -109,11 +126,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="40" column="6" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
+            <state relative-caret-position="180">
+              <caret line="12" column="6" lean-forward="true" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#798#799#0" expanded="true" />
@@ -154,14 +171,14 @@
         <option value="$PROJECT_DIR$/src/cecs429/queryparser/NearLiteral.java" />
         <option value="$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java" />
         <option value="$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java" />
-        <option value="$PROJECT_DIR$/src/cecs429/index/TermDocumentIndex.java" />
-        <option value="$PROJECT_DIR$/src/cecs429/index/InvertedIndex.java" />
         <option value="$PROJECT_DIR$/src/cecs429/index/Posting.java" />
         <option value="$PROJECT_DIR$/src/cecs429/queryparser/AndQuery.java" />
         <option value="$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java" />
         <option value="$PROJECT_DIR$/src/cecs429/index/Index.java" />
-        <option value="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" />
         <option value="$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java" />
+        <option value="$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/index/TermDocumentIndex.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/index/InvertedIndex.java" />
       </list>
     </option>
   </component>
@@ -240,7 +257,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538531213509" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538531433934" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -292,6 +309,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.30463982" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -302,7 +320,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.37653062" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.37653062" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -310,7 +328,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32857144" />
+      <window_info anchor="bottom" id="Messages" order="10" visible="true" weight="0.32857144" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -485,33 +503,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/InvertedIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="28" lean-forward="true" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1455#1456#0" expanded="true" />
-            <element signature="e#1491#1492#0" expanded="true" />
-            <element signature="e#1549#1550#0" expanded="true" />
-            <element signature="e#1576#1577#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/TermDocumentIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-56">
-          <caret line="13" column="7" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
-          <folding>
-            <element signature="e#2023#2024#0" expanded="true" />
-            <element signature="e#2050#2051#0" expanded="true" />
-            <element signature="e#2102#2103#0" expanded="true" />
-            <element signature="e#2120#2121#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/index/Posting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="870">
@@ -552,37 +543,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Index.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="46" column="22" lean-forward="true" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/documents/DirectoryCorpus.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1653">
           <caret line="148" column="7" selection-start-line="148" selection-start-column="7" selection-end-line="148" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1838">
-          <caret line="46" column="25" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -603,14 +567,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Index.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="46" column="22" lean-forward="true" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="40" column="6" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
+        <state relative-caret-position="180">
+          <caret line="12" column="6" lean-forward="true" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#798#799#0" expanded="true" />
             <element signature="e#879#880#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="431">
+          <caret line="195" column="13" lean-forward="true" selection-start-line="195" selection-start-column="13" selection-end-line="195" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/TermDocumentIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="72" column="5" selection-start-line="72" selection-start-column="5" selection-end-line="72" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/InvertedIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
