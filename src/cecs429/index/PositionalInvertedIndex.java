@@ -2,11 +2,12 @@ package cecs429.index;
 
 import cecs429.queryparser.KGramIndex;
 import cecs429.text.TokenProcessor;
+
 import java.util.*;
 
-//TODO::@MICHAEL
 /**
- *
+ * Positional inverted index class which keeps track of the position
+ * of a term in addition to which document it was found in
  */
 public class PositionalInvertedIndex implements Index {
     /**
@@ -35,11 +36,13 @@ public class PositionalInvertedIndex implements Index {
         this.processor = processor;
     }
 
-//TODO:: @MICHAEL
     /**
-     * @param term
-     * @param documentId
-     * @param position
+     * Checks to see if the term being added is within the index already, if it is, add a new Posting
+     * for that term, else add the term to the index
+     *
+     * @param term       - the stemmed term to be added to the index
+     * @param documentId - the documentId at which the corresponding term shows up in
+     * @param position   - the position of the term within the documentId
      */
     public void addTerm(String term, int documentId, int position) {
         if (index.containsKey(term)) {

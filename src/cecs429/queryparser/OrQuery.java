@@ -24,12 +24,13 @@ public class OrQuery implements QueryComponent {
         mComponents = components;
     }
 
-//TODO :: @MICHAEL
     /**
+     *  Performs the orMerge by iterating through the smaller of the two lists
+     *  and checking to see if the the bigger list contains the posting(s) of smaller
+     * @param list_one - first part of the List of postings retrieved from mTerms
+     * @param list_two - second part of the List of postings retrieved from mTerms
+     * @return the two parameters lists merged together using the orMerge routine from lecture
      *
-     * @param list_one
-     * @param list_two
-     * @return
      */
     private List<Posting> orMerge(List<Posting> list_one, List<Posting> list_two) {
 

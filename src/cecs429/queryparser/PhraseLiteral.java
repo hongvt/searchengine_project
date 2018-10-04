@@ -25,12 +25,13 @@ public class PhraseLiteral implements QueryComponent {
         mTerms.addAll(Arrays.asList(terms.split(" ")));
     }
 
-//TODO :: @MICHAEL
     /**
-     *
-     * @param list_one
-     * @param list_two
-     * @return
+     * Performs the positional merge routine by iterating to find the same documentId across both lists
+     * and checking to see if their position lists are off by 1
+     * @param list_one - the first list of postings retrieved from mTerms
+     * @param list_two - the second list of postings retrieved from mTerms
+     * @return returns a result list of postings where two lists are contained within the same
+     * documentId and where the position their positions are off by 1, meaning adjacent to each other
      */
     private List<Posting> positionMerge(List<Posting> list_one, List<Posting> list_two) {
         List<Posting> result = new ArrayList<>();
