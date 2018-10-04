@@ -2,6 +2,7 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,11 +25,13 @@ public class AndQuery implements QueryComponent {
         mComponents = components;
     }
 
-//TODO :: @MICHAEL
     /**
-     * @param list_one
-     * @param list_two
-     * @return
+     * Uses the andMerge routine from lecture to merge two lists that share the same documentId.
+     * Iterates through the lists with i and j pointers.
+     *
+     * @param list_one - the first list of the parameter
+     * @param list_two - the second list of the parameter
+     * @return the list of postings that are shared across both parameters.
      */
     private List<Posting> andMerge(List<Posting> list_one, List<Posting> list_two) {
         int i = 0, j = 0;

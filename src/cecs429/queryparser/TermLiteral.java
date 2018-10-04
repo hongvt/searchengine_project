@@ -10,14 +10,13 @@ import java.util.List;
  * A TermLiteral represents a single term in a subquery.
  */
 public class TermLiteral implements QueryComponent {
-//TODO::MICHAEL
     /**
-     *
+     * Term used to retrieve the postings list for
      */
     private String mTerm;
 
     /**
-     *
+     * Constructor that assigns the member variable to what the BooleanQueryParser parsed
      * @param term
      */
     public TermLiteral(String term) {
@@ -25,8 +24,8 @@ public class TermLiteral implements QueryComponent {
     }
 
     /**
-     *
-     * @return
+     * Retrieves the term
+     * @return the termLiteral
      */
     public String getTerm() {
         return mTerm;

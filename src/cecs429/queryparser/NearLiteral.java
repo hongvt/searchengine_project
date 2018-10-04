@@ -2,33 +2,33 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO :: @MICHAEL
+
 /**
- *
+ *  Performs the check to see if the right term is within K terms of the leftTerm.
  */
 public class NearLiteral implements QueryComponent {
-//TODO :: @MICHAEL
     /**
-     *
+     * Represents the leftTerm that was parsed from the NearQuery
      */
     private String leftTerm;
     /**
-     *
+     * Represents the rightTerm that was parsed from the NearQuery
      */
     private String rightTerm;
     /**
-     *
+     * Represents the bounds at which the rightTerm is within the leftTerm
      */
     private int k;
 
-//TODO :: @MICHAEL
+
     /**
-     * @param leftTerm
-     * @param rightTerm
-     * @param k
+     * @param leftTerm - Represents the leftTerm that was parsed from the NearQuery
+     * @param rightTerm - Represents the rightTerm that was parsed from the NearQuery
+     * @param k - Represents the bounds at which the rightTerm is within the leftTerm
      */
     public NearLiteral(String leftTerm, String rightTerm, int k) {
         this.leftTerm = leftTerm;
@@ -36,12 +36,13 @@ public class NearLiteral implements QueryComponent {
         this.k = k;
     }
 
-//TODO :: @MICHAEL
+
     /**
-     * @param list_one
-     * @param list_two
-     * @param nearK
-     * @return
+     * @param list_one - the postings list for the termLiteral of leftTerm
+     * @param list_two - the postings list for the termLiteral of rightTerm
+     * @param nearK - the bounds at which the rightTerm is within the leftTerm
+     * @return returns a List of Postings that meet the criteria for the right term being
+     * within the range of nearK of the leftTerm
      */
     private List<Posting> nearMerge(List<Posting> list_one, List<Posting> list_two, int nearK) {
         List<Posting> result = new ArrayList<>();
