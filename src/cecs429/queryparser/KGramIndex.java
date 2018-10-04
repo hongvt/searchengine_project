@@ -123,9 +123,7 @@ public class KGramIndex {
         ArrayList<Integer> removing = new ArrayList<>();
 
         if (!isLeading) {
-            System.out.println(temp);
             String leadingQ = components[0].substring(1);
-            System.out.println(leadingQ);
             for (int i = 0; i < andedVocab.size(); i++) {
                 if (andedVocab.get(i).length() >= leadingQ.length() && !andedVocab.get(i).substring(0, leadingQ.length()).equals(leadingQ)) {
                     removing.add(i);
