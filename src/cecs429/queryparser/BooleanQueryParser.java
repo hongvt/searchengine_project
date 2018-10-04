@@ -2,7 +2,6 @@ package cecs429.queryparser;
 
 import java.util.ArrayList;
 import java.util.List;
-import cecs429.text.TokenProcessor;
 
 /**
  * Parses boolean queries according to the base requirements of the CECS 429 project.
@@ -37,6 +36,8 @@ public class BooleanQueryParser {
 
     /**
      * Given a boolean query, parses and returns a tree of QueryComponents representing the query.
+     * @param query
+     * @return
      */
     public QueryComponent parseQuery(String query) {
         int start = 0;
@@ -97,8 +98,10 @@ public class BooleanQueryParser {
     }
 
     /**
-     * Locates the start index and length of the next subquery in the given query string,
-     * starting at the given index.
+     * Locates the start index and length of the next subquery in the given query string, starting at the given index.
+     * @param query
+     * @param startIndex
+     * @return
      */
     private StringBounds findNextSubquery(String query, int startIndex) {
         int lengthOut;
@@ -135,6 +138,9 @@ public class BooleanQueryParser {
 
     /**
      * Locates and returns the next literal from the given subquery string.
+     * @param subquery
+     * @param startIndex
+     * @return
      */
     private Literal findNextLiteral(String subquery, int startIndex) {
         int subLength = subquery.length();
@@ -151,7 +157,6 @@ public class BooleanQueryParser {
         if (firstIndexCheck == '\"') {
             // find the index of the ending "
             int nextDoubleQuote = subquery.indexOf('"', startIndex + 1);
-
             return new Literal(
                     new StringBounds(startIndex + 1, nextDoubleQuote),
                     new PhraseLiteral(subquery.substring(startIndex + 1, nextDoubleQuote)));

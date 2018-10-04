@@ -3,7 +3,6 @@ package cecs429.queryparser;
 import cecs429.index.Index;
 import cecs429.index.Posting;
 import cecs429.text.Milestone1TokenProcessor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +10,24 @@ import java.util.List;
  * A TermLiteral represents a single term in a subquery.
  */
 public class TermLiteral implements QueryComponent {
+//TODO::MICHAEL
+    /**
+     *
+     */
     private String mTerm;
 
+    /**
+     *
+     * @param term
+     */
     public TermLiteral(String term) {
         mTerm = term;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTerm() {
         return mTerm;
     }

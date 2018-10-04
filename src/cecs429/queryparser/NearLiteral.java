@@ -2,15 +2,15 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
-import cecs429.text.TokenProcessor;
-
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO :: @MICHAEL
 /**
  *
  */
 public class NearLiteral implements QueryComponent {
+//TODO :: @MICHAEL
     /**
      *
      */
@@ -24,6 +24,7 @@ public class NearLiteral implements QueryComponent {
      */
     private int k;
 
+//TODO :: @MICHAEL
     /**
      * @param leftTerm
      * @param rightTerm
@@ -35,6 +36,7 @@ public class NearLiteral implements QueryComponent {
         this.k = k;
     }
 
+//TODO :: @MICHAEL
     /**
      * @param list_one
      * @param list_two
@@ -79,10 +81,6 @@ public class NearLiteral implements QueryComponent {
         }
     }
 
-    /**
-     * @param index
-     * @return
-     */
     @Override
     public List<Posting> getPostings(Index index) {
         return nearMerge(index.getPostings(index.getProcessor().getStem(leftTerm)), index.getPostings(index.getProcessor().getStem(rightTerm)), k);

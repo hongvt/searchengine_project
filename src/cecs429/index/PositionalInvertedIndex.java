@@ -4,75 +4,78 @@ import cecs429.queryparser.KGramIndex;
 import cecs429.text.TokenProcessor;
 import java.util.*;
 
+//TODO::@MICHAEL
 /**
  *
  */
 public class PositionalInvertedIndex implements Index {
-
     /**
-     *
+     * Key is the stemmed vocab
+     * Value is the posting list (a posting is a doc ID and its positions in that doc)
      */
     private HashMap<String, ArrayList<Posting>> index;
     /**
-     *
-     */
-    private HashSet<String> vocabTypes;
-    /**
-     *
+     * The KGramIndex that is filled with this kgrams from the types of this Index
      */
     private KGramIndex kgi;
     /**
-     *
+     * The TokenProcessor used to index the Index and for the queries on this Index
      */
     private TokenProcessor processor;
 
     /**
+     * Constructor used to create a PositionalInvertedIndex with the given TokenProcessor parameter value
+     * Instantiates the index HashMap and kgi KGramIndex
      *
-     * @param processor
+     * @param processor TokenProcessor - processor is set to this parameter value
      */
     public PositionalInvertedIndex(TokenProcessor processor) {
         index = new HashMap<>();
-        vocabTypes = new HashSet<>();
         kgi = new KGramIndex();
         this.processor = processor;
     }
 
+//TODO:: @MICHAEL
     /**
-     *
-     * @param types
+     * @param term
+     * @param documentId
+     * @param position
      */
+    public void addTerm(String term, int documentId, int position) {
+        if (index.containsKey(term)) {
+            List<Posting> postings = index.get(term);
+            if (postings.get(postings.size() - 1).getDocumentId() != documentId) {
+                Posting p = new Posting(documentId);
+                p.addPosition(position);
+                postings.add(p);
+            } else {
+                postings.get(postings.size() - 1).addPosition(position);
+            }
+
+        } else {
+            ArrayList<Posting> postings = new ArrayList<>();
+            Posting p = new Posting(documentId);
+            p.addPosition(position);
+            postings.add(p);
+            index.put(term, postings);
+        }
+    }
+
     @Override
-    public void addToKGI(HashSet<String> types)
-    {
+    public void addToKGI(HashSet<String> types) {
         kgi.addToKGI(types);
     }
 
-    /**
-     *
-     * @param term
-     * @return
-     */
     @Override
-    public String[] getWildcardMatches(String term)
-    {
+    public String[] getWildcardMatches(String term) {
         return kgi.getWildcardMatches(term);
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
-    public TokenProcessor getProcessor()
-    {
+    public TokenProcessor getProcessor() {
         return this.processor;
     }
 
-    /**
-     *
-     * @param term
-     * @return
-     */
     @Override
     public List<Posting> getPostings(String term) {
         List<Posting> results = new ArrayList<>();
@@ -88,42 +91,11 @@ public class PositionalInvertedIndex implements Index {
         return results;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public List<String> getVocabulary() {
         Collection<String> unsortedVocab = index.keySet();
         ArrayList<String> sortedVocab = new ArrayList(unsortedVocab);
         Collections.sort(sortedVocab);
         return Collections.unmodifiableList(sortedVocab);
-    }
-
-    /**
-     *
-     * @param term
-     * @param documentId
-     * @param position
-     */
-    public void addTerm(String term, int documentId, int position) {
-
-
-        if (index.containsKey(term)) {
-            List<Posting> postings = index.get(term);
-            if (postings.get(postings.size() - 1).getDocumentId() != documentId) {
-                Posting p = new Posting(documentId);
-                p.addPosition(position);
-                postings.add(new Posting(documentId));
-            } else {
-                postings.get(postings.size() - 1).addPosition(position);
-            }
-
-        } else {
-            ArrayList<Posting> postings = new ArrayList<>();
-            postings.add(new Posting(documentId));
-            postings.get(postings.size() - 1).addPosition(position);
-            index.put(term, postings);
-        }
     }
 }

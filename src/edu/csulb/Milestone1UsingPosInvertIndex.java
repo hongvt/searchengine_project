@@ -23,13 +23,12 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- *
+ * Contains the main for Milestone 1
  */
 public class Milestone1UsingPosInvertIndex {
     /**
      * Prints the names of the directories given the path of the corpus directory
-     *
-     * @param corpusFolder
+     * @param corpusFolder Path - path of the folder that contains all possible corpora to index
      */
     private static void printDirectoryList(Path corpusFolder) {
         System.out.println("Directories");
@@ -43,9 +42,10 @@ public class Milestone1UsingPosInvertIndex {
     }
 
     /**
-     * @param keyboard
-     * @param corpusFolder
-     * @return String the
+     * Prompts the user for the name of the corpus to index
+     * @param keyboard Scanner - used to get user input
+     * @param corpusFolder Path - path of the folder that contains all possible corpora to index
+     * @return String "quit" or the String name of the directory
      */
     private static String getDirectoryName(Scanner keyboard, Path corpusFolder) {
         printDirectoryList(corpusFolder);
@@ -65,9 +65,10 @@ public class Milestone1UsingPosInvertIndex {
     }
 
     /**
-     * @param corpusFolder
-     * @param dir
-     * @return
+     * Checks if the parameter value String dir is a valid directory name
+     * @param corpusFolder Path - path of the folder that contains all possible corpora to index
+     * @param dir String - the directory name
+     * @return boolean true if dir is valid false if not valid
      */
     private static boolean hasDirectory(Path corpusFolder, String dir) {
         File[] files = new File(corpusFolder.toString()).listFiles();
@@ -83,6 +84,7 @@ public class Milestone1UsingPosInvertIndex {
     }
 
     /**
+     * MAIN METHOD FOR MILESTONE 1
      * @param args
      * @throws IOException
      */
@@ -137,7 +139,7 @@ public class Milestone1UsingPosInvertIndex {
 
                         System.out.println("posting size: " + posts.size());
                         if (posts.size() > 0) {
-                            System.out.print("Enter a Doc ID to view file's content: ");
+                            System.out.print("Enter a Doc ID to view file's content \t\t(NUMBER ONLY!!!!!): ");
                             Reader fileContent = corpus.getDocument(Integer.parseInt(keyboard.nextLine())).getContent();
                             EnglishTokenStream ets = new EnglishTokenStream(fileContent);
                             System.out.println();
@@ -151,11 +153,11 @@ public class Milestone1UsingPosInvertIndex {
                 System.out.print("\nEnter term to search (or \"quit\" to exit): ");
                 word = keyboard.nextLine();
             }
-            if (!word.equals(":q")) { //word must equal "quit" to go in here
+            if (!word.equals(":q")) {
                 if (!changeDirectory) {
                     dir = getDirectoryName(keyboard, corpusFolder);
                 }
-            } else if (word.equals(":q"))// word == :q so quit program
+            } else if (word.equals(":q"))
             {
                 dir = "quit";
             }
@@ -164,8 +166,9 @@ public class Milestone1UsingPosInvertIndex {
     }
 
     /**
-     * @param corpus
-     * @return
+     * Indexes the selected corpus
+     * @param corpus - the corpus to index
+     * @return Index contains info on every term in every document within selected corpus
      * @throws IOException
      */
     private static Index indexCorpus(DocumentCorpus corpus) throws IOException {
@@ -182,10 +185,10 @@ public class Milestone1UsingPosInvertIndex {
             Iterable<String> engTokens = ets.getTokens();
             for (String engTok : engTokens) {
                 String[] types = posInvertIndex.getProcessor().processButDontStemTokensAKAGetType(engTok);
+                //adding TYPES
                 for(String x: types)
                     KGI.add(x);
 
-                //posInvertIndex.addToKGI(types);
                 String[] stems = posInvertIndex.getProcessor().getStems(types);
                 for (int i = 0; i < stems.length; i++) {
                     if (stems.length > 1) {
@@ -199,10 +202,11 @@ public class Milestone1UsingPosInvertIndex {
                     }
                 }
             }
-            System.out.println("finished indexing doc #" + doc.getId());
             ets.close();
         }
         // add the entire hashset to the KGI
+        System.out.println("vocab:"+posInvertIndex.getVocabulary().size());
+        System.out.println("KGI size:"+KGI.size());
         posInvertIndex.addToKGI(KGI);
         return posInvertIndex;
     }

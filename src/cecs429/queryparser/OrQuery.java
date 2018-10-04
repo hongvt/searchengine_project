@@ -2,7 +2,6 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,13 +10,27 @@ import java.util.stream.Collectors;
  * An OrQuery composes other QueryComponents and merges their postings with a union-type operation.
  */
 public class OrQuery implements QueryComponent {
-    // The components of the Or query.
+    /**
+     * Contains the components to Or together
+     */
     private List<QueryComponent> mComponents;
 
+    /**
+     * Constructor used to create an OrQuery
+     *
+     * @param components List<QueryComponent> - mComponents is set to this parameter value (!!reference!!)
+     */
     public OrQuery(List<QueryComponent> components) {
         mComponents = components;
     }
 
+//TODO :: @MICHAEL
+    /**
+     *
+     * @param list_one
+     * @param list_two
+     * @return
+     */
     private List<Posting> orMerge(List<Posting> list_one, List<Posting> list_two) {
 
         List<Posting> result = list_one.size() >= list_two.size() ? list_one : list_two;

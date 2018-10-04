@@ -2,9 +2,6 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
-import cecs429.text.Milestone1TokenProcessor;
-import cecs429.text.TokenProcessor;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,26 +10,28 @@ import java.util.List;
  * Represents a phrase literal consisting of one or more terms that must occur in sequence.
  */
 public class PhraseLiteral implements QueryComponent {
-    // The list of individual terms in the phrase.
+    /**
+     * The list of individual terms in the phrase.
+     */
     private List<String> mTerms;
 
     /**
-     * Constructs a PhraseLiteral with the given individual phrase terms.
-     */
-
-
-    public PhraseLiteral(List<String> terms) {
-        mTerms.addAll(terms);
-    }
-
-    /**
      * Constructs a PhraseLiteral given a string with one or more individual terms separated by spaces.
+     * Instantiates the mTerms list and fills it
+     * @param terms String - the String that was in double quotes that need to be represented as PhraseLiteral
      */
     public PhraseLiteral(String terms) {
         mTerms = new ArrayList<>();
         mTerms.addAll(Arrays.asList(terms.split(" ")));
     }
 
+//TODO :: @MICHAEL
+    /**
+     *
+     * @param list_one
+     * @param list_two
+     * @return
+     */
     private List<Posting> positionMerge(List<Posting> list_one, List<Posting> list_two) {
         List<Posting> result = new ArrayList<>();
         int i = 0, j = 0, k, m;
@@ -82,18 +81,18 @@ public class PhraseLiteral implements QueryComponent {
     public List<Posting> getPostings(Index index) {
         List<List<Posting>> postingList = new ArrayList<>();
 
-        for (int i = 0; i < mTerms.size(); i++)
-            postingList.add(index.getPostings(index.getProcessor().getStem(index.getProcessor().removeNonAlphaNumCharBegEndAndQuotes(mTerms.get(i)))));
-
-        Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
         for (int i = 0; i < mTerms.size(); i++) {
-            postingList.add(index.getPostings(processor.getStem(processor.removeNonAlphaNumCharBegEndAndQuotes(mTerms.get(i)))));
+            String temp = index.getProcessor().getStem(index.getProcessor().removeNonAlphaNumCharBegEndAndQuotes(mTerms.get(i)));
+            postingList.add(index.getPostings(temp));
         }
 
         List<Posting> result = postingList.get(0);
 
         for (int i = 1; i < postingList.size(); i++)
+        {
             result = positionMerge(result, postingList.get(i));
+        }
+
 
         return result;
         // TODO: program this method. Retrieve the postings for the individual terms in the phrase,
