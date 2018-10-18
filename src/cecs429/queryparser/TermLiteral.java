@@ -33,9 +33,8 @@ public class TermLiteral implements QueryComponent {
 
     @Override
     public List<Posting> getPostings(Index index) {
-        Milestone1TokenProcessor processor = new Milestone1TokenProcessor();
 
-        String[] stemmedStuff = processor.processTokens(mTerm);
+        String[] stemmedStuff = index.getProcessor().processTokens(mTerm);
 
         ArrayList<QueryComponent> words = new ArrayList<>();
 
