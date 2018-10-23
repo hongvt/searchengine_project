@@ -8,7 +8,9 @@ import java.util.List;
 
 //to check the .bin files:
 //vim <fileName>.bin
-//:% ! xxd
+//type :
+//then copy and paste
+//% ! xxd
 public class DiskIndexWriter
 {
     public void writeIndex(Index index, Path indexFolder)
@@ -31,11 +33,7 @@ public class DiskIndexWriter
             {
                 writeVocabTable(vocabTableData, nextVocabPos, nextPostPos);
                 nextVocabPos += writeVocab(vocabData,vocabList.get(i));
-
-
                 nextPostPos += writePostings(postData,vocabList.get(i), index);
-
-
             }
 
 
@@ -53,13 +51,23 @@ public class DiskIndexWriter
         for (int i = 0; i < numPostings; i++)
         {
             Posting posting = index.getPostings(term).get(i);
-            postData.writeInt(posting.getDocumentId());
+            int compressedDocId = posting.getDocumentId();
+            if (i != 0)
+            {
+                compressedDocId -= index.getPostings(term).get(i-1).getDocumentId();
+            }
+            postData.writeInt(compressedDocId);
             acc += 4;
             postData.writeInt(posting.getPositions().size());
             acc += 4;
             for (int j = 0; j < posting.getPositions().size(); j++)
             {
-                postData.writeInt(posting.getPositions().get(j));
+                int compressedPos = posting.getPositions().get(j);
+                if (j != 0)
+                {
+                    compressedPos -= posting.getPositions().get(j-1);
+                }
+                postData.writeInt(compressedPos);
                 acc += 4;
             }
         }
@@ -75,7 +83,7 @@ public class DiskIndexWriter
 
     private void writeVocabTable(DataOutputStream vocabTableData, long nextVocabPos, long nextPostPos) throws IOException
     {
-        vocabTableData.writeLong(nextPostPos);
+        vocabTableData.writeLong(nextVocabPos);
         vocabTableData.writeLong(nextPostPos);
     }
 }
