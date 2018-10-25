@@ -13,36 +13,74 @@ import java.util.List;
 //% ! xxd
 public class DiskIndexWriter
 {
-    public void writeIndex(Index index, Path indexFolder)
+    private DataOutputStream postData, vocabData, vocabTableData, docWeightsData;
+
+    public DiskIndexWriter(Path indexFolder)
     {
         try
         {
             FileOutputStream postingsFile = new FileOutputStream(indexFolder.toString()+"/index/postings.bin");
-            DataOutputStream postData = new DataOutputStream(postingsFile);
+            postData = new DataOutputStream(postingsFile);
 
             FileOutputStream vocabFile = new FileOutputStream(indexFolder.toString()+"/index/vocab.bin");
-            DataOutputStream vocabData = new DataOutputStream(vocabFile);
+            vocabData = new DataOutputStream(vocabFile);
 
             FileOutputStream vocabTableFile = new FileOutputStream(indexFolder.toString()+"/index/vocabTable.bin");
-            DataOutputStream vocabTableData = new DataOutputStream(vocabTableFile);
+            vocabTableData = new DataOutputStream(vocabTableFile);
 
+            FileOutputStream docWeightsFile = new FileOutputStream(indexFolder.toString()+"/index/docWeights.bin");
+            docWeightsData = new DataOutputStream(docWeightsFile);
+        }
+        catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
+    }
+    public void writeDocWeight(double docWeight)
+    {
+        try {
+            docWeightsData.writeDouble(docWeight);
+        }
+        catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
+    }
+
+    public void closeDocWeights()
+    {
+        try
+        {
+            docWeightsData.close();
+        }
+        catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
+    }
+
+    public void writeIndex(Index index)
+    {
+        try
+        {
             long nextVocabPos = 0;
             long nextPostPos = 0;
             List<String> vocabList = index.getVocabulary();
             for (int i = 0; i < vocabList.size(); i++)
             {
-                writeVocabTable(vocabTableData, nextVocabPos, nextPostPos);
-                nextVocabPos += writeVocab(vocabData,vocabList.get(i));
-                nextPostPos += writePostings(postData,vocabList.get(i), index);
+                writeVocabTable(nextVocabPos, nextPostPos);
+                nextVocabPos += writeVocab(vocabList.get(i));
+                nextPostPos += writePostings(vocabList.get(i), index);
             }
-
-
+            closeVocabPostOutput();
         }
-        catch (IOException e) { System.out.println("IO exception"); e.printStackTrace();}
+        catch (IOException e) { System.out.println("IO exception"); e.printStackTrace(); }
 
     }
 
-    private long writePostings(DataOutputStream postData, String term, Index index) throws IOException
+    private void closeVocabPostOutput()
+    {
+        try
+        {
+            vocabData.close();
+            vocabTableData.close();
+            postData.close();
+        }
+        catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
+    }
+
+    private long writePostings(String term, Index index) throws IOException
     {
         long acc = 0;
         int numPostings = index.getPostings(term).size();
@@ -74,14 +112,14 @@ public class DiskIndexWriter
         return acc;
     }
 
-    private long writeVocab(DataOutputStream vocabData, String term) throws IOException
+    private long writeVocab(String term) throws IOException
     {
         byte[] termBytes = term.getBytes();
         vocabData.write(termBytes);
         return termBytes.length;
     }
 
-    private void writeVocabTable(DataOutputStream vocabTableData, long nextVocabPos, long nextPostPos) throws IOException
+    private void writeVocabTable(long nextVocabPos, long nextPostPos) throws IOException
     {
         vocabTableData.writeLong(nextVocabPos);
         vocabTableData.writeLong(nextPostPos);
