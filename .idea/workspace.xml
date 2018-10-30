@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="935db4c0-fda6-4fcf-a60b-d36cf3bb766f" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change afterPath="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/csulb/Homework5.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/csulb/Homework5.java" afterDir="false" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,31 +23,31 @@
     <session id="-200011843">
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="9" />
+          <entry key="java" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="9" />
+          <entry key="JAVA" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="6" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.3" value="2" />
-          <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.open.time.5" value="2" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="1548" />
+          <entry key="java" value="2676" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1548" />
+          <entry key="JAVA" value="2676" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -77,6 +84,7 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+<<<<<<< HEAD
         <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="529">
@@ -90,11 +98,18 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
               <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+=======
+        <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone2.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1460">
+              <caret line="113" column="42" lean-forward="true" selection-start-line="113" selection-start-column="42" selection-end-line="113" selection-end-column="42" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< HEAD
         <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/QueryComponent.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
@@ -135,10 +150,17 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
               <caret line="86" column="30" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="30" />
+=======
+        <entry file="file://$PROJECT_DIR$/src/cecs429/index/Posting.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="83">
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -155,15 +177,30 @@
                 <element signature="e#3649#3650#0" expanded="true" />
                 <element signature="e#3676#3677#0" expanded="true" />
               </folding>
+=======
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/index/Index.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="527">
               <caret line="40" column="88" selection-start-line="40" selection-start-column="32" selection-end-line="40" selection-end-column="88" />
+=======
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="9" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -193,8 +230,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java" />
-        <option value="$PROJECT_DIR$/src/edu/csulb/Homework5.java" />
         <option value="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" />
       </list>
     </option>
@@ -202,12 +239,28 @@
   <component name="ProjectFrameBounds">
     <option name="width" value="2736" />
     <option name="height" value="1824" />
+=======
+        <option value="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" />
+        <option value="$PROJECT_DIR$/src/edu/csulb/Homework5.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="x" value="832" />
+    <option name="y" value="23" />
+    <option name="width" value="848" />
+    <option name="height" value="958" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< HEAD
+=======
+      <pane id="Scope" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -275,13 +328,21 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="AndroidView" />
+<<<<<<< HEAD
       <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540926936438" />
+=======
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540492938822" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
@@ -301,7 +362,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Homework5">
+  <component name="RunManager" selected="Application.Milestone2">
     <configuration name="Homework5" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="edu.csulb.Homework5" />
       <module name="searchengine_project" />
@@ -328,12 +389,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Milestone2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="edu.csulb.Milestone2" />
+      <module name="searchengine_project" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.csulb.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Milestone1UsingPosInvertIndex" />
       <item itemvalue="Application.Homework5" />
+      <item itemvalue="Application.Milestone2" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Milestone2" />
         <item itemvalue="Application.Homework5" />
         <item itemvalue="Application.Milestone1UsingPosInvertIndex" />
       </list>
@@ -356,7 +432,11 @@
     <frame x="0" y="0" width="1368" height="912" extended-state="0" />
     <editor active="true" />
     <layout>
+<<<<<<< HEAD
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27175573" />
+=======
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1929182" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -365,7 +445,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32959184" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32959184" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -373,7 +453,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32959184" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -451,6 +531,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/QueryComponent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -490,11 +571,60 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="189" column="31" lean-forward="true" selection-start-line="189" selection-start-column="31" selection-end-line="189" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/documents/DirectoryCorpus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Posting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-508">
+          <caret line="8" column="68" selection-start-line="8" selection-start-column="68" selection-end-line="8" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Index.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Homework5.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="112" column="14" selection-start-line="112" selection-start-column="14" selection-end-line="112" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1460">
+          <caret line="113" column="42" lean-forward="true" selection-start-line="113" selection-start-column="42" selection-end-line="113" selection-end-column="42" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="527">
           <caret line="40" column="88" selection-start-line="40" selection-start-column="32" selection-end-line="40" selection-end-column="88" />
           <folding>
@@ -507,6 +637,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
+=======
+        <state relative-caret-position="180">
+          <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="9" />
+>>>>>>> 63c2c184bd50fdfce0367b9db52fe0e2d53526d5
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3372#3373#0" expanded="true" />

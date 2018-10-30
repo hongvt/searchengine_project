@@ -19,14 +19,15 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Contains the main for Homework 5
+ * Contains the main for Milestone 2
  */
-public class Homework5 {
+public class Milestone2 {
     /**
      * Prints the names of the directories given the path of the corpus directory
      * @param corpusFolder Path - path of the folder that contains all possible corpora to index
@@ -85,7 +86,7 @@ public class Homework5 {
     }
 
     /**
-     * MAIN METHOD FOR HOMEWORK 5
+     * MAIN METHOD FOR MILESTONE 2
      * @param args
      * @throws IOException
      */
@@ -103,16 +104,14 @@ public class Homework5 {
 
             //index the corpus
             long startTime = System.currentTimeMillis();
-            Index index = indexCorpus(corpus);
+            DiskIndexWriter indexWriter = new DiskIndexWriter(currentPath);
+            Index index = indexCorpus(corpus, indexWriter);
             long endTime = System.currentTimeMillis();
             int numSeconds = ((int) ((endTime - startTime) / 1000));
             System.out.println("Indexing took " + numSeconds + " seconds");
 
             //WRITE TO DISK
-            //DiskIndexWriter indexWriter = new DiskIndexWriter();
-            //indexWriter.writeIndex(index,currentPath);
-
-
+            indexWriter.writeIndex(index);
 
             System.out.print("Enter term to search (or \"quit\" to exit): ");
             String word = keyboard.nextLine();
@@ -175,10 +174,11 @@ public class Homework5 {
     /**
      * Indexes the selected corpus
      * @param corpus - the corpus to index
+     * @param indexWriter - the disk writer is used to calculate docWeights in this method
      * @return Index contains info on every term in every document within selected corpus
      * @throws IOException
      */
-    private static Index indexCorpus(DocumentCorpus corpus) throws IOException {
+    private static Index indexCorpus(DocumentCorpus corpus, DiskIndexWriter indexWriter) throws IOException {
         HashSet<String> KGI = new HashSet<>();
         Iterable<Document> itrDoc = corpus.getDocuments();
         TokenProcessor processor = new Milestone1TokenProcessor();
@@ -190,6 +190,8 @@ public class Homework5 {
             Reader readDoc = doc.getContent();
             EnglishTokenStream ets = new EnglishTokenStream(readDoc);
             Iterable<String> engTokens = ets.getTokens();
+            //term, num of times the term appears in the doc
+            HashMap<String, Integer> docVocab = new HashMap<>();
             for (String engTok : engTokens) {
                 String[] types = posInvertIndex.getProcessor().processButDontStemTokensAKAGetType(engTok);
                 //adding TYPES
@@ -207,10 +209,34 @@ public class Homework5 {
                         positionCounter++;
                         posInvertIndex.addTerm(stems[i], doc.getId(), positionCounter);
                     }
+                    if (!docVocab.isEmpty() && docVocab.containsKey(stems[i]))
+                    {
+                        docVocab.replace(stems[i],docVocab.get(stems[i]),docVocab.get(stems[i])+1);
+                    }
+                    else
+                    {
+                        docVocab.put(stems[i],1);
+                    }
                 }
             }
+            double[] termWeightsSquared = new double[docVocab.size()];
+            int i = 0;
+            for (String term : docVocab.keySet())
+            {
+                termWeightsSquared[i] = 1 + Math.log(docVocab.get(term));
+                termWeightsSquared[i] *= termWeightsSquared[i];
+                i++;
+            }
+            double docWeight = 0;
+            for (int j = 0; j < termWeightsSquared.length; j++)
+            {
+                docWeight += termWeightsSquared[j];
+            }
+            docWeight = Math.sqrt(docWeight);
+            indexWriter.writeDocWeight(docWeight);
             ets.close();
         }
+        indexWriter.closeDocWeights();
         // add the entire hashset to the KGI
         System.out.println("vocab:"+posInvertIndex.getVocabulary().size());
         System.out.println("KGI size:"+KGI.size());
