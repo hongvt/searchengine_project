@@ -1,6 +1,5 @@
 package cecs429.index;
 
-import cecs429.queryparser.KGramIndex;
 import cecs429.text.TokenProcessor;
 
 import java.util.*;

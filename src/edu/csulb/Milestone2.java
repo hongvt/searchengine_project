@@ -4,25 +4,17 @@ import cecs429.documents.DirectoryCorpus;
 import cecs429.documents.Document;
 import cecs429.documents.DocumentCorpus;
 import cecs429.documents.JsonFileDocument;
-import cecs429.index.DiskIndexWriter;
-import cecs429.index.Index;
-import cecs429.index.PositionalInvertedIndex;
-import cecs429.index.Posting;
+import cecs429.index.*;
 import cecs429.queryparser.BooleanQueryParser;
 import cecs429.queryparser.QueryComponent;
 import cecs429.text.EnglishTokenStream;
 import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Contains the main for Milestone 2
@@ -85,6 +77,30 @@ public class Milestone2 {
         return false;
     }
 
+    private static void queryIndex(String word, Index index, DocumentCorpus corpus, Scanner keyboard) {
+        BooleanQueryParser pa = new BooleanQueryParser();
+        QueryComponent c = pa.parseQuery(word);
+        List<Posting> posts = c.getPostings(index);
+
+        for (Posting x : posts)
+            System.out.println("Doc ID: " + x.getDocumentId() + " " + corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
+
+        System.out.println("posting size: " + posts.size());
+        if (posts.size() > 0) {
+            System.out.print("Enter a Doc ID to view file's content \t\t(NUMBER ONLY!!!!!): ");
+            Reader fileContent = corpus.getDocument(Integer.parseInt(keyboard.nextLine())).getContent();
+            try {
+                EnglishTokenStream ets = new EnglishTokenStream(fileContent);
+                System.out.println();
+                for (String x : ets.getTokens())
+                    System.out.print(x + " ");
+                ets.close();
+            }
+            catch(IOException e) {System.out.println(e.getStackTrace());}
+            System.out.println();
+        }
+    }
+
     /**
      * MAIN METHOD FOR MILESTONE 2
      * @param args
@@ -96,8 +112,10 @@ public class Milestone2 {
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
 
         String dir = getDirectoryName(keyboard, corpusFolder);
-        while (!dir.equals("quit") && !dir.equals(":q")) {
-            boolean changeDirectory = false;
+        boolean changeDirectory = false;
+
+        while (!dir.equals("quit"))
+        {
             currentPath = Paths.get(corpusFolder.toString(), dir);
             DocumentCorpus corpus = DirectoryCorpus.loadTextDirectory(currentPath, ".txt");
             ((DirectoryCorpus) corpus).registerFileDocumentFactory(".json", JsonFileDocument::loadJsonFileDocument);
@@ -109,63 +127,79 @@ public class Milestone2 {
             long endTime = System.currentTimeMillis();
             int numSeconds = ((int) ((endTime - startTime) / 1000));
             System.out.println("Indexing took " + numSeconds + " seconds");
+            String queryBuild = "";
 
-            //WRITE TO DISK
-            indexWriter.writeIndex(index);
-
-            System.out.print("Enter term to search (or \"quit\" to exit): ");
-            String word = keyboard.nextLine();
-            while (!word.equals("quit") && !word.equals(":q")) {
-                String[] words = word.split(" ");
-                if (words[0].equals(":index")) {
-                    if (hasDirectory(corpusFolder, words[1])) {
-                        word = "quit";
-                        dir = words[1];
-                        changeDirectory = true;
-                    } else {
-                        System.out.println("Please recheck spelling of directory");
-                    }
-                } else {
-                    if (words[0].equals(":stem")) {
-                        String[] stems = index.getProcessor().processTokens(words[1]);
-                        for (int i = 0; i < stems.length; i++) {
-                            System.out.println(i + ":" + stems[i]);
-                        }
-                    } else if (words[0].equals(":vocab")) {
-                        for (int i = 0; i < 1000; i++) {
-                            System.out.println(index.getVocabulary().get(i));
-                        }
-                    } else {
-                        BooleanQueryParser pa = new BooleanQueryParser();
-                        QueryComponent c = pa.parseQuery(word);
-                        List<Posting> posts = c.getPostings(index);
-
-                        for (Posting x : posts)
-                            System.out.println("Doc ID: " + x.getDocumentId() + " " + corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
-
-                        System.out.println("posting size: " + posts.size());
-                        if (posts.size() > 0) {
-                            System.out.print("Enter a Doc ID to view file's content \t\t(NUMBER ONLY!!!!!): ");
-                            Reader fileContent = corpus.getDocument(Integer.parseInt(keyboard.nextLine())).getContent();
-                            EnglishTokenStream ets = new EnglishTokenStream(fileContent);
-                            System.out.println();
-                            for (String x : ets.getTokens())
-                                System.out.print(x + " ");
-                            ets.close();
-                            System.out.println();
-                        }
-                    }
-                }
-                System.out.print("\nEnter term to search (or \"quit\" to exit): ");
-                word = keyboard.nextLine();
+            if (!changeDirectory) {
+                System.out.print("Enter \"query\" or \"build\" (or \"quit\" to exit): ");
+                queryBuild = keyboard.nextLine();
             }
-            if (!word.equals(":q")) {
-                if (!changeDirectory) {
-                    dir = getDirectoryName(keyboard, corpusFolder);
+
+            while ((!queryBuild.equals("quit") && !queryBuild.equals(":q"))) {
+                if (queryBuild.equals("build"))
+                {
+                    //WRITE TO DISK
+                    indexWriter.writeIndex(index);
                 }
-            } else if (word.equals(":q"))
+                else if (queryBuild.equals("query") || changeDirectory)
+                {
+                    if (changeDirectory)
+                    {
+                        changeDirectory = false;
+                    }
+                    System.out.print("Enter term to search (or \"quit\" to exit): ");
+                    String word = keyboard.nextLine();
+
+                    while(!word.equals("quit") && !word.equals(":q"))
+                    {
+                        String[] words = word.split(" ");
+                        if (words[0].equals(":index")) {
+                            if (hasDirectory(corpusFolder, words[1])) {
+                                word = "quit";
+                                dir = words[1];
+                                changeDirectory = true;
+                                queryBuild = "quit";
+                            } else {
+                                System.out.println("Please recheck spelling of directory");
+                            }
+                        } else {
+                            if (words[0].equals(":stem")) {
+                                String[] stems = index.getProcessor().processTokens(words[1]);
+                                for (int i = 0; i < stems.length; i++) {
+                                    System.out.println(i + ":" + stems[i]);
+                                }
+                            } else if (words[0].equals(":vocab")) {
+                                for (int i = 0; i < 1000; i++) {
+                                    System.out.println(index.getVocabulary().get(i));
+                                }
+                            } else {
+                                queryIndex(word, index, corpus, keyboard);
+                            }
+                        }
+
+                        if(!changeDirectory) {
+                            System.out.print("Enter term to search (or \"quit\" to exit): ");
+                            word = keyboard.nextLine();
+                        }
+                    }
+                    if (word.equals(":q"))
+                    {
+                        queryBuild = ":q";
+                    }
+                }
+                if(!queryBuild.equals("quit") && !queryBuild.equals(":q"))
+                {
+                    System.out.print("Enter \"query\" or \"build\" (or \"quit\" to exit): ");
+                    queryBuild = keyboard.nextLine();
+                }
+            }
+            if (queryBuild.equals(":q"))
             {
                 dir = "quit";
+            }
+            else if (queryBuild.equals("quit") && !changeDirectory)
+            {
+                System.out.println();
+                dir = getDirectoryName(keyboard, corpusFolder);
             }
         }
         keyboard.close();
@@ -184,8 +218,10 @@ public class Milestone2 {
         TokenProcessor processor = new Milestone1TokenProcessor();
         PositionalInvertedIndex posInvertIndex = new PositionalInvertedIndex(processor);
         int positionCounter;
+        int numDocs = 0;
 
         for (Document doc : itrDoc) {
+            numDocs++;
             positionCounter = 0;
             Reader readDoc = doc.getContent();
             EnglishTokenStream ets = new EnglishTokenStream(readDoc);
@@ -238,8 +274,8 @@ public class Milestone2 {
         }
         indexWriter.closeDocWeights();
         // add the entire hashset to the KGI
-        System.out.println("vocab:"+posInvertIndex.getVocabulary().size());
-        System.out.println("KGI size:"+KGI.size());
+        //System.out.println("vocab:"+posInvertIndex.getVocabulary().size());
+        //System.out.println("KGI size:"+KGI.size());
         posInvertIndex.addToKGI(KGI);
         return posInvertIndex;
     }

@@ -1,4 +1,4 @@
-package cecs429.queryparser;
+package cecs429.index;
 
 import java.util.*;
 
