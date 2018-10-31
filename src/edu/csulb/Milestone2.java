@@ -12,6 +12,7 @@ import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -101,13 +102,137 @@ public class Milestone2 {
         }
     }
 
+    private static long bytesToLong(byte[] bytes)
+    {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.put(bytes);
+        buffer.flip();
+        return buffer.getLong();
+    }
+
     /**
      * MAIN METHOD FOR MILESTONE 2
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        Scanner keyboard = new Scanner(System.in);
+        try
+        {
+            Path currentPath = Paths.get(System.getProperty("user.dir"));
+
+            Path corpusFolder = Paths.get(currentPath.toString(), "corpora/vocab.bin");
+            File vocabFile = new File(corpusFolder.toString());
+            InputStream vocabIS = new FileInputStream(vocabFile);
+            DataInputStream vocabDIS = new DataInputStream(vocabIS);
+            byte[] vocabFileBytes = new byte[(int)vocabFile.length()];
+            vocabDIS.read(vocabFileBytes);
+
+            corpusFolder = Paths.get(currentPath.toString(), "corpora/vocabTable.bin");
+            File vocabTableFile = new File(corpusFolder.toString());
+            InputStream vocabTableIS = new FileInputStream(vocabTableFile);
+            DataInputStream vocabTableDIS = new DataInputStream(vocabTableIS);
+            byte[] vocabTableBytes = new byte[(int)vocabTableFile.length()];
+            vocabTableDIS.read(vocabTableBytes);
+
+            int lowVTAIndex = 0;
+            int highVTAIndex = (vocabTableBytes.length / 16) - 1;
+            int midVTAIndex;
+            int midVTByteIndex;
+
+            String term = "a";
+
+            while(lowVTAIndex <= highVTAIndex)
+            {
+                midVTAIndex = (lowVTAIndex + highVTAIndex)/2;
+                midVTByteIndex = midVTAIndex * 16;
+
+                byte[] midLongBytes = new byte[8];
+                for (int i = 0; i < midLongBytes.length; i++) {
+                    midLongBytes[i] = vocabTableBytes[midVTByteIndex + i];
+                }
+                long midVocabStartIndex = bytesToLong(midLongBytes);
+
+                midVTAIndex++;
+                midVTByteIndex = midVTAIndex * 16;
+
+                byte[] midPLUS1LongBytes = new byte[8];
+                for (int i = 0; i < midPLUS1LongBytes.length; i++) {
+                    midPLUS1LongBytes[i] = vocabTableBytes[midVTByteIndex + i];
+                }
+                long midPLUS1VocabStartIndex = bytesToLong(midPLUS1LongBytes);
+
+                long vocabLength = midPLUS1VocabStartIndex - midVocabStartIndex;
+
+                byte[] vocabBytes = new byte[(int) vocabLength];
+                for (int i = 0; i < vocabBytes.length; i++) {
+                    vocabBytes[i] = vocabFileBytes[(int)midVocabStartIndex + i];
+                }
+
+                String word = new String(vocabBytes);
+                System.out.println("word="+word);
+
+                if (term.compareTo(word) > 0) {
+                    System.out.println("term is in the last half");
+                    //term is in the last half
+                    lowVTAIndex = midVTAIndex;
+                } else if (term.compareTo(word) < 0) {
+                    System.out.println("term is in the first half");
+                    //term is in the first half
+                    highVTAIndex = midVTAIndex - 2;
+                } else {
+                    System.out.println("Term was found at index "+(midVTAIndex-1));
+                    break;
+                }
+            }
+
+
+
+
+            /*while (true) {
+                try {
+                    System.out.println(vocabTableDIS.readLong());
+                } catch (EOFException e) {
+                    break;
+                }
+            }*/
+        }
+        catch(IOException e){}
+        /*try
+        {
+            Path currentPath = Paths.get(System.getProperty("user.dir"));
+            Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
+            FileOutputStream vocabFile = new FileOutputStream(corpusFolder.toString()+"/vocab.bin");
+            DataOutputStream vocabData = new DataOutputStream(vocabFile);
+
+            FileOutputStream vocabTableFile = new FileOutputStream(corpusFolder.toString()+"/vocabTable.bin");
+            DataOutputStream vocabTableData = new DataOutputStream(vocabTableFile);
+
+            String term = "aangelsbaseballcatcherdodgers";
+            byte[] termBytes = term.getBytes();
+            vocabData.write(termBytes);
+
+//0            //a
+            vocabTableData.writeLong(0);
+            vocabTableData.writeLong(0);
+//1            //angels
+            vocabTableData.writeLong(1);
+            vocabTableData.writeLong(20);
+//2            //baseball
+            vocabTableData.writeLong(7);
+            vocabTableData.writeLong(100);
+//3            //catcher
+            vocabTableData.writeLong(15);
+            vocabTableData.writeLong(140);
+//4            //dodgers
+            vocabTableData.writeLong(22);
+            vocabTableData.writeLong(400);
+
+            vocabData.close();
+            vocabTableData.close();
+        }
+        catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
+        */
+        /*Scanner keyboard = new Scanner(System.in);
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
 
@@ -202,7 +327,7 @@ public class Milestone2 {
                 dir = getDirectoryName(keyboard, corpusFolder);
             }
         }
-        keyboard.close();
+        keyboard.close();*/
     }
 
     /**

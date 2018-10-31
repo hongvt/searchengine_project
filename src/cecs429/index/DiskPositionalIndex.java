@@ -2,24 +2,30 @@ package cecs429.index;
 
 import cecs429.text.TokenProcessor;
 
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.nio.file.Path;
 
 public class DiskPositionalIndex implements Index {
-    private FileInputStream vocabTableFile, vocabFile, postingsFile;
-    private DataInputStream vocabTableData, vocabData, postingsData;
 
-    public DiskPositionalIndex(Path indexFolder) {
+    private byte[] vocabFileBytes, vocabTableBytes;
+
+    public DiskPositionalIndex(Path corpusFolder) {
         try {
-            vocabTableFile = new FileInputStream(indexFolder.toString() + "/index/vocabTable.bin");
-            vocabTableData = new DataInputStream(vocabTableFile);
-            vocabFile = new FileInputStream(indexFolder.toString() + "/index/vocab.bin");
-            postingsFile = new FileInputStream(indexFolder.toString() + "/index/postings.bin");
+            File vocabFile = new File(corpusFolder.toString()+"/vocab.bin");
+            InputStream vocabIS = new FileInputStream(vocabFile);
+            DataInputStream vocabDIS = new DataInputStream(vocabIS);
+            vocabFileBytes = new byte[(int)vocabFile.length()];
+            vocabDIS.read(vocabFileBytes);
+
+            File vocabTableFile = new File(corpusFolder.toString()+"/vocabTable.bin");
+            InputStream vocabTableIS = new FileInputStream(vocabTableFile);
+            DataInputStream vocabTableDIS = new DataInputStream(vocabTableIS);
+            vocabTableBytes = new byte[(int)vocabTableFile.length()];
+            vocabTableDIS.read(vocabTableBytes);
         } catch (IOException e) {
             System.out.println("IO exception");
             e.printStackTrace();
@@ -33,52 +39,59 @@ public class DiskPositionalIndex implements Index {
     }
 
     private long binarySearchVocabTable(String term) throws IOException {
+        int lowVTAIndex = 0;
+        int highVTAIndex = (vocabTableBytes.length / 16) - 1;
+        int midVTAIndex;
+        int midVTByteIndex = 0;
 
-        int low = 0, midIndex, high = ((int) vocabTableFile.getChannel().size() / 16) - 1, midByteIndex;
-        //int numWords = (int) vocabTableFile.getChannel().size() / 16;
-        byte[] termBytes = term.getBytes();
-        byte[] vocabTableBytes = new byte[(int) vocabTableFile.getChannel().size()];
-        vocabTableFile.read(vocabTableBytes);
+        while(lowVTAIndex <= highVTAIndex)
+        {
+            midVTAIndex = (lowVTAIndex + highVTAIndex)/2;
+            midVTByteIndex = midVTAIndex * 16;
 
-        while (low <= high) {
-            midIndex = (low + high) / 2;
-            midByteIndex = midIndex * 16;
-            long midStart = vocabTableBytes[midByteIndex];
-            byte[] temp = new byte[8];
-            for (int i = 0; i < temp.length; i++) {
-                temp[i] = vocabTableBytes[midByteIndex + i];
+            byte[] midLongBytes = new byte[8];
+            for (int i = 0; i < midLongBytes.length; i++) {
+                midLongBytes[i] = vocabTableBytes[midVTByteIndex + i];
             }
-            long midVocabIndex = bytesToLong(temp);
+            long midVocabStartIndex = bytesToLong(midLongBytes);
 
-            midIndex++;
-            midByteIndex = midIndex * 16;
+            midVTAIndex++;
+            midVTByteIndex = midVTAIndex * 16;
 
-            byte[] temp2 = new byte[8];
-            for (int i = 0; i < temp2.length; i++) {
-                temp2[i] = vocabTableBytes[midByteIndex + i];
+            byte[] midPLUS1LongBytes = new byte[8];
+            for (int i = 0; i < midPLUS1LongBytes.length; i++) {
+                midPLUS1LongBytes[i] = vocabTableBytes[midVTByteIndex + i];
             }
-            long nextMidPointIndex = bytesToLong(temp2);
-            long wordLength = nextMidPointIndex - midVocabIndex;
-            byte[] vocabFileBytes = new byte[(int) vocabFile.getChannel().size()];
-            vocabFile.read(vocabFileBytes);
-            byte[] words = new byte[(int) wordLength];
-            for (int i = 0; i < words.length; i++) {
-                words[i] = vocabFileBytes[(int) midVocabIndex + i];
+            long midPLUS1VocabStartIndex = bytesToLong(midPLUS1LongBytes);
+
+            long vocabLength = midPLUS1VocabStartIndex - midVocabStartIndex;
+
+            byte[] vocabBytes = new byte[(int) vocabLength];
+            for (int i = 0; i < vocabBytes.length; i++) {
+                vocabBytes[i] = vocabFileBytes[(int)midVocabStartIndex + i];
             }
-            String word = new String(words);
-            if (term.compareTo(word) > 1) {
-                low = midIndex++;
-            } else if (term.compareTo(word) < 1) {
-                high = midIndex--;
+
+            String word = new String(vocabBytes);
+            System.out.println("word="+word);
+
+            if (term.compareTo(word) > 0) {
+                System.out.println("term is in the last half");
+                //term is in the last half
+                lowVTAIndex = midVTAIndex;
+            } else if (term.compareTo(word) < 0) {
+                System.out.println("term is in the first half");
+                //term is in the first half
+                highVTAIndex = midVTAIndex - 2;
             } else {
-                byte[] postingPos = new byte[8];
-                for (int i = 0; i < postingPos.length; i++) {
-                    postingPos[i] = vocabTableBytes[midByteIndex + 8 + i];
-                }
-                return bytesToLong(postingPos);
+                System.out.println("Term was found at index "+(midVTAIndex-1));
+                break;
             }
         }
-        return -1;
+        byte[] postingPos = new byte[8];
+        for (int i = 0; i < postingPos.length; i++) {
+            postingPos[i] = vocabTableBytes[(midVTByteIndex/16) + 8 + i];
+        }
+        return bytesToLong(postingPos);
     }
 
     public long bytesToLong(byte[] bytes) {
