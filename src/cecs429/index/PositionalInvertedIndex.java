@@ -23,6 +23,8 @@ public class PositionalInvertedIndex implements Index {
      */
     private TokenProcessor processor;
 
+    private int MAXEDOUT = 1000;
+
     /**
      * Constructor used to create a PositionalInvertedIndex with the given TokenProcessor parameter value
      * Instantiates the index HashMap and kgi KGramIndex
@@ -43,7 +45,7 @@ public class PositionalInvertedIndex implements Index {
      * @param documentId - the documentId at which the corresponding term shows up in
      * @param position   - the position of the term within the documentId
      */
-    public void addTerm(String term, int documentId, int position) {
+    public boolean addTerm(String term, int documentId, int position) {
         if (index.containsKey(term)) {
             List<Posting> postings = index.get(term);
             if (postings.get(postings.size() - 1).getDocumentId() != documentId) {
@@ -61,6 +63,13 @@ public class PositionalInvertedIndex implements Index {
             postings.add(p);
             index.put(term, postings);
         }
+        return index.size() == MAXEDOUT;
+    }
+
+    public void clearIndex()
+    {
+        index = index = new HashMap<>();
+        kgi = new KGramIndex();
     }
 
     @Override
@@ -79,7 +88,7 @@ public class PositionalInvertedIndex implements Index {
     }
 
     @Override
-    public List<Posting> getPostings(String term) {
+    public List<Posting> getPostingsWithPositions(String term) {
         List<Posting> results = new ArrayList<>();
 
         try {
@@ -91,6 +100,12 @@ public class PositionalInvertedIndex implements Index {
         }
 
         return results;
+    }
+
+    @Override
+    public int[][] getPostingsNoPositions(String term)
+    {
+        return null;
     }
 
     @Override

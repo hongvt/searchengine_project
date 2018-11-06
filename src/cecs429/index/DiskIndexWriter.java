@@ -50,18 +50,18 @@ public class DiskIndexWriter
         catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
     }
 
-    public void writeIndex(Index index)
+    public void writeIndex(PositionalInvertedIndex positionalInvertedIndex)
     {
         try
         {
             long nextVocabPos = 0;
             long nextPostPos = 0;
-            List<String> vocabList = index.getVocabulary();
+            List<String> vocabList = positionalInvertedIndex.getVocabulary();
             for (int i = 0; i < vocabList.size(); i++)
             {
                 writeVocabTable(nextVocabPos, nextPostPos);
                 nextVocabPos += writeVocab(vocabList.get(i));
-                nextPostPos += writePostings(vocabList.get(i), index);
+                nextPostPos += writePostings(vocabList.get(i), positionalInvertedIndex);
             }
             closeVocabPostOutput();
         }
@@ -80,19 +80,19 @@ public class DiskIndexWriter
         catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
     }
 
-    private long writePostings(String term, Index index) throws IOException
+    private long writePostings(String term, PositionalInvertedIndex positionalInvertedIndex) throws IOException
     {
         long acc = 0;
-        int numPostings = index.getPostings(term).size();
+        int numPostings = positionalInvertedIndex.getPostingsWithPositions(term).size();
         postData.writeInt(numPostings);
         acc += 4;
         for (int i = 0; i < numPostings; i++)
         {
-            Posting posting = index.getPostings(term).get(i);
+            Posting posting = positionalInvertedIndex.getPostingsWithPositions(term).get(i);
             int compressedDocId = posting.getDocumentId();
             if (i != 0)
             {
-                compressedDocId -= index.getPostings(term).get(i-1).getDocumentId();
+                compressedDocId -= positionalInvertedIndex.getPostingsWithPositions(term).get(i-1).getDocumentId();
             }
             postData.writeInt(compressedDocId);
             acc += 4;

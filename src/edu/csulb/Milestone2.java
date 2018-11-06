@@ -78,10 +78,11 @@ public class Milestone2 {
         return false;
     }
 
-    private static void queryIndex(String word, Index index, DocumentCorpus corpus, Scanner keyboard) {
+    private static void booleanQueryIndex(Path currentPath, String word, DocumentCorpus corpus, Scanner keyboard, TokenProcessor processor) {
+        DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath, processor);
         BooleanQueryParser pa = new BooleanQueryParser();
         QueryComponent c = pa.parseQuery(word);
-        List<Posting> posts = c.getPostings(index);
+        List<Posting> posts = c.getPostings(diskPosIndex);
 
         for (Posting x : posts)
             System.out.println("Doc ID: " + x.getDocumentId() + " " + corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
@@ -102,12 +103,108 @@ public class Milestone2 {
         }
     }
 
-    private static long bytesToLong(byte[] bytes)
+    public static byte[] readDocWeights(Path currentPath)
     {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.put(bytes);
-        buffer.flip();
-        return buffer.getLong();
+        try {
+            File docWeights = new File(currentPath.toString() + "/index/docWeights.bin");
+            InputStream readDocWeights = new FileInputStream(docWeights);
+            DataInputStream dis = new DataInputStream(readDocWeights);
+            byte[] docWeightBytes = new byte[(int)docWeights.length()];
+            dis.read(docWeightBytes);
+            return docWeightBytes;
+        }
+        catch (IOException e){System.out.println("IOException in readDOcWeights");}
+        return null;
+    }
+
+
+    private static void rankedRetrieval(byte[] docWeightBytes, Path currentPath, String term, DocumentCorpus corpus, TokenProcessor processor)
+    {
+        DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath, processor);
+        //ArrayList<Double> docWeights = readDocWeights(currentPath);
+        try {
+            String[] stems = diskPosIndex.getProcessor().processTokens(term);
+
+            HashMap<Integer, Double> docIdsAds = new HashMap<>();
+
+            for (int i = 0; i < stems.length; i++)
+            {
+                double wqt = corpus.getCorpusSize();
+                wqt /= diskPosIndex.getPostingsNoPositions(term).length;
+                wqt++;
+                wqt = Math.log(wqt);
+
+                int[][] docIdsTermFreq = diskPosIndex.getPostingsNoPositions(stems[i]);
+                for (int j = 0; j < docIdsTermFreq.length; j++)
+                {
+                    double wdt = Math.log(docIdsTermFreq[j][1]);
+                    wdt++;
+                    double ad = wdt * wqt;
+
+                    if (!docIdsAds.containsKey(docIdsTermFreq[j][0]))
+                    {
+                        docIdsAds.put(docIdsTermFreq[j][0],ad);
+                    }
+                    else
+                    {
+                        docIdsAds.replace(docIdsTermFreq[j][0],docIdsAds.get(docIdsTermFreq[j][0]),docIdsAds.get(docIdsTermFreq[j][0])+ad);
+                    }
+                }
+            }
+
+            for (Integer docId : docIdsAds.keySet())
+            {
+                if (docIdsAds.get(docId) != 0)
+                {
+                    int startPos = docId*8;
+                    byte[] tempDocWeightBytes = new byte[8];
+                    for (int i = 0; i < tempDocWeightBytes.length; i++) {
+                        tempDocWeightBytes[i] = docWeightBytes[startPos + i];
+                    }
+                    double docWeight = DiskPositionalIndex.bytesToDouble(tempDocWeightBytes);
+                    docIdsAds.replace(docId,docIdsAds.get(docId),docIdsAds.get(docId)/docWeight);
+                }
+            }
+
+
+            Comparator<Map.Entry<Integer, Double>> valueComparator = new Comparator<Map.Entry<Integer,Double>>() {
+                @Override
+                public int compare(Map.Entry<Integer, Double> e1, Map.Entry<Integer, Double> e2) {
+                    return e2.getValue().compareTo(e1.getValue());
+                }
+            };
+
+            // Sort method needs a List, so let's first convert Set to List in Java
+            List<Map.Entry<Integer, Double>> listOfEntries = new ArrayList<Map.Entry<Integer, Double>>(docIdsAds.entrySet());
+
+            // sorting HashMap by values using comparator
+            Collections.sort(listOfEntries, valueComparator);
+
+            LinkedHashMap<Integer, Double> sortedByValue = new LinkedHashMap<Integer, Double>(listOfEntries.size());
+
+            // copying entries from List to Map
+            for(Map.Entry<Integer, Double> entry : listOfEntries){
+                sortedByValue.put(entry.getKey(), entry.getValue());
+            }
+
+            System.out.println("HashMap after sorting entries by values ");
+            Set<Map.Entry<Integer, Double>> entrySetSortedByValue = sortedByValue.entrySet();
+
+            int i = 0;
+            for(Map.Entry<Integer, Double> mapping : entrySetSortedByValue){
+                System.out.println(mapping.getKey() + " ==> " + mapping.getValue());
+                System.out.println("Accum:"+mapping.getValue()+"    Doc ID: " + mapping.getKey() + " " + corpus.getDocument(mapping.getKey()).getTitle());
+                i++;
+                if (i == 10)
+                {
+                    break;
+                }
+            }
+
+
+        } catch (NullPointerException e) {
+            System.out.println(term + " was not found");
+        }
     }
 
     /**
@@ -116,7 +213,7 @@ public class Milestone2 {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        try
+        /*try
         {
             Path currentPath = Paths.get(System.getProperty("user.dir"));
 
@@ -184,20 +281,9 @@ public class Milestone2 {
                     break;
                 }
             }
-
-
-
-
-            /*while (true) {
-                try {
-                    System.out.println(vocabTableDIS.readLong());
-                } catch (EOFException e) {
-                    break;
-                }
-            }*/
         }
         catch(IOException e){}
-        /*try
+        try
         {
             Path currentPath = Paths.get(System.getProperty("user.dir"));
             Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
@@ -230,17 +316,16 @@ public class Milestone2 {
             vocabData.close();
             vocabTableData.close();
         }
-        catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
-        */
-        /*Scanner keyboard = new Scanner(System.in);
+        catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }*/
+
+        Scanner keyboard = new Scanner(System.in);
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
 
         String dir = getDirectoryName(keyboard, corpusFolder);
         boolean changeDirectory = false;
 
-        while (!dir.equals("quit"))
-        {
+        while (!dir.equals("quit")) {
             currentPath = Paths.get(corpusFolder.toString(), dir);
             DocumentCorpus corpus = DirectoryCorpus.loadTextDirectory(currentPath, ".txt");
             ((DirectoryCorpus) corpus).registerFileDocumentFactory(".json", JsonFileDocument::loadJsonFileDocument);
@@ -248,7 +333,7 @@ public class Milestone2 {
             //index the corpus
             long startTime = System.currentTimeMillis();
             DiskIndexWriter indexWriter = new DiskIndexWriter(currentPath);
-            Index index = indexCorpus(corpus, indexWriter);
+            PositionalInvertedIndex index = indexCorpus(corpus, indexWriter, currentPath);
             long endTime = System.currentTimeMillis();
             int numSeconds = ((int) ((endTime - startTime) / 1000));
             System.out.println("Indexing took " + numSeconds + " seconds");
@@ -260,74 +345,86 @@ public class Milestone2 {
             }
 
             while ((!queryBuild.equals("quit") && !queryBuild.equals(":q"))) {
-                if (queryBuild.equals("build"))
-                {
-                    //WRITE TO DISK
+                if (queryBuild.equals("build")) {
                     indexWriter.writeIndex(index);
-                }
-                else if (queryBuild.equals("query") || changeDirectory)
-                {
-                    if (changeDirectory)
-                    {
+                } else if (queryBuild.equals("query") || changeDirectory) {
+                    if (changeDirectory) {
                         changeDirectory = false;
                     }
-                    System.out.print("Enter term to search (or \"quit\" to exit): ");
-                    String word = keyboard.nextLine();
 
-                    while(!word.equals("quit") && !word.equals(":q"))
-                    {
-                        String[] words = word.split(" ");
-                        if (words[0].equals(":index")) {
-                            if (hasDirectory(corpusFolder, words[1])) {
-                                word = "quit";
-                                dir = words[1];
-                                changeDirectory = true;
-                                queryBuild = "quit";
+                    System.out.print("Enter \"boolean\" or \"ranked\" (or \"quit\" to exit): ");
+                    String queryType = keyboard.nextLine();
+
+                    while (!queryType.equals("quit") && !queryType.equals(":q")) {
+                        byte[] docWeightBytes = null;
+                        if (queryType.equals("ranked"))
+                        {
+                            docWeightBytes = readDocWeights(currentPath);
+                        }
+                        System.out.print("Enter term to search (or \"quit\" to exit): ");
+                        String word = keyboard.nextLine();
+
+                        while (!word.equals("quit") && !word.equals(":q")) {
+                            String[] words = word.split(" ");
+                            if (words[0].equals(":index")) {
+                                if (hasDirectory(corpusFolder, words[1])) {
+                                    word = "quit";
+                                    dir = words[1];
+                                    changeDirectory = true;
+                                    queryBuild = "quit";
+                                    queryType = "quit";
+                                } else {
+                                    System.out.println("Please recheck spelling of directory");
+                                }
                             } else {
-                                System.out.println("Please recheck spelling of directory");
+                                if (words[0].equals(":stem")) {
+                                    String[] stems = index.getProcessor().processTokens(words[1]);
+                                    for (int i = 0; i < stems.length; i++) {
+                                        System.out.println(i + ":" + stems[i]);
+                                    }
+                                } else if (words[0].equals(":vocab")) {
+                                    for (int i = 0; i < 1000; i++) {
+                                        System.out.println(index.getVocabulary().get(i));
+                                    }
+                                } else {
+                                    if (queryType.equals("boolean")) {
+                                        booleanQueryIndex(currentPath, word, corpus, keyboard, index.getProcessor());
+                                    }
+                                    else if (queryType.equals("ranked"))
+                                    {
+                                        rankedRetrieval(docWeightBytes,currentPath, word,corpus, index.getProcessor());
+                                    }
+                                }
                             }
-                        } else {
-                            if (words[0].equals(":stem")) {
-                                String[] stems = index.getProcessor().processTokens(words[1]);
-                                for (int i = 0; i < stems.length; i++) {
-                                    System.out.println(i + ":" + stems[i]);
-                                }
-                            } else if (words[0].equals(":vocab")) {
-                                for (int i = 0; i < 1000; i++) {
-                                    System.out.println(index.getVocabulary().get(i));
-                                }
-                            } else {
-                                queryIndex(word, index, corpus, keyboard);
+
+                            if (!changeDirectory) {
+                                System.out.print("Enter term to search (or \"quit\" to exit): ");
+                                word = keyboard.nextLine();
                             }
                         }
-
-                        if(!changeDirectory) {
-                            System.out.print("Enter term to search (or \"quit\" to exit): ");
-                            word = keyboard.nextLine();
+                        if (word.equals(":q")) {
+                            queryType = ":q";
+                            queryBuild = ":q";
+                        }
+                        else {
+                            System.out.print("Enter \"boolean\" or \"ranked\" (or \"quit\" to exit): ");
+                            queryType = keyboard.nextLine();
                         }
                     }
-                    if (word.equals(":q"))
-                    {
-                        queryBuild = ":q";
+                    if (!queryBuild.equals("quit") && !queryBuild.equals(":q")) {
+                        System.out.print("Enter \"query\" or \"build\" (or \"quit\" to exit): ");
+                        queryBuild = keyboard.nextLine();
                     }
                 }
-                if(!queryBuild.equals("quit") && !queryBuild.equals(":q"))
-                {
-                    System.out.print("Enter \"query\" or \"build\" (or \"quit\" to exit): ");
-                    queryBuild = keyboard.nextLine();
+                if (queryBuild.equals(":q")) {
+                    dir = "quit";
+                } else if (queryBuild.equals("quit") && !changeDirectory) {
+                    System.out.println();
+                    dir = getDirectoryName(keyboard, corpusFolder);
                 }
-            }
-            if (queryBuild.equals(":q"))
-            {
-                dir = "quit";
-            }
-            else if (queryBuild.equals("quit") && !changeDirectory)
-            {
-                System.out.println();
-                dir = getDirectoryName(keyboard, corpusFolder);
             }
         }
-        keyboard.close();*/
+        keyboard.close();
     }
 
     /**
@@ -337,16 +434,15 @@ public class Milestone2 {
      * @return Index contains info on every term in every document within selected corpus
      * @throws IOException
      */
-    private static Index indexCorpus(DocumentCorpus corpus, DiskIndexWriter indexWriter) throws IOException {
+    private static PositionalInvertedIndex indexCorpus(DocumentCorpus corpus, DiskIndexWriter indexWriter, Path corpusFolder) throws IOException {
         HashSet<String> KGI = new HashSet<>();
         Iterable<Document> itrDoc = corpus.getDocuments();
         TokenProcessor processor = new Milestone1TokenProcessor();
-        PositionalInvertedIndex posInvertIndex = new PositionalInvertedIndex(processor);
+        PositionalInvertedIndex posInvertedIndex = new PositionalInvertedIndex(processor);
+
         int positionCounter;
-        int numDocs = 0;
 
         for (Document doc : itrDoc) {
-            numDocs++;
             positionCounter = 0;
             Reader readDoc = doc.getContent();
             EnglishTokenStream ets = new EnglishTokenStream(readDoc);
@@ -354,22 +450,23 @@ public class Milestone2 {
             //term, num of times the term appears in the doc
             HashMap<String, Integer> docVocab = new HashMap<>();
             for (String engTok : engTokens) {
-                String[] types = posInvertIndex.getProcessor().processButDontStemTokensAKAGetType(engTok);
+                String[] types = posInvertedIndex.getProcessor().processButDontStemTokensAKAGetType(engTok);
                 //adding TYPES
                 for(String x: types)
                     KGI.add(x);
 
-                String[] stems = posInvertIndex.getProcessor().getStems(types);
+                String[] stems = posInvertedIndex.getProcessor().getStems(types);
                 for (int i = 0; i < stems.length; i++) {
                     if (stems.length > 1) {
                         if (i == 0) {
                             positionCounter++;
                         }
-                        posInvertIndex.addTerm(stems[i], doc.getId(), positionCounter);
+                        posInvertedIndex.addTerm(stems[i], doc.getId(), positionCounter);
                     } else {
                         positionCounter++;
-                        posInvertIndex.addTerm(stems[i], doc.getId(), positionCounter);
+                        posInvertedIndex.addTerm(stems[i], doc.getId(), positionCounter);
                     }
+
                     if (!docVocab.isEmpty() && docVocab.containsKey(stems[i]))
                     {
                         docVocab.replace(stems[i],docVocab.get(stems[i]),docVocab.get(stems[i])+1);
@@ -398,10 +495,7 @@ public class Milestone2 {
             ets.close();
         }
         indexWriter.closeDocWeights();
-        // add the entire hashset to the KGI
-        //System.out.println("vocab:"+posInvertIndex.getVocabulary().size());
-        //System.out.println("KGI size:"+KGI.size());
-        posInvertIndex.addToKGI(KGI);
-        return posInvertIndex;
+        posInvertedIndex.addToKGI(KGI);
+        return posInvertedIndex;
     }
 }

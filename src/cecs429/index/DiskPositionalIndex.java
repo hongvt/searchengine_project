@@ -5,27 +5,37 @@ import cecs429.text.TokenProcessor;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.nio.file.Path;
 
 public class DiskPositionalIndex implements Index {
 
-    private byte[] vocabFileBytes, vocabTableBytes;
+    private byte[] vocabFileBytes, vocabTableBytes, postingsBytes;
 
-    public DiskPositionalIndex(Path corpusFolder) {
+    private TokenProcessor processor;
+
+    public DiskPositionalIndex(Path corpusFolder, TokenProcessor processor) {
+        this.processor = processor;
         try {
-            File vocabFile = new File(corpusFolder.toString()+"/vocab.bin");
+            File vocabFile = new File(corpusFolder.toString()+"/index/vocab.bin");
             InputStream vocabIS = new FileInputStream(vocabFile);
             DataInputStream vocabDIS = new DataInputStream(vocabIS);
             vocabFileBytes = new byte[(int)vocabFile.length()];
             vocabDIS.read(vocabFileBytes);
 
-            File vocabTableFile = new File(corpusFolder.toString()+"/vocabTable.bin");
+            File vocabTableFile = new File(corpusFolder.toString()+"/index/vocabTable.bin");
             InputStream vocabTableIS = new FileInputStream(vocabTableFile);
             DataInputStream vocabTableDIS = new DataInputStream(vocabTableIS);
             vocabTableBytes = new byte[(int)vocabTableFile.length()];
             vocabTableDIS.read(vocabTableBytes);
+
+            File postingsFile = new File(corpusFolder.toString()+"/index/vocabTable.bin");
+            InputStream postingsIS = new FileInputStream(postingsFile);
+            DataInputStream postingsDIS = new DataInputStream(postingsIS);
+            postingsBytes = new byte[(int)postingsFile.length()];
+            postingsDIS.read(postingsBytes);
         } catch (IOException e) {
             System.out.println("IO exception");
             e.printStackTrace();
@@ -33,8 +43,109 @@ public class DiskPositionalIndex implements Index {
     }
 
     @Override
-    public List<Posting> getPostings(String term) {
+    public int[][] getPostingsNoPositions(String term)
+    {
+        try {
+            long postingPos = binarySearchVocabTable(term);
+            byte[] numOfDocsBytes = new byte[4];
+            for (int i = 0; i < numOfDocsBytes.length; i++) {
+                numOfDocsBytes[i] = postingsBytes[(int) postingPos + i];
+            }
+            int numOfDocs = bytesToInt(numOfDocsBytes);
 
+            int[][] docIdsTermFreqs = new int[numOfDocs][2];
+            int nextIntBytePos = (int) postingPos + 4;
+
+            for (int i = 0; i < numOfDocs; i++) {
+                byte[] docIdBytes = new byte[4];
+                for (int j = 0; j < docIdBytes.length; j++) {
+                    docIdBytes[i] = postingsBytes[nextIntBytePos + j];
+                }
+                nextIntBytePos += 4;
+                int docId = bytesToInt(docIdBytes);
+
+                if (i == 0) {
+                    docIdsTermFreqs[i][0] = docId;
+                } else {
+                    docIdsTermFreqs[i][0] = docId + docIdsTermFreqs[i - 1][0];
+                }
+
+                byte[] termFreqBytes = new byte[4];
+                for (int j = 0; j < termFreqBytes.length; j++) {
+                    termFreqBytes[i] = termFreqBytes[nextIntBytePos + j];
+                }
+                nextIntBytePos += 4;
+                int termFreq = bytesToInt(termFreqBytes);
+                docIdsTermFreqs[i][1] = termFreq;
+
+                nextIntBytePos += (4 * termFreq);
+            }
+            return docIdsTermFreqs;
+        }
+        catch (IOException e) {};
+        return null;
+    }
+
+    @Override
+    public List<Posting> getPostingsWithPositions(String term){
+        try
+        {
+            long postingPos = binarySearchVocabTable(term);
+            byte[] numOfDocsBytes = new byte[4];
+            for (int i = 0; i < numOfDocsBytes.length; i++) {
+                numOfDocsBytes[i] = postingsBytes[(int)postingPos + i];
+            }
+            int numOfDocs = bytesToInt(numOfDocsBytes);
+
+            //Posting[] postings = new Posting[numOfDocs];
+            ArrayList<Posting> postings = new ArrayList<>();
+            int nextIntBytePos = (int)postingPos + 4;
+
+            for (int i = 0; i < numOfDocs; i++)
+            {
+                byte[] docIdBytes = new byte[4];
+                for (int j = 0; j < docIdBytes.length; j++) {
+                    docIdBytes[i] = postingsBytes[nextIntBytePos + j];
+                }
+                nextIntBytePos += 4;
+                int docId = bytesToInt(docIdBytes);
+
+                if (i == 0) {
+                    postings.add(new Posting(docId));
+                }
+                else
+                {
+                    postings.add(new Posting(docId+postings.get(i-1).getDocumentId()));
+                }
+
+                byte[] termFreqBytes = new byte[4];
+                for (int j = 0; j < termFreqBytes.length; j++) {
+                    termFreqBytes[i] = termFreqBytes[nextIntBytePos + j];
+                }
+                nextIntBytePos += 4;
+                int termFreq = bytesToInt(termFreqBytes);
+
+                for (int j = 0; j < termFreq; j++)
+                {
+                    byte[] posBytes = new byte[4];
+                    for (int k = 0; k < posBytes.length; k++) {
+                        posBytes[i] = posBytes[nextIntBytePos + k];
+                    }
+                    nextIntBytePos += 4;
+                    int pos = bytesToInt(posBytes);
+
+                    if (i == 0) {
+                        postings.get(i).addPosition(pos);
+                    }
+                    else
+                    {
+                        postings.get(i).addPosition(pos+postings.get(i).getPositions().get(postings.get(i).getPositions().size()-1));
+                    }
+                }
+            }
+            return postings;
+        }
+        catch (IOException e) {};
         return null;
     }
 
@@ -94,11 +205,25 @@ public class DiskPositionalIndex implements Index {
         return bytesToLong(postingPos);
     }
 
-    public long bytesToLong(byte[] bytes) {
+    private static long bytesToLong(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.put(bytes);
         buffer.flip();
         return buffer.getLong();
+    }
+
+    private static int bytesToInt(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.put(bytes);
+        buffer.flip();
+        return buffer.getInt();
+    }
+
+    public static double bytesToDouble(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
+        buffer.put(bytes);
+        buffer.flip();
+        return buffer.getDouble();
     }
 
     @Override
@@ -107,17 +232,11 @@ public class DiskPositionalIndex implements Index {
     }
 
     @Override
-    public void addToKGI(HashSet<String> types) {
-        return;
-    }
+    public void addToKGI(HashSet<String> types) { return; }
 
     @Override
-    public String[] getWildcardMatches(String term) {
-        return new String[0];
-    }
+    public String[] getWildcardMatches(String term) { return null; }
 
     @Override
-    public TokenProcessor getProcessor() {
-        return null;
-    }
+    public TokenProcessor getProcessor() { return this.processor; }
 }

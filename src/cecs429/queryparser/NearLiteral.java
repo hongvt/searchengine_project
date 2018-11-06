@@ -84,6 +84,6 @@ public class NearLiteral implements QueryComponent {
 
     @Override
     public List<Posting> getPostings(Index index) {
-        return nearMerge(index.getPostings(index.getProcessor().getStem(leftTerm)), index.getPostings(index.getProcessor().getStem(rightTerm)), k);
+        return nearMerge(index.getPostingsWithPositions(index.getProcessor().getStem(leftTerm)), index.getPostingsWithPositions(index.getProcessor().getStem(rightTerm)), k);
     }
 }

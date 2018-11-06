@@ -3,9 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="d76b948e-7fd4-411f-9a4f-4da8efeaa5f2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/index/Heap.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/index/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/Index.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/queryparser/NearLiteral.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/queryparser/NearLiteral.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" afterDir="false" />
     </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,25 +26,33 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="bin" value="2" />
-          <entry key="java" value="2" />
+          <entry key="java" value="29" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="2" />
+          <entry key="JAVA" value="29" />
           <entry key="PLAIN_TEXT" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="1521" />
+          <entry key="java" value="6074" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1521" />
+          <entry key="JAVA" value="6074" />
         </counts>
       </usages-collector>
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.vcs.git.usages" />
     </session>
   </component>
   <component name="FileEditorManager">
@@ -42,8 +60,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="119" column="9" lean-forward="true" selection-start-line="119" selection-start-column="9" selection-end-line="119" selection-end-column="9" />
+            <state relative-caret-position="1402">
+              <caret line="397" column="29" lean-forward="true" selection-start-line="397" selection-start-column="29" selection-end-line="397" selection-end-column="29" />
+              <folding>
+                <element signature="e#7326#7354#0" expanded="true" />
+                <element signature="e#7576#7593#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -51,18 +73,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="23" column="83" selection-start-line="23" selection-start-column="83" selection-end-line="23" selection-end-column="83" />
-              <folding>
-                <element signature="e#4411#4412#0" expanded="true" />
-                <element signature="e#4438#4439#0" expanded="true" />
-                <element signature="e#4503#4504#0" expanded="true" />
-                <element signature="e#4525#4526#0" expanded="true" />
-                <element signature="e#4594#4595#0" expanded="true" />
-                <element signature="e#4630#4631#0" expanded="true" />
-                <element signature="e#4688#4689#0" expanded="true" />
-                <element signature="e#4715#4716#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="3030">
+              <caret line="210" column="18" selection-start-line="210" selection-start-column="18" selection-end-line="210" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -82,30 +94,34 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/index/RankedPosting.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/queryparser/NearLiteral.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/index/Index.java" />
         <option value="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" />
+        <option value="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" />
       </list>
     </option>
+  </component>
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1680" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
               <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
-              <item name="corpora" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
@@ -136,16 +152,26 @@
               <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
               <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="cecs429" type="462c0819:PsiDirectoryNode" />
+              <item name="text" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="csulb" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540948794603" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541545859192" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
@@ -218,7 +244,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="935db4c0-fda6-4fcf-a60b-d36cf3bb766f" name="Default Changelist" comment="" />
+      <changelist id="d76b948e-7fd4-411f-9a4f-4da8efeaa5f2" name="Default Changelist" comment="" />
       <created>1538690834483</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -230,7 +256,7 @@
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21245421" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.21446079" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -258,67 +284,14 @@
       <window_info anchor="right" id="Maven Projects" order="7" />
     </layout>
   </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/OrQuery.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/NearLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/AndQuery.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="51" column="9" lean-forward="true" selection-start-line="51" selection-start-column="9" selection-end-line="51" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="189" column="31" lean-forward="true" selection-start-line="189" selection-start-column="31" selection-end-line="189" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/documents/DirectoryCorpus.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="443">
           <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Index.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -336,34 +309,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Heap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="903">
-          <caret line="75" column="32" selection-start-line="75" selection-start-column="32" selection-end-line="75" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Posting.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="63" column="5" lean-forward="true" selection-start-line="63" selection-start-column="5" selection-end-line="63" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Heap.java" />
     <entry file="file://$PROJECT_DIR$/src/cecs429/index/KGramIndex.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="96" column="38" selection-start-line="96" selection-start-column="38" selection-end-line="96" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -373,37 +323,134 @@
     <entry file="file://$PROJECT_DIR$/corpora/vocab.bin">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/RankedPosting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="16" column="29" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/PositionalInvertedIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1485">
+          <caret line="105" column="11" selection-start-line="105" selection-start-column="11" selection-end-line="105" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3261#3262#0" expanded="true" />
+            <element signature="e#3282#3283#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Posting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="75" column="12" selection-start-line="75" selection-start-column="12" selection-end-line="76" selection-end-column="35" />
+        <state relative-caret-position="945">
+          <caret line="63" column="86" selection-start-line="63" selection-start-column="86" selection-end-line="63" selection-end-column="86" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/TermLiteral.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="47" column="50" selection-start-line="47" selection-start-column="50" selection-end-line="47" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/AndQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="618">
+          <caret line="59" column="50" lean-forward="true" selection-start-line="59" selection-start-column="50" selection-end-line="59" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/WildcardLiteral.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="36" column="9" lean-forward="true" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/PhraseLiteral.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="573">
+          <caret line="86" column="59" selection-start-line="86" selection-start-column="59" selection-end-line="86" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/OrQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/NearLiteral.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="65" column="80" selection-start-line="65" selection-start-column="80" selection-end-line="65" selection-end-column="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/QueryComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/BooleanQueryParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone1UsingPosInvertIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1420">
+          <caret line="189" column="31" lean-forward="true" selection-start-line="189" selection-start-column="31" selection-end-line="189" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/text/Milestone1TokenProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Index.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="30" lean-forward="true" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="119" column="9" lean-forward="true" selection-start-line="119" selection-start-column="9" selection-end-line="119" selection-end-column="9" />
+        <state relative-caret-position="1402">
+          <caret line="397" column="29" lean-forward="true" selection-start-line="397" selection-start-column="29" selection-end-line="397" selection-end-column="29" />
+          <folding>
+            <element signature="e#7326#7354#0" expanded="true" />
+            <element signature="e#7576#7593#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="23" column="83" selection-start-line="23" selection-start-column="83" selection-end-line="23" selection-end-column="83" />
-          <folding>
-            <element signature="e#4411#4412#0" expanded="true" />
-            <element signature="e#4438#4439#0" expanded="true" />
-            <element signature="e#4503#4504#0" expanded="true" />
-            <element signature="e#4525#4526#0" expanded="true" />
-            <element signature="e#4594#4595#0" expanded="true" />
-            <element signature="e#4630#4631#0" expanded="true" />
-            <element signature="e#4688#4689#0" expanded="true" />
-            <element signature="e#4715#4716#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="3030">
+          <caret line="210" column="18" selection-start-line="210" selection-start-column="18" selection-end-line="210" selection-end-column="18" />
         </state>
       </provider>
     </entry>

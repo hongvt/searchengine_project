@@ -84,7 +84,7 @@ public class PhraseLiteral implements QueryComponent {
 
         for (int i = 0; i < mTerms.size(); i++) {
             String temp = index.getProcessor().getStem(index.getProcessor().removeNonAlphaNumCharBegEndAndQuotes(mTerms.get(i)));
-            postingList.add(index.getPostings(temp));
+            postingList.add(index.getPostingsWithPositions(temp));
         }
 
         List<Posting> result = postingList.get(0);

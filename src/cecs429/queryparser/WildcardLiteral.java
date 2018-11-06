@@ -31,8 +31,8 @@ public class WildcardLiteral implements QueryComponent {
         HashSet<Posting> orPosts = new HashSet<>();
 
         for (int i = 0; i < typesStems.length; i++) {
-            for (int j = 0; j < index.getPostings(typesStems[i]).size(); j++) {
-                orPosts.add(index.getPostings(typesStems[i]).get(j));
+            for (int j = 0; j < index.getPostingsWithPositions(typesStems[i]).size(); j++) {
+                orPosts.add(index.getPostingsWithPositions(typesStems[i]).get(j));
             }
         }
 
