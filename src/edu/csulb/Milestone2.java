@@ -122,15 +122,13 @@ public class Milestone2 {
     private static void rankedRetrieval(byte[] docWeightBytes, Path currentPath, String term, DocumentCorpus corpus, TokenProcessor processor)
     {
         DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath, processor);
-        //ArrayList<Double> docWeights = readDocWeights(currentPath);
+
         try {
             String[] terms = term.split(" ");
             HashMap<Integer, Double> docIdsAds = new HashMap<>();
             for (int k = 0; k < terms.length; k++)
             {
                 String[] stems = diskPosIndex.getProcessor().processTokens(terms[k]);
-
-
 
                 for (int i = 0; i < stems.length; i++)
                 {
@@ -159,9 +157,6 @@ public class Milestone2 {
                 }
 
             }
-
-
-
 
             for (Integer docId : docIdsAds.keySet())
             {
@@ -195,18 +190,6 @@ public class Milestone2 {
                     break;
                 }
             }
-
-            //int i = 0;
-            /*for(){
-                System.out.println(mapping.getKey() + " ==> " + mapping.getValue());
-                System.out.println("Accum:"+mapping.getValue()+"    Doc ID: " + mapping.getKey() + " " + corpus.getDocument(mapping.getKey()).getTitle());
-                i++;
-                if (i == 10)
-                {
-                    break;
-                }
-            }*/
-
 
         } catch (NullPointerException e) {
             System.out.println(term + " was not found");

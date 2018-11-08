@@ -48,7 +48,7 @@ public class DiskPositionalIndex implements Index {
         System.out.println("postingsBytes.length:"+postingsBytes.length);
         try {
             long postingPos = binarySearchVocabTable(term);
-            System.out.println("postingPos:"+postingPos);
+            //System.out.println("postingPos:"+postingPos);
             byte[] numOfDocsBytes = new byte[4];
             for (int i = 0; i < numOfDocsBytes.length; i++) {
                 numOfDocsBytes[i] = postingsBytes[(int) postingPos + i];
@@ -68,23 +68,23 @@ public class DiskPositionalIndex implements Index {
                 nextIntBytePos += 4;
 
                 int docId = bytesToInt(docIdBytes);
-                System.out.print("\tdocId="+docId);
+                //System.out.print("\tdocId="+docId);
                 if (i != 0)
                 {
                     docId +=docIdsTermFreqs[i-1][0];
                 }
-                System.out.println("\tdocId="+docId);
+                //System.out.println("\tdocId="+docId);
 
                 docIdsTermFreqs[i][0] = docId;
 
                 byte[] termFreqBytes = new byte[4];
-                System.out.print("startTermFreqBytes="+nextIntBytePos);
+                //System.out.print("startTermFreqBytes="+nextIntBytePos);
                 for (int j = 0; j < termFreqBytes.length; j++) {
                     termFreqBytes[j] = postingsBytes[nextIntBytePos + j];
                 }
                 nextIntBytePos += 4;
                 int termFreq = bytesToInt(termFreqBytes);
-                System.out.println("\ttermFreq="+termFreq);
+                //System.out.println("\ttermFreq="+termFreq);
                 docIdsTermFreqs[i][1] = termFreq;
 
                 //postings
@@ -116,44 +116,53 @@ public class DiskPositionalIndex implements Index {
             {
                 byte[] docIdBytes = new byte[4];
                 for (int j = 0; j < docIdBytes.length; j++) {
-                    docIdBytes[i] = postingsBytes[nextIntBytePos + j];
+                    docIdBytes[j] = postingsBytes[nextIntBytePos + j];
                 }
                 nextIntBytePos += 4;
                 int docId = bytesToInt(docIdBytes);
+                //System.out.print("docId="+docId);
 
-                if (i == 0) {
-                    postings.add(new Posting(docId));
-                }
-                else
+                if (i != 0)
                 {
-                    postings.add(new Posting(docId+postings.get(i-1).getDocumentId()));
+                    docId += postings.get(i-1).getDocumentId();
                 }
+
+                //System.out.print("\tdocId="+docId);
+
+                postings.add(new Posting(docId));
 
                 byte[] termFreqBytes = new byte[4];
                 for (int j = 0; j < termFreqBytes.length; j++) {
-                    termFreqBytes[i] = termFreqBytes[nextIntBytePos + j];
+                    termFreqBytes[j] = postingsBytes[nextIntBytePos + j];
                 }
                 nextIntBytePos += 4;
                 int termFreq = bytesToInt(termFreqBytes);
+                //System.out.println("\ttermFreq="+termFreq);
 
                 for (int j = 0; j < termFreq; j++)
                 {
                     byte[] posBytes = new byte[4];
                     for (int k = 0; k < posBytes.length; k++) {
-                        posBytes[i] = posBytes[nextIntBytePos + k];
+                        posBytes[k] = postingsBytes[nextIntBytePos + k];
                     }
                     nextIntBytePos += 4;
                     int pos = bytesToInt(posBytes);
+                    //System.out.println("posting: "+pos);
 
-                    if (i == 0) {
-                        postings.get(i).addPosition(pos);
-                    }
-                    else
+                    if (j != 0)
                     {
-                        postings.get(i).addPosition(pos+postings.get(i).getPositions().get(postings.get(i).getPositions().size()-1));
+                        //System.out.println("last posting:"+postings.get(i).getPositions().get(postings.get(i).getPositions().size()-1));
+                        pos += postings.get(i).getPositions().get(postings.get(i).getPositions().size()-1);
                     }
+                    //System.out.print("posting: "+pos+",");
+
+                    postings.get(i).addPosition(pos);
+
                 }
+                //System.out.println();
             }
+            //System.out.print(term+":");
+            //System.out.println(postings);
             return postings;
         }
         catch (IOException e) {};
@@ -211,7 +220,7 @@ public class DiskPositionalIndex implements Index {
 
                 word = new String(vocabBytes);
             }
-            System.out.println("word=" + word);
+            //System.out.println("word=" + word);
 
             if (term.compareTo(word) > 0) {
                 //System.out.println("term is in the last half");
@@ -224,7 +233,7 @@ public class DiskPositionalIndex implements Index {
                 //term is in the first half
                 highVTAIndex = midVTAIndex - 2;
             } else {
-                System.out.println("Term was found at index " + (midVTAIndex - 1));
+                //System.out.println("Term was found at index " + (midVTAIndex - 1));
                 break;
             }
         }

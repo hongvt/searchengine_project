@@ -38,18 +38,13 @@ public class TermLiteral implements QueryComponent {
 
         ArrayList<QueryComponent> words = new ArrayList<>();
 
-        if (stemmedStuff.length == 1)
+        if (stemmedStuff.length == 1) {
             return index.getPostingsWithPositions(stemmedStuff[0]);
+        }
 
         for (int i = 0; i < stemmedStuff.length; i++)
             words.add(new TermLiteral(stemmedStuff[i]));
 
-        if (stemmedStuff.length == 1) {
-            return index.getPostingsWithPositions(stemmedStuff[0]);
-        }
-        for (int i = 0; i < stemmedStuff.length; i++) {
-            words.add(new TermLiteral(stemmedStuff[i]));
-        }
         return (new OrQuery(words)).getPostings(index);
     }
 
