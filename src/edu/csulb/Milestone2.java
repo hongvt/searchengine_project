@@ -10,6 +10,7 @@ import cecs429.queryparser.QueryComponent;
 import cecs429.text.EnglishTokenStream;
 import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
+import com.sun.tools.javac.util.ArrayUtils;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -123,34 +124,44 @@ public class Milestone2 {
         DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath, processor);
         //ArrayList<Double> docWeights = readDocWeights(currentPath);
         try {
-            String[] stems = diskPosIndex.getProcessor().processTokens(term);
-
+            String[] terms = term.split(" ");
             HashMap<Integer, Double> docIdsAds = new HashMap<>();
-
-            for (int i = 0; i < stems.length; i++)
+            for (int k = 0; k < terms.length; k++)
             {
-                double wqt = corpus.getCorpusSize();
-                wqt /= diskPosIndex.getPostingsNoPositions(term).length;
-                wqt++;
-                wqt = Math.log(wqt);
+                String[] stems = diskPosIndex.getProcessor().processTokens(terms[k]);
 
-                int[][] docIdsTermFreq = diskPosIndex.getPostingsNoPositions(stems[i]);
-                for (int j = 0; j < docIdsTermFreq.length; j++)
+
+
+                for (int i = 0; i < stems.length; i++)
                 {
-                    double wdt = Math.log(docIdsTermFreq[j][1]);
-                    wdt++;
-                    double ad = wdt * wqt;
+                    int[][] docIdsTermFreq = diskPosIndex.getPostingsNoPositions(stems[i]);
+                    double wqt = corpus.getCorpusSize();
+                    wqt /= docIdsTermFreq.length;
+                    wqt++;
+                    wqt = Math.log(wqt);
 
-                    if (!docIdsAds.containsKey(docIdsTermFreq[j][0]))
+
+                    for (int j = 0; j < docIdsTermFreq.length; j++)
                     {
-                        docIdsAds.put(docIdsTermFreq[j][0],ad);
-                    }
-                    else
-                    {
-                        docIdsAds.replace(docIdsTermFreq[j][0],docIdsAds.get(docIdsTermFreq[j][0]),docIdsAds.get(docIdsTermFreq[j][0])+ad);
+                        double wdt = Math.log(docIdsTermFreq[j][1]);
+                        wdt++;
+                        double ad = wdt * wqt;
+
+                        if (!docIdsAds.containsKey(docIdsTermFreq[j][0]))
+                        {
+                            docIdsAds.put(docIdsTermFreq[j][0],ad);
+                        }
+                        else
+                        {
+                            docIdsAds.replace(docIdsTermFreq[j][0],docIdsAds.get(docIdsTermFreq[j][0]),docIdsAds.get(docIdsTermFreq[j][0])+ad);
+                        }
                     }
                 }
+
             }
+
+
+
 
             for (Integer docId : docIdsAds.keySet())
             {
@@ -166,32 +177,27 @@ public class Milestone2 {
                 }
             }
 
-
-            Comparator<Map.Entry<Integer, Double>> valueComparator = new Comparator<Map.Entry<Integer,Double>>() {
+            List<Map.Entry<Integer, Double>> list = new LinkedList<>(docIdsAds.entrySet());
+            Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
                 @Override
                 public int compare(Map.Entry<Integer, Double> e1, Map.Entry<Integer, Double> e2) {
-                    return e2.getValue().compareTo(e1.getValue());
+                    return (e2.getValue()).compareTo(e1.getValue());
                 }
-            };
+            });
 
-            // Sort method needs a List, so let's first convert Set to List in Java
-            List<Map.Entry<Integer, Double>> listOfEntries = new ArrayList<Map.Entry<Integer, Double>>(docIdsAds.entrySet());
-
-            // sorting HashMap by values using comparator
-            Collections.sort(listOfEntries, valueComparator);
-
-            LinkedHashMap<Integer, Double> sortedByValue = new LinkedHashMap<Integer, Double>(listOfEntries.size());
-
-            // copying entries from List to Map
-            for(Map.Entry<Integer, Double> entry : listOfEntries){
-                sortedByValue.put(entry.getKey(), entry.getValue());
+            Map<Integer, Double> result = new LinkedHashMap<>();
+            int i = 0;
+            for (Map.Entry<Integer, Double> entry : list) {
+                result.put(entry.getKey(), entry.getValue());
+                System.out.println("Accum:"+entry.getValue()+"    Doc ID: " + entry.getKey() + " " + corpus.getDocument(entry.getKey()).getTitle());
+                if (i == 10)
+                {
+                    break;
+                }
             }
 
-            System.out.println("HashMap after sorting entries by values ");
-            Set<Map.Entry<Integer, Double>> entrySetSortedByValue = sortedByValue.entrySet();
-
-            int i = 0;
-            for(Map.Entry<Integer, Double> mapping : entrySetSortedByValue){
+            //int i = 0;
+            /*for(){
                 System.out.println(mapping.getKey() + " ==> " + mapping.getValue());
                 System.out.println("Accum:"+mapping.getValue()+"    Doc ID: " + mapping.getKey() + " " + corpus.getDocument(mapping.getKey()).getTitle());
                 i++;
@@ -199,7 +205,7 @@ public class Milestone2 {
                 {
                     break;
                 }
-            }
+            }*/
 
 
         } catch (NullPointerException e) {
@@ -231,15 +237,24 @@ public class Milestone2 {
             byte[] vocabTableBytes = new byte[(int)vocabTableFile.length()];
             vocabTableDIS.read(vocabTableBytes);
 
+            File postingsFile = new File(corpusFolder.toString()+"corpora/vocabTable.bin");
+            InputStream postingsIS = new FileInputStream(postingsFile);
+            DataInputStream postingsDIS = new DataInputStream(postingsIS);
+            postingsBytes = new byte[(int)postingsFile.length()];
+            postingsDIS.read(postingsBytes);
+
             int lowVTAIndex = 0;
             int highVTAIndex = (vocabTableBytes.length / 16) - 1;
-            int midVTAIndex;
-            int midVTByteIndex;
+            int maxVTAIndex = highVTAIndex;
+            int midVTAIndex = -1;
+            int midVTByteIndex = -1;
 
-            String term = "a";
+            String term = "catcher";
+
 
             while(lowVTAIndex <= highVTAIndex)
             {
+                String word = "";
                 midVTAIndex = (lowVTAIndex + highVTAIndex)/2;
                 midVTByteIndex = midVTAIndex * 16;
 
@@ -247,43 +262,70 @@ public class Milestone2 {
                 for (int i = 0; i < midLongBytes.length; i++) {
                     midLongBytes[i] = vocabTableBytes[midVTByteIndex + i];
                 }
-                long midVocabStartIndex = bytesToLong(midLongBytes);
+                long midVocabStartIndex = DiskPositionalIndex.bytesToLong(midLongBytes);
+                System.out.println("midVocabStartIndex="+midVocabStartIndex);
 
                 midVTAIndex++;
                 midVTByteIndex = midVTAIndex * 16;
 
-                byte[] midPLUS1LongBytes = new byte[8];
-                for (int i = 0; i < midPLUS1LongBytes.length; i++) {
-                    midPLUS1LongBytes[i] = vocabTableBytes[midVTByteIndex + i];
+                System.out.println("lowVTAIndex="+lowVTAIndex);
+                System.out.println("highVTAIndex="+highVTAIndex);
+
+                if(lowVTAIndex == highVTAIndex && lowVTAIndex == maxVTAIndex)
+                {
+                    byte[] vocabBytes = new byte[vocabFileBytes.length - (int) midVocabStartIndex];
+                    for (int i = 0; i < vocabBytes.length; i++) {
+                        vocabBytes[i] = vocabFileBytes[(int) midVocabStartIndex + i];
+                    }
+                    word = new String(vocabBytes);
                 }
-                long midPLUS1VocabStartIndex = bytesToLong(midPLUS1LongBytes);
+                else {
+                    byte[] midPLUS1LongBytes = new byte[8];
+                    for (int i = 0; i < midPLUS1LongBytes.length; i++) {
+                        midPLUS1LongBytes[i] = vocabTableBytes[midVTByteIndex + i];
+                    }
+                    long midPLUS1VocabStartIndex = DiskPositionalIndex.bytesToLong(midPLUS1LongBytes);
 
-                long vocabLength = midPLUS1VocabStartIndex - midVocabStartIndex;
+                    long vocabLength = midPLUS1VocabStartIndex - midVocabStartIndex;
 
-                byte[] vocabBytes = new byte[(int) vocabLength];
-                for (int i = 0; i < vocabBytes.length; i++) {
-                    vocabBytes[i] = vocabFileBytes[(int)midVocabStartIndex + i];
+                    byte[] vocabBytes = new byte[(int) vocabLength];
+                    for (int i = 0; i < vocabBytes.length; i++) {
+                        vocabBytes[i] = vocabFileBytes[(int) midVocabStartIndex + i];
+                    }
+
+                    word = new String(vocabBytes);
                 }
-
-                String word = new String(vocabBytes);
-                System.out.println("word="+word);
+                System.out.println("word=" + word);
 
                 if (term.compareTo(word) > 0) {
                     System.out.println("term is in the last half");
                     //term is in the last half
+                    //highVTAIndex = 0;
                     lowVTAIndex = midVTAIndex;
+
                 } else if (term.compareTo(word) < 0) {
                     System.out.println("term is in the first half");
                     //term is in the first half
                     highVTAIndex = midVTAIndex - 2;
                 } else {
-                    System.out.println("Term was found at index "+(midVTAIndex-1));
+                    System.out.println("Term was found at index " + (midVTAIndex - 1));
                     break;
                 }
             }
+            byte[] postingPos = new byte[8];
+            for (int i = 0; i < postingPos.length; i++) {
+                postingPos[i] = vocabTableBytes[(midVTAIndex-1)*16 + i + 8];
+            }
+            System.out.println(DiskPositionalIndex.bytesToLong(postingPos));
+
+            byte[] numOfDocsBytes = new byte[4];
+            for (int i = 0; i < numOfDocsBytes.length; i++) {
+                numOfDocsBytes[i] = postingsBytes[(int)postingPos + i];
+            }
+            int numOfDocs = bytesToInt(numOfDocsBytes);
         }
-        catch(IOException e){}
-        try
+        catch(IOException e){}*/
+        /*try
         {
             Path currentPath = Paths.get(System.getProperty("user.dir"));
             Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
@@ -293,6 +335,9 @@ public class Milestone2 {
             FileOutputStream vocabTableFile = new FileOutputStream(corpusFolder.toString()+"/vocabTable.bin");
             DataOutputStream vocabTableData = new DataOutputStream(vocabTableFile);
 
+            FileOutputStream postingsFile = new FileOutputStream(corpusFolder.toString()+"/postings.bin");
+            DataOutputStream postingsData = new DataOutputStream(postingsFile);
+
             String term = "aangelsbaseballcatcherdodgers";
             byte[] termBytes = term.getBytes();
             vocabData.write(termBytes);
@@ -300,19 +345,55 @@ public class Milestone2 {
 //0            //a
             vocabTableData.writeLong(0);
             vocabTableData.writeLong(0);
+
+            postingsData.writeInt(1); //dft
+            postingsData.writeInt(1); //id is actually 1
+            postingsData.writeInt(1); //tftd
+            postingsData.writeInt(1); //p
+
 //1            //angels
             vocabTableData.writeLong(1);
-            vocabTableData.writeLong(20);
+            vocabTableData.writeLong(16);
+
+            postingsData.writeInt(1); //dft
+            postingsData.writeInt(20); //id is actually 20
+            postingsData.writeInt(2); //tftd
+            postingsData.writeInt(1); //p
+            postingsData.writeInt(10); //p
+
 //2            //baseball
             vocabTableData.writeLong(7);
-            vocabTableData.writeLong(100);
+            vocabTableData.writeLong(36);
+
+            postingsData.writeInt(2); //dft
+            postingsData.writeInt(30); //id is actually 30
+            postingsData.writeInt(1); //tftd
+            postingsData.writeInt(1); //p
+
+            postingsData.writeInt(3); //id is actually 33
+            postingsData.writeInt(1); //tftd
+            postingsData.writeInt(1); //p
+
 //3            //catcher
             vocabTableData.writeLong(15);
-            vocabTableData.writeLong(140);
+            vocabTableData.writeLong(64);
+
+            postingsData.writeInt(1); //dft
+            postingsData.writeInt(4); //id is actually 4
+            postingsData.writeInt(2); //tftd
+            postingsData.writeInt(1); //p
+            postingsData.writeInt(10); //p
+
 //4            //dodgers
             vocabTableData.writeLong(22);
-            vocabTableData.writeLong(400);
+            vocabTableData.writeLong(84);
 
+            postingsData.writeInt(1); //dft
+            postingsData.writeInt(5); //id is actually 5
+            postingsData.writeInt(1); //tftd
+            postingsData.writeInt(1); //p
+
+            postingsData.close();
             vocabData.close();
             vocabTableData.close();
         }
@@ -347,6 +428,7 @@ public class Milestone2 {
             while ((!queryBuild.equals("quit") && !queryBuild.equals(":q"))) {
                 if (queryBuild.equals("build")) {
                     indexWriter.writeIndex(index);
+                    indexWriter.closeVocabPostOutput();
                 } else if (queryBuild.equals("query") || changeDirectory) {
                     if (changeDirectory) {
                         changeDirectory = false;
@@ -418,10 +500,17 @@ public class Milestone2 {
                 }
                 if (queryBuild.equals(":q")) {
                     dir = "quit";
-                } else if (queryBuild.equals("quit") && !changeDirectory) {
-                    System.out.println();
-                    dir = getDirectoryName(keyboard, corpusFolder);
                 }
+                if (queryBuild.equals("build") || queryBuild.equals("query"))
+                {
+                    System.out.print("Enter \"query\" or \"build\" (or \"quit\" to exit): ");
+                    queryBuild = keyboard.nextLine();
+                }
+            }
+            if (queryBuild.equals("quit") && !changeDirectory)
+            {
+                System.out.println();
+                dir = getDirectoryName(keyboard, corpusFolder);
             }
         }
         keyboard.close();

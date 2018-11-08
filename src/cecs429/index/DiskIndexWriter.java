@@ -63,13 +63,16 @@ public class DiskIndexWriter
                 nextVocabPos += writeVocab(vocabList.get(i));
                 nextPostPos += writePostings(vocabList.get(i), positionalInvertedIndex);
             }
-            closeVocabPostOutput();
+            vocabTableData.flush();
+            vocabData.flush();
+            postData.flush();
+            //closeVocabPostOutput();
         }
         catch (IOException e) { System.out.println("IO exception"); e.printStackTrace(); }
 
     }
 
-    private void closeVocabPostOutput()
+    public void closeVocabPostOutput()
     {
         try
         {
@@ -80,48 +83,55 @@ public class DiskIndexWriter
         catch (IOException e) {System.out.println("IO exception"); e.printStackTrace(); }
     }
 
-    private long writePostings(String term, PositionalInvertedIndex positionalInvertedIndex) throws IOException
+    private long writePostings(String term, PositionalInvertedIndex positionalInvertedIndex)
     {
-        long acc = 0;
-        int numPostings = positionalInvertedIndex.getPostingsWithPositions(term).size();
-        postData.writeInt(numPostings);
-        acc += 4;
-        for (int i = 0; i < numPostings; i++)
-        {
-            Posting posting = positionalInvertedIndex.getPostingsWithPositions(term).get(i);
-            int compressedDocId = posting.getDocumentId();
-            if (i != 0)
-            {
-                compressedDocId -= positionalInvertedIndex.getPostingsWithPositions(term).get(i-1).getDocumentId();
-            }
-            postData.writeInt(compressedDocId);
+        try {
+            long acc = 0;
+            int numPostings = positionalInvertedIndex.getPostingsWithPositions(term).size();
+            postData.writeInt(numPostings);
             acc += 4;
-            postData.writeInt(posting.getPositions().size());
-            acc += 4;
-            for (int j = 0; j < posting.getPositions().size(); j++)
-            {
-                int compressedPos = posting.getPositions().get(j);
-                if (j != 0)
-                {
-                    compressedPos -= posting.getPositions().get(j-1);
+            for (int i = 0; i < numPostings; i++) {
+                Posting posting = positionalInvertedIndex.getPostingsWithPositions(term).get(i);
+                int compressedDocId = posting.getDocumentId();
+                if (i != 0) {
+                    compressedDocId -= positionalInvertedIndex.getPostingsWithPositions(term).get(i - 1).getDocumentId();
                 }
-                postData.writeInt(compressedPos);
+                postData.writeInt(compressedDocId);
                 acc += 4;
+                postData.writeInt(posting.getPositions().size());
+                acc += 4;
+                for (int j = 0; j < posting.getPositions().size(); j++) {
+                    int compressedPos = posting.getPositions().get(j);
+                    if (j != 0) {
+                        compressedPos -= posting.getPositions().get(j - 1);
+                    }
+                    postData.writeInt(compressedPos);
+                    acc += 4;
+                }
             }
+            return acc;
         }
-        return acc;
+        catch(IOException e) {System.out.println("in writePostings");}
+        return -1;
     }
 
-    private long writeVocab(String term) throws IOException
+    private long writeVocab(String term)
     {
-        byte[] termBytes = term.getBytes();
-        vocabData.write(termBytes);
-        return termBytes.length;
+        try {
+            byte[] termBytes = term.getBytes();
+            vocabData.write(termBytes);
+            return termBytes.length;
+        }
+        catch(IOException e) {System.out.println("in writeVocab");}
+        return -1;
     }
 
-    private void writeVocabTable(long nextVocabPos, long nextPostPos) throws IOException
+    private void writeVocabTable(long nextVocabPos, long nextPostPos)
     {
-        vocabTableData.writeLong(nextVocabPos);
-        vocabTableData.writeLong(nextPostPos);
+        try {
+            vocabTableData.writeLong(nextVocabPos);
+            vocabTableData.writeLong(nextPostPos);
+        }
+        catch(IOException e) {System.out.println("in writeVocabTable"); }
     }
 }
