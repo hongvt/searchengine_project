@@ -10,10 +10,8 @@ import cecs429.queryparser.QueryComponent;
 import cecs429.text.EnglishTokenStream;
 import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
-import com.sun.tools.javac.util.ArrayUtils;
 
 import java.io.*;
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -102,6 +100,7 @@ public class Milestone2 {
             catch(IOException e) {System.out.println(e.getStackTrace());}
             System.out.println();
         }
+        System.out.println("size: "+diskPosIndex.getVocabulary());
     }
 
     public static byte[] readDocWeights(Path currentPath)

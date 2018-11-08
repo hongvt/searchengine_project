@@ -2,6 +2,7 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,24 +26,34 @@ public class OrQuery implements QueryComponent {
     }
 
     /**
-     *  Performs the orMerge by iterating through the smaller of the two lists
-     *  and checking to see if the the bigger list contains the posting(s) of smaller
+     * Performs the orMerge by iterating through the smaller of the two lists
+     * and checking to see if the the bigger list contains the posting(s) of smaller
+     *
      * @param list_one - first part of the List of postings retrieved from mTerms
      * @param list_two - second part of the List of postings retrieved from mTerms
      * @return the two parameters lists merged together using the orMerge routine from lecture
-     *
      */
     private List<Posting> orMerge(List<Posting> list_one, List<Posting> list_two) {
+        int i = 0, j = 0;
+        List<Posting> result = new ArrayList<>();
 
-        List<Posting> result = list_one.size() >= list_two.size() ? list_one : list_two;
-        List<Posting> small = list_one.size() < list_two.size() ? list_one : list_two;
-
-        for (int i = 0; i < small.size(); i++) {
-            if (!result.contains(small.get(i))) {
-                result.add(small.get(i));
+        while (true) {
+            if (i == list_one.size() || j == list_two.size())
+                return result;
+            else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
+                result.add(new Posting(list_one.get(i).getDocumentId()));
+                i++;
+                j++;
+            } else {
+                if (list_one.get(i).getDocumentId() < list_two.get(j).getDocumentId()) {
+                    result.add(new Posting(list_one.get(i).getDocumentId()));
+                    i++;
+                } else {
+                    result.add(new Posting(list_two.get(j).getDocumentId()));
+                    j++;
+                }
             }
         }
-        return result;
     }
 
     @Override

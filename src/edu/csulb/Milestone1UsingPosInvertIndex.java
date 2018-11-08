@@ -127,7 +127,8 @@ public class Milestone1UsingPosInvertIndex {
                         }
                     } else if (words[0].equals(":vocab")) {
                         for (int i = 0; i < 1000; i++) {
-                            System.out.println(index.getVocabulary().get(i));
+                            //System.out.println(index.getVocabulary().get(i));
+                            System.out.println("vocab size:"+ index.getVocabulary().size());
                         }
                     } else {
                         BooleanQueryParser pa = new BooleanQueryParser();
