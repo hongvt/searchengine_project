@@ -10,10 +10,8 @@ import cecs429.queryparser.QueryComponent;
 import cecs429.text.EnglishTokenStream;
 import cecs429.text.Milestone1TokenProcessor;
 import cecs429.text.TokenProcessor;
-import com.sun.tools.javac.util.ArrayUtils;
 
 import java.io.*;
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -105,6 +103,7 @@ public class Milestone2 {
                 System.out.println();
             }
         }
+<<<<<<< HEAD
         if (posts == null || posts.size() < 3)
         {
             spellingCorrection(kgi,word);
@@ -227,6 +226,9 @@ public class Milestone2 {
             }
         }
         return kg;
+=======
+        System.out.println("size: "+diskPosIndex.getVocabulary());
+>>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
     }
 
     public static byte[] readDocWeights(Path currentPath)
