@@ -43,7 +43,6 @@ public class DiskPositionalIndex implements Index {
     }
 
     @Override
-<<<<<<< HEAD
     public int[][] getPostingsNoPositions(String term)
     {
         //System.out.println("postingsBytes.length:"+postingsBytes.length);
@@ -57,24 +56,10 @@ public class DiskPositionalIndex implements Index {
                 }
                 int numOfDocs = bytesToInt(numOfDocsBytes);
                 //System.out.println("numOfDocs=" + numOfDocs);
-=======
-    public int[][] getPostingsNoPositions(String term) {
-        System.out.println("postingsBytes.length:" + postingsBytes.length);
-        try {
-            long postingPos = binarySearchVocabTable(term);
-            //System.out.println("postingPos:"+postingPos);
-            byte[] numOfDocsBytes = new byte[4];
-            for (int i = 0; i < numOfDocsBytes.length; i++) {
-                numOfDocsBytes[i] = postingsBytes[(int) postingPos + i];
-            }
-            int numOfDocs = bytesToInt(numOfDocsBytes);
-            System.out.println("numOfDocs=" + numOfDocs);
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
 
                 int[][] docIdsTermFreqs = new int[numOfDocs][2];
                 int nextIntBytePos = (int) postingPos + 4;
 
-<<<<<<< HEAD
                 for (int i = 0; i < numOfDocs; i++) {
                     byte[] docIdBytes = new byte[4];
                     //System.out.print("startDocIdBytes=" + nextIntBytePos);
@@ -89,22 +74,6 @@ public class DiskPositionalIndex implements Index {
                         docId += docIdsTermFreqs[i - 1][0];
                     }
                     //System.out.println("\tdocId="+docId);
-=======
-            for (int i = 0; i < numOfDocs; i++) {
-                byte[] docIdBytes = new byte[4];
-                System.out.print("startDocIdBytes=" + nextIntBytePos);
-                for (int j = 0; j < docIdBytes.length; j++) {
-                    docIdBytes[j] = postingsBytes[nextIntBytePos + j];
-                }
-                nextIntBytePos += 4;
-
-                int docId = bytesToInt(docIdBytes);
-                //System.out.print("\tdocId="+docId);
-                if (i != 0) {
-                    docId += docIdsTermFreqs[i - 1][0];
-                }
-                //System.out.println("\tdocId="+docId);
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
 
                     docIdsTermFreqs[i][0] = docId;
 
@@ -122,25 +91,9 @@ public class DiskPositionalIndex implements Index {
                     //System.out.println("SIze of postings=" + (4 * termFreq));
                     nextIntBytePos = nextIntBytePos + (4 * termFreq);
                 }
-<<<<<<< HEAD
                 return docIdsTermFreqs;
             }
-            return null;
-=======
-                nextIntBytePos += 4;
-                int termFreq = bytesToInt(termFreqBytes);
-                //System.out.println("\ttermFreq="+termFreq);
-                docIdsTermFreqs[i][1] = termFreq;
-
-                //postings
-                System.out.println("SIze of postings=" + (4 * termFreq));
-                nextIntBytePos = nextIntBytePos + (4 * termFreq);
-            }
-            return docIdsTermFreqs;
-        } catch (IOException e) {
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
-        }
-        ;
+        } catch (IOException e) { }
         return null;
     }
 
@@ -148,7 +101,6 @@ public class DiskPositionalIndex implements Index {
     public List<Posting> getPostingsWithPositions(String term) {
         try {
             long postingPos = binarySearchVocabTable(term);
-<<<<<<< HEAD
             if (postingPos != -1) {
                 byte[] numOfDocsBytes = new byte[4];
                 for (int i = 0; i < numOfDocsBytes.length; i++) {
@@ -172,53 +124,14 @@ public class DiskPositionalIndex implements Index {
                     if (i != 0) {
                         docId += postings.get(i - 1).getDocumentId();
                     }
-=======
-            byte[] numOfDocsBytes = new byte[4];
-            for (int i = 0; i < numOfDocsBytes.length; i++) {
-                numOfDocsBytes[i] = postingsBytes[(int) postingPos + i];
-            }
-            int numOfDocs = bytesToInt(numOfDocsBytes);
-
-            //Posting[] postings = new Posting[numOfDocs];
-            ArrayList<Posting> postings = new ArrayList<>();
-            int nextIntBytePos = (int) postingPos + 4;
-
-            for (int i = 0; i < numOfDocs; i++) {
-                byte[] docIdBytes = new byte[4];
-                for (int j = 0; j < docIdBytes.length; j++) {
-                    docIdBytes[j] = postingsBytes[nextIntBytePos + j];
-                }
-                nextIntBytePos += 4;
-                int docId = bytesToInt(docIdBytes);
-                //System.out.print("docId="+docId);
-
-                if (i != 0) {
-                    docId += postings.get(i - 1).getDocumentId();
-                }
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
 
                     //System.out.print("\tdocId="+docId);
 
                     postings.add(new Posting(docId));
 
-<<<<<<< HEAD
                     byte[] termFreqBytes = new byte[4];
                     for (int j = 0; j < termFreqBytes.length; j++) {
                         termFreqBytes[j] = postingsBytes[nextIntBytePos + j];
-=======
-                byte[] termFreqBytes = new byte[4];
-                for (int j = 0; j < termFreqBytes.length; j++) {
-                    termFreqBytes[j] = postingsBytes[nextIntBytePos + j];
-                }
-                nextIntBytePos += 4;
-                int termFreq = bytesToInt(termFreqBytes);
-                //System.out.println("\ttermFreq="+termFreq);
-
-                for (int j = 0; j < termFreq; j++) {
-                    byte[] posBytes = new byte[4];
-                    for (int k = 0; k < posBytes.length; k++) {
-                        posBytes[k] = postingsBytes[nextIntBytePos + k];
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
                     }
                     nextIntBytePos += 4;
                     int termFreq = bytesToInt(termFreqBytes);
@@ -240,30 +153,15 @@ public class DiskPositionalIndex implements Index {
                         //System.out.print("posting: "+pos+",");
 
                         postings.get(i).addPosition(pos);
-
-<<<<<<< HEAD
-=======
-                    if (j != 0) {
-                        //System.out.println("last posting:"+postings.get(i).getPositions().get(postings.get(i).getPositions().size()-1));
-                        pos += postings.get(i).getPositions().get(postings.get(i).getPositions().size() - 1);
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
+                        //System.out.println();
                     }
-                    //System.out.println();
+                    //System.out.print(term+":");
+                    //System.out.println(postings);
+
                 }
-                //System.out.print(term+":");
-                //System.out.println(postings);
                 return postings;
             }
-<<<<<<< HEAD
-            return null;
-=======
-            //System.out.print(term+":");
-            //System.out.println(postings);
-            return postings;
-        } catch (IOException e) {
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
-        }
-        ;
+        } catch (IOException e) { }
         return null;
     }
 
@@ -334,18 +232,12 @@ public class DiskPositionalIndex implements Index {
                 break;
             }
         }
-<<<<<<< HEAD
         if (foundWord) {
             byte[] postingPos = new byte[8];
             for (int i = 0; i < postingPos.length; i++) {
                 postingPos[i] = vocabTableBytes[(midVTAIndex - 1) * 16 + i + 8];
             }
             return bytesToLong(postingPos);
-=======
-        byte[] postingPos = new byte[8];
-        for (int i = 0; i < postingPos.length; i++) {
-            postingPos[i] = vocabTableBytes[(midVTAIndex - 1) * 16 + i + 8];
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
         }
         return -1;
     }

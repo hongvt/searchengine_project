@@ -103,7 +103,6 @@ public class Milestone2 {
                 System.out.println();
             }
         }
-<<<<<<< HEAD
         if (posts == null || posts.size() < 3)
         {
             spellingCorrection(kgi,word);
@@ -226,9 +225,6 @@ public class Milestone2 {
             }
         }
         return kg;
-=======
-        System.out.println("size: "+diskPosIndex.getVocabulary());
->>>>>>> 7d22dce47c09dff45c513dffbf10e5f81553a4a9
     }
 
     public static byte[] readDocWeights(Path currentPath)
@@ -633,8 +629,9 @@ public class Milestone2 {
                                         System.out.println(i + ":" + stems[i]);
                                     }
                                 } else if (words[0].equals(":vocab")) {
+                                    DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath,index.getProcessor());
                                     for (int i = 0; i < 1000; i++) {
-                                        System.out.println(index.getVocabulary().get(i));
+                                        System.out.println(diskPosIndex.getVocabulary().get(i));
                                     }
                                 } else {
                                     if (queryType.equals("boolean")) {
