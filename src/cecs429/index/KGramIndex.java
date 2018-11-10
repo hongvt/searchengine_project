@@ -1,12 +1,13 @@
 package cecs429.index;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * A KGramIndex can retrieve types that match a wildcard search query
  * It is filled by creating k-grams of length 1-3 for every type that is passed into the method addToKGI
  */
-public class KGramIndex {
+public class KGramIndex implements Serializable {
     /**
      * Key is the kgram
      * Value is the list of vocab types that contain that kgram
@@ -48,6 +49,16 @@ public class KGramIndex {
             }
         }
     }
+
+    public HashSet<String> getTypesFromKGram(String key)
+    {
+        if (kGramIndex.containsKey(key)) {
+            return kGramIndex.get(key);
+        }
+        return null;
+    }
+
+
 
     /**
      * Adds the kgramKey parameter value to the kGramIndex if that key doesn't already exist and adds the type parameter value to the HashSet for that new Key
