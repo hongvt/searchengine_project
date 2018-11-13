@@ -59,6 +59,7 @@ public class DiskIndexWriter
             List<String> vocabList = positionalInvertedIndex.getVocabulary();
             for (int i = 0; i < vocabList.size(); i++)
             {
+                long startTime = System.currentTimeMillis();
                 writeVocabTable(nextVocabPos, nextPostPos);
                 nextVocabPos += writeVocab(vocabList.get(i));
                 nextPostPos += writePostings(vocabList.get(i), positionalInvertedIndex);
@@ -87,23 +88,25 @@ public class DiskIndexWriter
     {
         try {
             long acc = 0;
-            int numPostings = positionalInvertedIndex.getPostingsWithPositions(term).size();
+            List<Posting> posts = positionalInvertedIndex.getPostingsWithPositions(term);
+            int numPostings = posts.size();
             postData.writeInt(numPostings);
             acc += 4;
             for (int i = 0; i < numPostings; i++) {
-                Posting posting = positionalInvertedIndex.getPostingsWithPositions(term).get(i);
+                Posting posting = posts.get(i);
                 int compressedDocId = posting.getDocumentId();
                 if (i != 0) {
-                    compressedDocId -= positionalInvertedIndex.getPostingsWithPositions(term).get(i - 1).getDocumentId();
+                    compressedDocId -= posts.get(i - 1).getDocumentId();
                 }
                 postData.writeInt(compressedDocId);
                 acc += 4;
-                postData.writeInt(posting.getPositions().size());
+                List<Integer> postingPos = posting.getPositions();
+                postData.writeInt(postingPos.size());
                 acc += 4;
-                for (int j = 0; j < posting.getPositions().size(); j++) {
-                    int compressedPos = posting.getPositions().get(j);
+                for (int j = 0; j < postingPos.size(); j++) {
+                    int compressedPos = postingPos.get(j);
                     if (j != 0) {
-                        compressedPos -= posting.getPositions().get(j - 1);
+                        compressedPos -= postingPos.get(j - 1);
                     }
                     postData.writeInt(compressedPos);
                     acc += 4;

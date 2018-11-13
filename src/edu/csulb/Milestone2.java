@@ -43,7 +43,7 @@ public class Milestone2 {
      */
     private static String getDirectoryName(Scanner keyboard, Path corpusFolder) {
         printDirectoryList(corpusFolder);
-        System.out.print("\nEnter the name of the corpus to index (or \"quit\" to exit): ");
+        System.out.print("\nEnter the name of the corpus to use (or \"quit\" to exit): ");
         String dir = keyboard.nextLine();
 
         while (!dir.equals("quit") && !dir.equals(":q")) {
@@ -52,7 +52,7 @@ public class Milestone2 {
             } else {
                 System.out.println("Please recheck spelling of directory");
             }
-            System.out.print("Enter the name of the corpus to index (or \"quit\" to exit): ");
+            System.out.print("Enter the name of the corpus to use (or \"quit\" to exit): ");
             dir = keyboard.nextLine();
         }
         return "quit";
@@ -105,11 +105,11 @@ public class Milestone2 {
         }
         if (posts == null || posts.size() < 3)
         {
-            spellingCorrection(kgi,word);
+            spellingCorrection(diskPosIndex,kgi,word);
         }
     }
 
-    public static void spellingCorrection(KGramIndex kgi, String misspelledTerm)
+    public static void spellingCorrection(DiskPositionalIndex index, KGramIndex kgi, String misspelledTerm)
     {
         String[] misspelledterms = misspelledTerm.split(" ");
         HashSet<String> misspelledTermKG = new HashSet<>();
@@ -144,12 +144,14 @@ public class Milestone2 {
             typeJaccard.put(type,kgCommon/kgDistinct);
         }
 
+        System.out.println("meet 0.22 jaccard coef:");
         HashMap<String, Integer> typeEditDist = new HashMap<>();
         for(String type :typeJaccard.keySet())
         {
             if (typeJaccard.get(type) > 0.22)
             {
                 typeEditDist.put(type, getEditDistance(misspelledTerm.replaceAll(" ", ""),type));
+                //System.out.println(type+":"+);
             }
         }
         int min = 1000;
@@ -160,12 +162,25 @@ public class Milestone2 {
                 min = typeEditDist.get(type);
             }
         }
+        //System.out.println(typeEditDist);
+        int maxDf = -1;
+        for (String type : typeEditDist.keySet())
+        {
+            if (typeEditDist.get(type) == min) {
+                //System.out.println(type);
+                if ((index.getPostingsNoPositions((new Milestone1TokenProcessor()).getStem(type))).length > maxDf) {
+                    maxDf = index.getPostingsNoPositions((new Milestone1TokenProcessor()).getStem(type)).length;
+                }
+            }
+        }
+
         System.out.println("Search instead for: ");
         for (String type:typeEditDist.keySet())
         {
-            if (typeEditDist.get(type) == min)
-            {
-                System.out.println(type);
+            if (typeEditDist.get(type) == min) {
+                if ((index.getPostingsNoPositions(index.getProcessor().getStem(type))).length == maxDf) {
+                    System.out.println(type);
+                }
             }
         }
     }
@@ -244,13 +259,104 @@ public class Milestone2 {
 
     private static void rankedRetrieval(KGramIndex kgi, byte[] docWeightBytes, Path currentPath, String term, DocumentCorpus corpus, TokenProcessor processor)
     {
-        DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath, processor);
+        boolean needSpellCheck = false;
+        String[] terms = term.split(" ");
+        DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath, new Milestone1TokenProcessor());
+        HashMap<Integer, Double> docIdsAds = new HashMap<>();
+        for(int i = 0; i < terms.length; i++)
+        {
+            String[] stems = null;
+            if (terms[i].contains("*"))
+            {
+                String[] matches = kgi.getWildcardMatches(terms[i]);
+                stems = diskPosIndex.getProcessor().getStems(matches);
+            }
+            else
+            {
+                stems = diskPosIndex.getProcessor().processTokens(terms[i]);
+            }
+            for (int j = 0; j < stems.length; j++)
+            {
+                System.out.println(stems[j]);
+                int[][] docIdsTermFreq = diskPosIndex.getPostingsNoPositions(stems[j]);
+                if (docIdsTermFreq == null)
+                {
+                    needSpellCheck = true;
+                    break;
+                }
+                for(int k = 0; k < docIdsTermFreq.length; k++) {
+                    double wdtMinusOne = (double)(corpus.getCorpusSize())/docIdsTermFreq.length;
+                    double adTemp = (1+Math.log((double)docIdsTermFreq[k][1]))*(Math.log(1+wdtMinusOne));
+                    //System.out.println("Term freq for "+);
+                    System.out.println("Calculating wdt "+(1+Math.log(docIdsTermFreq[k][1]))+" for "+corpus.getDocument(docIdsTermFreq[k][0]).getTitle()+", term="+stems[j]);
+                    if (!docIdsAds.isEmpty() && docIdsAds.containsKey(docIdsTermFreq[k][0])) {
+                        docIdsAds.replace(docIdsTermFreq[k][0],docIdsAds.get(docIdsTermFreq[k][0]),docIdsAds.get(docIdsTermFreq[k][0])+adTemp);
+                    }
+                    else
+                    {
+                        docIdsAds.put(docIdsTermFreq[k][0],adTemp);
+                    }
+                }
+            }
+            if (needSpellCheck)
+            {
+                break;
+            }
+        }
+        System.out.println(needSpellCheck);
+        System.out.println(docIdsAds.size());
+        if (needSpellCheck || docIdsAds.size() < 3)
+        {
+            spellingCorrection(diskPosIndex,kgi,term);
+        }
+        else {
+
+            for (Integer docId : docIdsAds.keySet()) {
+                if (docIdsAds.get(docId) != 0) {
+                    int startPos = docId * 8;
+                    byte[] tempDocWeightBytes = new byte[8];
+                    for (int i = 0; i < tempDocWeightBytes.length; i++) {
+                        tempDocWeightBytes[i] = docWeightBytes[startPos + i];
+                    }
+                    double docWeight = DiskPositionalIndex.bytesToDouble(tempDocWeightBytes);
+                    System.out.println("Reading docWeight(Ld)"+docWeight+" for "+corpus.getDocument(docId).getTitle());
+                    docIdsAds.replace(docId, docIdsAds.get(docId), docIdsAds.get(docId) / docWeight);
+                }
+            }
+
+            List<Map.Entry<Integer, Double>> list = new LinkedList<Map.Entry<Integer, Double>>(docIdsAds.entrySet());
+            Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
+                @Override
+                public int compare(Map.Entry<Integer, Double> e1, Map.Entry<Integer, Double> e2) {
+                    return (e2.getValue()).compareTo(e1.getValue());
+                }
+            });
+
+            int i = 0;
+            for (Map.Entry<Integer, Double> entry : list) {
+                System.out.println("Accum:" + entry.getValue() + "\tDoc ID: " + entry.getKey() + "\t" + corpus.getDocument(entry.getKey()).getTitle());
+                if (i == 50) {
+                    break;
+                }
+                i++;
+            }
+        }
+        /*for (Document doc : corpus.getDocuments()) {
+            int startPos = doc.getId() * 8;
+            byte[] tempDocWeightBytes = new byte[8];
+            for (int i = 0; i < tempDocWeightBytes.length; i++) {
+                tempDocWeightBytes[i] = docWeightBytes[startPos + i];
+            }
+            double docWeight = DiskPositionalIndex.bytesToDouble(tempDocWeightBytes);
+            //System.out.println("Reading docWeight(Ld)"+docWeight+" for "+doc.getTitle());
+        }
+        //DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath, processor);
         boolean wordFound = false;
         boolean littleDocs = false;
 
         try {
-            String[] terms = term.split(" ");
-            HashMap<Integer, Double> docIdsAds = new HashMap<>();
+            //String[] terms = term.split(" ");
+            //HashMap<Integer, Double> docIdsAds = new HashMap<>();
             for (int k = 0; k < terms.length; k++)
             {
                 String[] stems = null;
@@ -270,7 +376,7 @@ public class Milestone2 {
                     if (docIdsTermFreq != null) {
                         wordFound = true;
                         double wqt = corpus.getCorpusSize();
-                        wqt /= docIdsTermFreq.length;
+                        wqt /= (double)docIdsTermFreq.length;
                         wqt++;
                         wqt = Math.log(wqt);
 
@@ -293,9 +399,9 @@ public class Milestone2 {
                         break;
                     }
                 }
-            }
+            }*/
 
-            if (wordFound) {
+            /*if (wordFound) {
                 for (Integer docId : docIdsAds.keySet()) {
                     if (docIdsAds.get(docId) != 0) {
                         int startPos = docId * 8;
@@ -308,7 +414,7 @@ public class Milestone2 {
                     }
                 }
 
-                List<Map.Entry<Integer, Double>> list = new LinkedList<>(docIdsAds.entrySet());
+                List<Map.Entry<Integer, Double>> list = new LinkedList<Map.Entry<Integer,Double>>(docIdsAds.entrySet());
                 Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
                     @Override
                     public int compare(Map.Entry<Integer, Double> e1, Map.Entry<Integer, Double> e2) {
@@ -316,12 +422,10 @@ public class Milestone2 {
                     }
                 });
 
-                Map<Integer, Double> result = new LinkedHashMap<>();
                 int i = 0;
                 for (Map.Entry<Integer, Double> entry : list) {
-                    result.put(entry.getKey(), entry.getValue());
                     System.out.println("Accum:" + entry.getValue() + "\tDoc ID: " + entry.getKey() + "\t" + corpus.getDocument(entry.getKey()).getTitle());
-                    if (i == 10) {
+                    if (i == 50) {
                         break;
                     }
                     i++;
@@ -333,11 +437,11 @@ public class Milestone2 {
             }
             if (!wordFound || littleDocs)
             {
-                spellingCorrection(kgi,term);
+                spellingCorrection(diskPosIndex,kgi,term);
             }
         } catch (NullPointerException e) {
             System.out.println(term + " was not found");
-        }
+        }*/
     }
 
     /**
@@ -346,6 +450,9 @@ public class Milestone2 {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
+        /*double x = 5;
+        int y = 2;
+        System.out.println(x/y);*/
         /*String term = "0wowicantbelieveit";
         String term1 = "0cannibalistically";
 
@@ -534,36 +641,16 @@ public class Milestone2 {
         Scanner keyboard = new Scanner(System.in);
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
-
         String dir = getDirectoryName(keyboard, corpusFolder);
+        TokenProcessor tokenProcessor = new Milestone1TokenProcessor();
+
         boolean changeDirectory = false;
 
         while (!dir.equals("quit")) {
             currentPath = Paths.get(corpusFolder.toString(), dir);
             DocumentCorpus corpus = DirectoryCorpus.loadTextDirectory(currentPath, ".txt");
             ((DirectoryCorpus) corpus).registerFileDocumentFactory(".json", JsonFileDocument::loadJsonFileDocument);
-            KGramIndex kgi = null;
 
-            //index the corpus
-            long startTime = System.currentTimeMillis();
-            DiskIndexWriter indexWriter = new DiskIndexWriter(currentPath);
-            PositionalInvertedIndex index = indexCorpus(corpus, indexWriter, currentPath);
-            try
-            {
-                FileOutputStream kGramsFile = new FileOutputStream(currentPath.toString()+"/index/kgrams.bin");
-                ObjectOutputStream kGramsOOS = new ObjectOutputStream(kGramsFile);
-                kGramsOOS.writeObject(index.getKGramIndex());
-                kGramsOOS.close();
-                kGramsFile.close();
-            }
-            catch(IOException e)
-            {
-                System.out.println("Kgrams ioexeception");
-            }
-
-            long endTime = System.currentTimeMillis();
-            int numSeconds = ((int) ((endTime - startTime) / 1000));
-            System.out.println("Indexing took " + numSeconds + " seconds");
             String queryBuild = "";
 
             if (!changeDirectory) {
@@ -573,8 +660,46 @@ public class Milestone2 {
 
             while ((!queryBuild.equals("quit") && !queryBuild.equals(":q"))) {
                 if (queryBuild.equals("build")) {
+                    //index the corpus - into PositionalInvertedIndex, writes docWeights.bin
+                    long startTime = System.currentTimeMillis();
+                    DiskIndexWriter indexWriter = new DiskIndexWriter(currentPath);
+                    PositionalInvertedIndex index = indexCorpus(corpus, indexWriter, currentPath);
+                    long endTime = System.currentTimeMillis();
+                    int numSeconds = ((int) ((endTime - startTime) / 1000));
+                    System.out.println("Indexing took " + numSeconds + " seconds");
+                    //building the corpus (writing to disk)
+                    long startTime1 = System.currentTimeMillis();
                     indexWriter.writeIndex(index);
                     indexWriter.closeVocabPostOutput();
+                    long endTime1 = System.currentTimeMillis();
+                    int numSeconds1 = ((int) ((endTime1 - startTime1) / 1000));
+                    System.out.println("Building took " + numSeconds1 + " seconds");
+                    //k-grams written to disk
+                    long startTime3 = System.currentTimeMillis();
+                    try
+                    {
+                        FileOutputStream kGramsFile = new FileOutputStream(currentPath.toString()+"/index/kgrams.bin");
+                        ObjectOutputStream kGramsOOS = new ObjectOutputStream(kGramsFile);
+                        kGramsOOS.writeObject(index.getKGramIndex());
+                        kGramsOOS.close();
+                        kGramsFile.close();
+                    }
+                    catch(IOException e)
+                    {
+                        System.out.println("Kgrams ioexeception");
+                    }
+                    long endTime3 = System.currentTimeMillis();
+                    int numSeconds3 = ((int) ((endTime3 - startTime3) / 1000));
+                    System.out.println("Writing k-grams to disk took " + numSeconds3 + " seconds");
+                } else if (queryBuild.equals("query") || changeDirectory) {
+
+                    if (changeDirectory) {
+                        changeDirectory = false;
+                    }
+
+                    //reading k-grams into k-gram object
+                    KGramIndex kgi = null;
+                    long startTime2 = System.currentTimeMillis();
                     try
                     {
                         FileInputStream kGramsFile = new FileInputStream(currentPath.toString()+"/index/kgrams.bin");
@@ -593,10 +718,9 @@ public class Milestone2 {
                     {
                         System.out.println("ClassNotFoundException is caught");
                     }
-                } else if (queryBuild.equals("query") || changeDirectory) {
-                    if (changeDirectory) {
-                        changeDirectory = false;
-                    }
+                    long endTime2 = System.currentTimeMillis();
+                    int numSeconds2 = ((int) ((endTime2 - startTime2) / 1000));
+                    System.out.println("Reading k-grams took " + numSeconds2 + " seconds");
 
                     System.out.print("Enter \"boolean\" or \"ranked\" (or \"quit\" to exit): ");
                     String queryType = keyboard.nextLine();
@@ -624,22 +748,22 @@ public class Milestone2 {
                                 }
                             } else {
                                 if (words[0].equals(":stem")) {
-                                    String[] stems = index.getProcessor().processTokens(words[1]);
+                                    String[] stems = (tokenProcessor.processTokens(words[1]));
                                     for (int i = 0; i < stems.length; i++) {
                                         System.out.println(i + ":" + stems[i]);
                                     }
                                 } else if (words[0].equals(":vocab")) {
-                                    DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath,index.getProcessor());
+                                    DiskPositionalIndex diskPosIndex = new DiskPositionalIndex(currentPath,tokenProcessor);
                                     for (int i = 0; i < 1000; i++) {
                                         System.out.println(diskPosIndex.getVocabulary().get(i));
                                     }
                                 } else {
                                     if (queryType.equals("boolean")) {
-                                        booleanQueryIndex(kgi,currentPath, word, corpus, keyboard, index.getProcessor());
+                                        booleanQueryIndex(kgi,currentPath, word, corpus, keyboard, tokenProcessor);
                                     }
                                     else if (queryType.equals("ranked"))
                                     {
-                                        rankedRetrieval(kgi,docWeightBytes,currentPath, word,corpus, index.getProcessor());
+                                        rankedRetrieval(kgi,docWeightBytes,currentPath, word,corpus, tokenProcessor);
                                     }
                                 }
                             }
@@ -732,20 +856,27 @@ public class Milestone2 {
                 }
             }
             double[] termWeightsSquared = new double[docVocab.size()];
-            int i = 0;
+            double sumWDT = 0;
+            //int i = 0;
             for (String term : docVocab.keySet())
             {
-                termWeightsSquared[i] = 1 + Math.log(docVocab.get(term));
-                termWeightsSquared[i] *= termWeightsSquared[i];
-                i++;
+                double wdt = (1+Math.log((double)docVocab.get(term)));
+                wdt *= wdt;
+                sumWDT += wdt;
+
+                //termWeightsSquared[i] = 1 + Math.log(docVocab.get(term));
+                //termWeightsSquared[i] *= termWeightsSquared[i];
+                //i++;
             }
-            double docWeight = 0;
+            double ld = Math.sqrt(sumWDT);
+            /*double docWeight = 0;
             for (int j = 0; j < termWeightsSquared.length; j++)
             {
                 docWeight += termWeightsSquared[j];
             }
             docWeight = Math.sqrt(docWeight);
-            indexWriter.writeDocWeight(docWeight);
+            //System.out.println("Writing docWeight (Ld) "+docWeight+" for "+doc.getTitle());*/
+            indexWriter.writeDocWeight(ld);
             ets.close();
         }
         indexWriter.closeDocWeights();
