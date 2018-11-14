@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c244e4e-2243-4625-91ae-5a3500c69cc6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/edu/csulb/JsonArticles.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" afterDir="false" />
     </list>
@@ -23,32 +21,33 @@
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.8" value="3" />
-          <entry key="project.opened" value="11" />
+          <entry key="project.opened" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="3468" />
+          <entry key="java" value="4422" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="3468" />
+          <entry key="JAVA" value="4422" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="19" />
+          <entry key="java" value="23" />
           <entry key="json" value="19" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="19" />
+          <entry key="JAVA" value="23" />
           <entry key="JSON" value="19" />
           <entry key="XML" value="1" />
         </counts>
@@ -58,20 +57,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="338" column="50" selection-start-line="338" selection-start-column="50" selection-end-line="338" selection-end-column="50" />
+            <state relative-caret-position="185">
+              <caret line="205" column="70" lean-forward="true" selection-start-line="205" selection-start-column="70" selection-end-line="205" selection-end-column="70" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="975">
-              <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
+            <state relative-caret-position="2460">
+              <caret line="168" column="7" selection-start-line="168" selection-start-column="7" selection-end-line="168" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -88,6 +87,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>crater</find>
+      <find>match</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -96,13 +96,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" />
-        <option value="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" />
         <option value="$PROJECT_DIR$/src/edu/csulb/ValueComparator.java" />
         <option value="$USER_HOME$/IdeaProjects/fall_2018/cecs_429/Homework3/src/JsonArticles.java" />
         <option value="$PROJECT_DIR$/src/edu/csulb/JsonArticles.java" />
         <option value="$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java" />
         <option value="$PROJECT_DIR$/src/edu/csulb/Milestone2.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java" />
+        <option value="$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java" />
       </list>
     </option>
   </component>
@@ -116,8 +116,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -136,13 +136,6 @@
               <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="cecs429" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="searchengine_project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="cecs429" type="462c0819:PsiDirectoryNode" />
-              <item name="documents" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="searchengine_project" type="b2602c69:ProjectViewProjectNode" />
@@ -178,7 +171,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542168127421" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542172707838" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
@@ -281,8 +274,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25702077" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26007327" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -338,13 +332,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/KGramIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-514">
-          <caret line="41" column="61" selection-start-line="41" selection-start-column="61" selection-end-line="41" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/queryparser/OrQuery.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -374,20 +361,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="109" column="21" selection-start-line="109" selection-start-column="21" selection-end-line="109" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="50" column="5" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -429,17 +402,55 @@
     <entry file="file://$PROJECT_DIR$/corpora/all-nps-sites/26709.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="338" column="50" selection-start-line="338" selection-start-column="50" selection-end-line="338" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cecs429/documents/JsonFileDocument.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="975">
           <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/KGramIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="41" column="61" selection-start-line="41" selection-start-column="61" selection-end-line="41" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/csulb/Milestone2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="205" column="70" lean-forward="true" selection-start-line="205" selection-start-column="70" selection-end-line="205" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/Index.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskPositionalIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4290">
+          <caret line="294" column="7" lean-forward="true" selection-start-line="294" selection-start-column="7" selection-end-line="294" selection-end-column="7" />
+          <folding>
+            <element signature="e#11318#11319#0" expanded="true" />
+            <element signature="e#11344#11345#0" expanded="true" />
+            <element signature="e#13254#13255#0" expanded="true" />
+            <element signature="e#13276#13277#0" expanded="true" />
+            <element signature="e#13345#13346#0" expanded="true" />
+            <element signature="e#13396#13397#0" expanded="true" />
+            <element signature="e#13454#13455#0" expanded="true" />
+            <element signature="e#13491#13492#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cecs429/index/DiskIndexWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2460">
+          <caret line="168" column="7" selection-start-line="168" selection-start-column="7" selection-end-line="168" selection-end-column="7" />
         </state>
       </provider>
     </entry>

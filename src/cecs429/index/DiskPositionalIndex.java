@@ -10,14 +10,29 @@ import java.util.HashSet;
 import java.util.List;
 import java.nio.file.Path;
 
+/**
+ *
+ */
 public class DiskPositionalIndex implements Index {
-
+    /**
+     *
+     */
     private byte[] vocabFileBytes, vocabTableBytes, postingsBytes;
-
+    /**
+     *
+     */
     private TokenProcessor processor;
 
+    /**
+     *
+     */
     private KGramIndex kgi;
 
+    /**
+     * @param corpusFolder
+     * @param processor
+     * @param kgi
+     */
     public DiskPositionalIndex(Path corpusFolder, TokenProcessor processor, KGramIndex kgi) {
         this.kgi = kgi;
         this.processor = processor;
@@ -45,14 +60,8 @@ public class DiskPositionalIndex implements Index {
         }
     }
 
-    public KGramIndex getKGramIndex()
-    {
-        return kgi;
-    }
-
     @Override
-    public int[][] getPostingsNoPositions(String term)
-    {
+    public int[][] getPostingsNoPositions(String term) {
         //System.out.println("postingsBytes.length:"+postingsBytes.length);
         try {
             long postingPos = binarySearchVocabTable(term);
@@ -101,7 +110,8 @@ public class DiskPositionalIndex implements Index {
                 }
                 return docIdsTermFreqs;
             }
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
         return null;
     }
 
@@ -169,10 +179,17 @@ public class DiskPositionalIndex implements Index {
                 }
                 return postings;
             }
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
         return null;
     }
 
+    /**
+     *
+     * @param term
+     * @return
+     * @throws IOException
+     */
     private long binarySearchVocabTable(String term) throws IOException {
         int lowVTAIndex = 0;
         int highVTAIndex = (vocabTableBytes.length / 16) - 1;
@@ -250,6 +267,11 @@ public class DiskPositionalIndex implements Index {
         return -1;
     }
 
+    /**
+     *
+     * @param bytes
+     * @return
+     */
     public static long bytesToLong(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.put(bytes);
@@ -257,6 +279,11 @@ public class DiskPositionalIndex implements Index {
         return buffer.getLong();
     }
 
+    /**
+     *
+     * @param bytes
+     * @return
+     */
     public static int bytesToInt(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
         buffer.put(bytes);
@@ -264,11 +291,24 @@ public class DiskPositionalIndex implements Index {
         return buffer.getInt();
     }
 
+    /**
+     *
+     * @param bytes
+     * @return
+     */
     public static double bytesToDouble(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
         buffer.put(bytes);
         buffer.flip();
         return buffer.getDouble();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public KGramIndex getKGramIndex() {
+        return kgi;
     }
 
     @Override
@@ -314,7 +354,7 @@ public class DiskPositionalIndex implements Index {
         } catch (Exception e) {
 
         }
-        System.out.println("size:"+result.size());
+        //System.out.println("size:"+result.size());
         return result;
     }
 
@@ -325,7 +365,7 @@ public class DiskPositionalIndex implements Index {
 
     @Override
     public String[] getWildcardMatches(String term) {
-        return null;
+        return kgi.getWildcardMatches(term);
     }
 
     @Override
