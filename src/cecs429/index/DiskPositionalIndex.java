@@ -16,7 +16,10 @@ public class DiskPositionalIndex implements Index {
 
     private TokenProcessor processor;
 
-    public DiskPositionalIndex(Path corpusFolder, TokenProcessor processor) {
+    private KGramIndex kgi;
+
+    public DiskPositionalIndex(Path corpusFolder, TokenProcessor processor, KGramIndex kgi) {
+        this.kgi = kgi;
         this.processor = processor;
         try {
             File vocabFile = new File(corpusFolder.toString() + "/index/vocab.bin");
@@ -40,6 +43,11 @@ public class DiskPositionalIndex implements Index {
             System.out.println("IO exception");
             e.printStackTrace();
         }
+    }
+
+    public KGramIndex getKGramIndex()
+    {
+        return kgi;
     }
 
     @Override

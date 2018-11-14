@@ -79,11 +79,13 @@ public class JsonFileDocument implements FileDocument {
                 r.close();
                 setTitle(jArticle.getTitle());
                 return jArticle.getTitle();
+                //return mFilePath.toString();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
         return mTitle;
+        //return mFilePath.toString();
     }
 
     public static FileDocument loadJsonFileDocument(Path absolutePath, int documentId) {
@@ -119,8 +121,6 @@ public class JsonFileDocument implements FileDocument {
         /**
          * @return String - title
          */
-        public String getTitle() {
-            return title;
-        }
+        public String getTitle() { return title; }
     }
 }
