@@ -204,10 +204,15 @@ public class Milestone2 {
         }
         if (posts == null || posts.size() < 3) {
             String searchInsteadFor = "";
-            for (String x : pa.getQueryWordsList())
-                searchInsteadFor = searchInsteadFor + " " + spellingCorrection(diskPosIndex, diskPosIndex.getProcessor().getStem(x));
+            for (String x : pa.getQueryWordsList()) {
+                String stem = diskPosIndex.getProcessor().getStem(x);
+                if (diskPosIndex.getPostingsWithPositions(diskPosIndex.getProcessor().getStem(x)) != null && diskPosIndex.getPostingsWithPositions(stem).size() > 3)
+                    searchInsteadFor = searchInsteadFor + " " + x;
+                else
+                    searchInsteadFor = searchInsteadFor + " " + spellingCorrection(diskPosIndex, diskPosIndex.getProcessor().getStem(x));
+            }
 
-            System.out.println("Search instead for " + searchInsteadFor);
+            System.out.println("Search instead for" + searchInsteadFor);
             //spelling correction
 
         }
