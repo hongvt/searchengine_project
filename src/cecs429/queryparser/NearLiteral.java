@@ -8,7 +8,7 @@ import java.util.List;
 
 
 /**
- *  Performs the check to see if the right term is within K terms of the leftTerm.
+ * Performs the check to see if the right term is within K terms of the leftTerm.
  */
 public class NearLiteral implements QueryComponent {
     /**
@@ -26,9 +26,9 @@ public class NearLiteral implements QueryComponent {
 
 
     /**
-     * @param leftTerm - Represents the leftTerm that was parsed from the NearQuery
+     * @param leftTerm  - Represents the leftTerm that was parsed from the NearQuery
      * @param rightTerm - Represents the rightTerm that was parsed from the NearQuery
-     * @param k - Represents the bounds at which the rightTerm is within the leftTerm
+     * @param k         - Represents the bounds at which the rightTerm is within the leftTerm
      */
     public NearLiteral(String leftTerm, String rightTerm, int k) {
         this.leftTerm = leftTerm;
@@ -40,7 +40,7 @@ public class NearLiteral implements QueryComponent {
     /**
      * @param list_one - the postings list for the termLiteral of leftTerm
      * @param list_two - the postings list for the termLiteral of rightTerm
-     * @param nearK - the bounds at which the rightTerm is within the leftTerm
+     * @param nearK    - the bounds at which the rightTerm is within the leftTerm
      * @return returns a List of Postings that meet the criteria for the right term being
      * within the range of nearK of the leftTerm
      */
@@ -49,7 +49,7 @@ public class NearLiteral implements QueryComponent {
         int i = 0, j = 0, k, m;
 
         while (true) {
-            if (i == list_one.size() || j == list_two.size())
+            if (list_one == null || list_two == null || i == list_one.size() || j == list_two.size())
                 return result;
             else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
                 k = 0;

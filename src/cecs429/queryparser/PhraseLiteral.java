@@ -2,6 +2,7 @@ package cecs429.queryparser;
 
 import cecs429.index.Index;
 import cecs429.index.Posting;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,7 @@ public class PhraseLiteral implements QueryComponent {
     /**
      * Constructs a PhraseLiteral given a string with one or more individual terms separated by spaces.
      * Instantiates the mTerms list and fills it
+     *
      * @param terms String - the String that was in double quotes that need to be represented as PhraseLiteral
      */
     public PhraseLiteral(String terms) {
@@ -28,6 +30,7 @@ public class PhraseLiteral implements QueryComponent {
     /**
      * Performs the positional merge routine by iterating to find the same documentId across both lists
      * and checking to see if their position lists are off by 1
+     *
      * @param list_one - the first list of postings retrieved from mTerms
      * @param list_two - the second list of postings retrieved from mTerms
      * @return returns a result list of postings where two lists are contained within the same
@@ -39,7 +42,7 @@ public class PhraseLiteral implements QueryComponent {
 
         // first loop attempts to find the indexes where the document id's match
         while (true) {
-            if (i == list_one.size() || j == list_two.size())
+            if (list_one == null || list_two == null || i == list_one.size() || j == list_two.size())
                 return result;
             else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
                 // when matched we attempt to find any positions that are off by 1 and add them accordingly
@@ -89,8 +92,7 @@ public class PhraseLiteral implements QueryComponent {
 
         List<Posting> result = postingList.get(0);
 
-        for (int i = 1; i < postingList.size(); i++)
-        {
+        for (int i = 1; i < postingList.size(); i++) {
             result = positionMerge(result, postingList.get(i));
         }
 
