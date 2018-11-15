@@ -181,6 +181,7 @@ public class Milestone2 {
         QueryComponent c = pa.parseQuery(word);
         List<Posting> posts = c.getPostings(diskPosIndex);
 
+
         if (posts != null) {
             for (Posting x : posts)
                 System.out.println("Doc ID: " + x.getDocumentId() + " " + corpus.getDocument(x.getDocumentId()).getTitle() + " " + x.getPositions());
@@ -202,7 +203,13 @@ public class Milestone2 {
             }
         }
         if (posts == null || posts.size() < 3) {
+            String searchInsteadFor = "";
+            for (String x : pa.getQueryWordsList())
+                searchInsteadFor = searchInsteadFor + " " + spellingCorrection(diskPosIndex, diskPosIndex.getProcessor().getStem(x));
+
+            System.out.println("Search instead for " + searchInsteadFor);
             //spelling correction
+
         }
     }
 

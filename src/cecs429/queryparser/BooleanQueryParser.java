@@ -11,6 +11,7 @@ public class BooleanQueryParser {
     /**
      * Identifies a portion of a string with a starting index and a length.
      */
+    private List<String> queryWordsList = new ArrayList<String>();
     private static class StringBounds {
         int start;
         int length;
@@ -34,6 +35,9 @@ public class BooleanQueryParser {
         }
     }
 
+    public List<String> getQueryWordsList(){
+        return queryWordsList;
+    }
     /**
      * Given a boolean query, parses and returns a tree of QueryComponents representing the query.
      * @param query
@@ -65,6 +69,8 @@ public class BooleanQueryParser {
 
                 // Add the literal component to the conjunctive list.
                 subqueryLiterals.add(lit.literalComponent);
+                queryWordsList.add(lit.literalComponent.toString());
+                //System.out.println(lit.literalComponent.toString());
 
                 // Set the next index to start searching for a literal.
                 subStart = lit.bounds.start + lit.bounds.length;

@@ -38,7 +38,7 @@ public class AndQuery implements QueryComponent {
         List<Posting> result = new ArrayList<>();
 
         while (true) {
-            if (i == list_one.size() || j == list_two.size())
+            if (list_one == null || list_two == null || i == list_one.size() || j == list_two.size())
                 return result;
             else if (list_one.get(i).getDocumentId() == list_two.get(j).getDocumentId()) {
                 result.add(new Posting(list_one.get(i).getDocumentId()));
