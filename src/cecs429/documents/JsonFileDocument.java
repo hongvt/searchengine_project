@@ -78,14 +78,14 @@ public class JsonFileDocument implements FileDocument {
                 JsonArticle jArticle = gsonObj.fromJson(r, JsonArticle.class);
                 r.close();
                 setTitle(jArticle.getTitle());
-                return jArticle.getTitle();
-                //return mFilePath.toString();
+                //return jArticle.getTitle();
+                return mFilePath.toString();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        return mTitle;
-        //return mFilePath.toString();
+        //return mTitle;
+        return mFilePath.toString();
     }
 
     public static FileDocument loadJsonFileDocument(Path absolutePath, int documentId) {

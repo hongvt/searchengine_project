@@ -19,18 +19,19 @@ import java.util.*;
 public class Milestone2 {
 
     /**
-     *
      * @param index
      * @param misspelledTerm
      */
-    private static void spellingCorrection(DiskPositionalIndex index, String misspelledTerm) {
-        String[] misspelledterms = misspelledTerm.split(" ");
+    private static String spellingCorrection(DiskPositionalIndex index, String misspelledTerm) {
+        //String[] misspelledterms = misspelledTerm.split(" ");
         HashSet<String> misspelledTermKG = new HashSet<>();
 
         //get the k-grams for the misspelledTerm
-        for (int i = 0; i < misspelledterms.length; i++) {
+
+        /*for (int i = 0; i < misspelledterms.length; i++) {
             misspelledTermKG.addAll(getKGrams(misspelledterms[i]));
-        }
+        }*/
+        misspelledTermKG.addAll(getKGrams(misspelledTerm));
 
         //get all the vocab types that share the same k-grams with the misspelledTerm
         HashSet<String> types = new HashSet<>();
@@ -55,55 +56,75 @@ public class Milestone2 {
             typeJaccard.put(type, kgCommon / kgDistinct);
         }
 
-        //get all the types that have a jaccard coef higher than threshold (0.22)
+        Map<Object, Double> sortedTypeJaccard = getSortedMap(typeJaccard, false);
+        double top1Percent = typeJaccard.size() * 0.0125;
+
+        //get all the types that have a jaccard coef that is top 5%
         //and get the edit distance for them between the misspelled term
-        //System.out.println("meet 0.22 jaccard coef:");
-        HashMap<String, Integer> typeEditDist = new HashMap<>();
-        for (String type : typeJaccard.keySet()) {
-            if (typeJaccard.get(type) > 0.22) {
-                typeEditDist.put(type, getEditDistance(misspelledTerm.replaceAll(" ", ""), type));
-                //System.out.println(type+":"+);
+        HashMap<String, Double> typeEditDist = new HashMap<>();
+        int i = 0;
+
+        for (Object type : sortedTypeJaccard.keySet()) {
+            typeEditDist.put((String) type, getEditDistance(misspelledTerm, (String) type));
+            //System.out.println((String) type+":"+typeEditDist.get((String)type));
+            if (i == (int) top1Percent) {
+                break;
             }
+            i++;
         }
 
+        //System.out.println("\n\nSorted EditDistance");
+
         //get the type with the lowest edit distance
-        int min = 1000;
-        for (String type : typeEditDist.keySet()) {
-            if (typeEditDist.get(type) < min) {
-                min = typeEditDist.get(type);
+        Map<Object, Double> sortedTypeEditDistance = getSortedMap(typeEditDist, true);
+        //System.out.println(sortedTypeEditDistance);
+
+        //make a loop to get tie, then go to
+        double minEditDist = -1;
+        for (Object type : sortedTypeEditDistance.keySet()) {
+            if (sortedTypeEditDistance.get(type) != 0) {
+                minEditDist = sortedTypeEditDistance.get(type);
+                break;
             }
         }
 
         //if multiple types' edit distance tie for lowest, get the type with the highest doc frequency
-        //System.out.println(typeEditDist);
-        int maxDf = -1;
-        for (String type : typeEditDist.keySet()) {
-            if (typeEditDist.get(type) == min) {
-                //System.out.println(type);
-                int postingsLength = (index.getPostingsNoPositions(index.getProcessor().getStem(type))).length;
-                if (postingsLength > maxDf) {
+        //System.out.println("minEditDist="+minEditDist);
+        int maxDf = 3;
+        for (Object type : sortedTypeEditDistance.keySet()) {
+            if (sortedTypeEditDistance.get(type) == minEditDist) {
+                int postingsLength = (index.getPostingsNoPositions(index.getProcessor().getStem((String) type))).length;
+                //System.out.println("type ="+(String)type+"\tpostingsLength="+postingsLength);
+                if (postingsLength >= maxDf) {
                     maxDf = postingsLength;
                 }
-            }
-        }
-
-        System.out.println("Search instead for: ");
-        for (String type : typeEditDist.keySet()) {
-            if (typeEditDist.get(type) == min) {
-                if ((index.getPostingsNoPositions(index.getProcessor().getStem(type))).length == maxDf) {
-                    System.out.println(type);
+            } else if (sortedTypeEditDistance.get(type) > minEditDist) {
+                if (maxDf > 3) {
+                    break;
+                } else {
+                    minEditDist = sortedTypeEditDistance.get(type);
                 }
             }
         }
+        //System.out.println("maxDf ="+maxDf);
+
+        String searchInsteadFor = "";
+        for (Object type : sortedTypeEditDistance.keySet()) {
+            if ((index.getPostingsNoPositions(index.getProcessor().getStem((String) type))).length == maxDf) {
+                searchInsteadFor = (String) type;
+                break;
+            }
+        }
+        //System.out.println("searchInsteadFor:"+searchInsteadFor);
+        return searchInsteadFor;
     }
 
     /**
-     *
      * @param term
      * @param candidate
      * @return
      */
-    private static int getEditDistance(String term, String candidate) {
+    private static Double getEditDistance(String term, String candidate) {
         int[][] dp = new int[term.length()][candidate.length()];
         for (int i = 0; i < term.length(); i++) {
             for (int j = 0; j < candidate.length(); j++) {
@@ -121,11 +142,10 @@ public class Milestone2 {
                 }
             }
         }
-        return dp[term.length() - 1][candidate.length() - 1];
+        return (Double) (double) dp[term.length() - 1][candidate.length() - 1];
     }
 
     /**
-     *
      * @param term
      * @return
      */
@@ -151,7 +171,6 @@ public class Milestone2 {
     }
 
     /**
-     *
      * @param diskPosIndex
      * @param word
      * @param corpus
@@ -183,13 +202,12 @@ public class Milestone2 {
             }
         }
         if (posts == null || posts.size() < 3) {
-            spellingCorrection(diskPosIndex, word);
+            //spelling correction
         }
     }
 
 
     /**
-     *
      * @param diskPosIndex
      * @param docWeightBytes
      * @param term
@@ -199,56 +217,72 @@ public class Milestone2 {
         boolean needSpellCheck = false;
         String[] terms = term.split(" ");
         HashMap<Integer, Double> docIdsAds = new HashMap<>();
+        String[] stems = null;
+        boolean[] termNeedSpellCheck = new boolean[terms.length];
         for (int i = 0; i < terms.length; i++) {
-            String[] stems = null;
             if (terms[i].contains("*")) {
                 String[] matches = diskPosIndex.getWildcardMatches(terms[i]);
                 stems = diskPosIndex.getProcessor().getStems(matches);
             } else {
                 stems = diskPosIndex.getProcessor().processTokens(terms[i]);
             }
+
             for (int j = 0; j < stems.length; j++) {
                 //System.out.println(stems[j]);
                 int[][] docIdsTermFreq = diskPosIndex.getPostingsNoPositions(stems[j]);
 
                 if (docIdsTermFreq == null) {
-                    needSpellCheck = true;
+                    termNeedSpellCheck[i] = true;
                     break;
-                }
-                for (int k = 0; k < docIdsTermFreq.length; k++) {
-                    double wqtMinusOne = ((double) (corpus.getCorpusSize())) / (double) docIdsTermFreq.length;
-                    double wqt = Math.log(1 + wqtMinusOne);
-                    double wdt = (1 + Math.log(docIdsTermFreq[k][1]));
-                    //System.out.println("wqt "+Math.log(1+wqtMinusOne)+" for "+corpus.getDocument(docIdsTermFreq[k][0]).getTitle()+", term="+stems[j]);
-                    //System.out.println("wdt "+(1+Math.log(docIdsTermFreq[k][1]))+" for "+corpus.getDocument(docIdsTermFreq[k][0]).getTitle()+", term="+stems[j]);
-                    double adTemp = wdt * wqt;
-                    if (!docIdsAds.isEmpty() && docIdsAds.containsKey(docIdsTermFreq[k][0])) {
-                        docIdsAds.replace(docIdsTermFreq[k][0], docIdsAds.get(docIdsTermFreq[k][0]), docIdsAds.get(docIdsTermFreq[k][0]) + adTemp);
-                    } else {
-                        docIdsAds.put(docIdsTermFreq[k][0], adTemp);
+                } else {
+                    termNeedSpellCheck[i] = false;
+                    for (int k = 0; k < docIdsTermFreq.length; k++) {
+                        double wqtMinusOne = ((double) (corpus.getCorpusSize())) / (double) docIdsTermFreq.length;
+                        double wqt = Math.log(1 + wqtMinusOne);
+                        double wdt = (1 + Math.log(docIdsTermFreq[k][1]));
+                        //System.out.println("wqt "+Math.log(1+wqtMinusOne)+" for "+corpus.getDocument(docIdsTermFreq[k][0]).getTitle()+", term="+stems[j]);
+                        //System.out.println("wdt "+(1+Math.log(docIdsTermFreq[k][1]))+" for "+corpus.getDocument(docIdsTermFreq[k][0]).getTitle()+", term="+stems[j]);
+                        double adTemp = wdt * wqt;
+                        if (!docIdsAds.isEmpty() && docIdsAds.containsKey(docIdsTermFreq[k][0])) {
+                            docIdsAds.replace(docIdsTermFreq[k][0], docIdsAds.get(docIdsTermFreq[k][0]), docIdsAds.get(docIdsTermFreq[k][0]) + adTemp);
+                        } else {
+                            docIdsAds.put(docIdsTermFreq[k][0], adTemp);
+                        }
                     }
                 }
             }
-            if (needSpellCheck) {
+        }
+
+        for (int i = 0; i < termNeedSpellCheck.length; i++) {
+            if (termNeedSpellCheck[i]) {
+                needSpellCheck = true;
                 break;
             }
         }
 
+        if (!needSpellCheck) {
+            //print results
+            printOutTopK(docIdsAds, docWeightBytes, corpus);
+        }
         if (needSpellCheck || docIdsAds.size() < 3) {
-            spellingCorrection(diskPosIndex, term);
-        } else {
-            printOutTopK(docIdsAds,docWeightBytes,corpus);
+            String searchInsteadFor = "";
+            for (int i = 0; i < termNeedSpellCheck.length; i++) {
+                if (termNeedSpellCheck[i] || diskPosIndex.getPostingsNoPositions(diskPosIndex.getProcessor().getStem(terms[i])).length < 3) {
+                    searchInsteadFor += (spellingCorrection(diskPosIndex, diskPosIndex.getProcessor().getStem(terms[i])) + " ");
+                } else {
+                    searchInsteadFor += (terms[i] + " ");
+                }
+            }
+            System.out.print("Search instead for: " + searchInsteadFor);
         }
     }
 
     /**
-     *
      * @param docIdsAds
      * @param docWeightBytes
      * @param corpus
      */
-    private static void printOutTopK(HashMap<Integer,Double> docIdsAds, byte[] docWeightBytes, DocumentCorpus corpus)
-    {
+    private static void printOutTopK(HashMap<Integer, Double> docIdsAds, byte[] docWeightBytes, DocumentCorpus corpus) {
         for (Integer docId : docIdsAds.keySet()) {
             if (docIdsAds.get(docId) != 0) {
                 int startPos = docId * 8;
@@ -262,22 +296,11 @@ public class Milestone2 {
             }
         }
 
-        List<Map.Entry<Integer, Double>> list = new LinkedList<>(docIdsAds.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Double> e1, Map.Entry<Integer, Double> e2) {
-                return (e2.getValue()).compareTo(e1.getValue());
-            }
-        });
-
-        Map<Integer, Double> result = new LinkedHashMap<>();
-        for (Map.Entry<Integer, Double> entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
+        Map<Object, Double> result = getSortedMap(docIdsAds, false);
 
         int i = 0;
-        for (Integer docId : result.keySet()) {
-            System.out.println("Accum:" + result.get(docId) + "\tDoc ID: " + docId + "\t" + corpus.getDocument(docId).getTitle());
+        for (Object docId : result.keySet()) {
+            System.out.println("Accum:" + result.get((Integer) docId) + "\tDoc ID: " + docId + "\t" + corpus.getDocument((Integer) docId).getTitle());
             if (i == 9) {
                 break;
             }
@@ -285,7 +308,26 @@ public class Milestone2 {
         }
     }
 
+    private static Map<Object, Double> getSortedMap(HashMap<?, Double> unsorted, boolean isAscending) {
+        List<Map.Entry<?, Double>> list = new LinkedList<>(unsorted.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<?, Double>>() {
+            @Override
+            public int compare(Map.Entry<?, Double> e1, Map.Entry<?, Double> e2) {
+                if (!isAscending) {
+                    return (e2.getValue()).compareTo(e1.getValue());
+                } else {
+                    return (e1.getValue()).compareTo(e2.getValue());
+                }
 
+            }
+        });
+
+        Map<Object, Double> result = new LinkedHashMap<>();
+        for (Map.Entry<?, Double> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
 
     /**
      * MAIN METHOD FOR MILESTONE 2
@@ -307,6 +349,7 @@ public class Milestone2 {
             currentPath = Paths.get(corpusFolder.toString(), dir);
             DocumentCorpus corpus = DirectoryCorpus.loadTextDirectory(currentPath, ".txt");
             ((DirectoryCorpus) corpus).registerFileDocumentFactory(".json", JsonFileDocument::loadJsonFileDocument);
+
 
             String queryBuild = "";
 
@@ -361,6 +404,7 @@ public class Milestone2 {
                                     }
                                 } else {
                                     if (queryType.equals("boolean")) {
+                                        System.out.println(corpus.getCorpusSize());
                                         booleanQueryIndex(diskPosIndex, word, corpus, keyboard);
                                     } else if (queryType.equals("ranked")) {
                                         rankedRetrieval(diskPosIndex, docWeightBytes, word, corpus);
@@ -463,7 +507,6 @@ public class Milestone2 {
     }
 
     /**
-     *
      * @param currentPath
      * @return
      */
@@ -491,7 +534,6 @@ public class Milestone2 {
     }
 
     /**
-     *
      * @param currentPath
      * @param tokenProcessor
      * @param corpus
@@ -529,7 +571,6 @@ public class Milestone2 {
     }
 
     /**
-     *
      * @param currentPath
      * @return
      */
