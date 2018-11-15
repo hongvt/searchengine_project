@@ -206,7 +206,7 @@ public class Milestone2 {
             String searchInsteadFor = "";
             for (String x : pa.getQueryWordsList()) {
                 String stem = diskPosIndex.getProcessor().getStem(x);
-                if (diskPosIndex.getPostingsWithPositions(diskPosIndex.getProcessor().getStem(x)) != null && diskPosIndex.getPostingsWithPositions(stem).size() > 3)
+                if (diskPosIndex.getPostingsWithPositions(stem) != null && diskPosIndex.getPostingsWithPositions(stem).size() > 3)
                     searchInsteadFor = searchInsteadFor + " " + x;
                 else
                     searchInsteadFor = searchInsteadFor + " " + spellingCorrection(diskPosIndex, diskPosIndex.getProcessor().getStem(x));
