@@ -209,7 +209,7 @@ public class Milestone2 {
                 if (diskPosIndex.getPostingsWithPositions(stem) != null && diskPosIndex.getPostingsWithPositions(stem).size() > 3)
                     searchInsteadFor = searchInsteadFor + " " + x;
                 else
-                    searchInsteadFor = searchInsteadFor + " " + spellingCorrection(diskPosIndex, stem);
+                    searchInsteadFor = searchInsteadFor + " " + spellingCorrection(diskPosIndex, x);
             }
 
             System.out.println("Search instead for" + searchInsteadFor);

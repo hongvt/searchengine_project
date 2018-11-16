@@ -11,27 +11,29 @@ import java.util.List;
 import java.nio.file.Path;
 
 /**
- *
+ *  Responsible for reading in the on disk files and translating them
+ *  to their respective Java objects
  */
 public class DiskPositionalIndex implements Index {
     /**
-     *
+     *  Represents the on disk index
      */
     private byte[] vocabFileBytes, vocabTableBytes, postingsBytes;
     /**
-     *
+     *  class values represented as bytes to be converted to higher level
+     *  objects
      */
     private TokenProcessor processor;
 
     /**
-     *
+     *  Processor for stemming tokens
      */
     private KGramIndex kgi;
 
     /**
-     * @param corpusFolder
-     * @param processor
-     * @param kgi
+     * @param corpusFolder Directory where all bin files to be read are located
+     * @param processor Processor for processing tokens
+     * @param kgi   the KGram Index
      */
     public DiskPositionalIndex(Path corpusFolder, TokenProcessor processor, KGramIndex kgi) {
         this.kgi = kgi;
@@ -60,6 +62,14 @@ public class DiskPositionalIndex implements Index {
         }
     }
 
+    /**
+     * Responsible for returning a list of postings without
+     * positions
+     * @param term term to retrieve the postings without positions for
+     * @return returns a 2d array with the first index representing the
+     * docid and with second index representing doc frequency [0] and
+     * [1] for term frequency
+     */
     @Override
     public int[][] getPostingsNoPositions(String term) {
         //System.out.println("postingsBytes.length:"+postingsBytes.length);
@@ -115,6 +125,12 @@ public class DiskPositionalIndex implements Index {
         return null;
     }
 
+    /**
+     * Responsible for returning and converting a series or bytes to their
+     * respective equivalents (id , and positions)
+     * @param term the term to retrieve the postings with positions for
+     * @return return the final list of postings for the term
+     */
     @Override
     public List<Posting> getPostingsWithPositions(String term) {
         try {
@@ -185,9 +201,9 @@ public class DiskPositionalIndex implements Index {
     }
 
     /**
-     *
-     * @param term
-     * @return
+     *  Binary searches the vocabTable
+     * @param term term to binary search the vocabtable.bin file for
+     * @return return the byte value at which the term starts at in the vocabTable
      * @throws IOException
      */
     private long binarySearchVocabTable(String term) throws IOException {
@@ -268,9 +284,9 @@ public class DiskPositionalIndex implements Index {
     }
 
     /**
-     *
-     * @param bytes
-     * @return
+     * Converts a series of bytes to a long
+     * @param bytes bytes to be converted
+     * @return long representation of the bytes
      */
     public static long bytesToLong(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
@@ -280,9 +296,9 @@ public class DiskPositionalIndex implements Index {
     }
 
     /**
-     *
-     * @param bytes
-     * @return
+     *  Converts a series of bytes to a int
+     * @param bytes bytes to be converted
+     * @return int representation of the bytes
      */
     public static int bytesToInt(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
@@ -292,9 +308,9 @@ public class DiskPositionalIndex implements Index {
     }
 
     /**
-     *
-     * @param bytes
-     * @return
+     *  Converts a series of bytes to a double
+     * @param bytes bytes to be converted
+     * @return double representation of the bytes
      */
     public static double bytesToDouble(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
@@ -304,13 +320,18 @@ public class DiskPositionalIndex implements Index {
     }
 
     /**
-     *
-     * @return
+     * Retrieve the KGram index
+     * @return KGram index
      */
     public KGramIndex getKGramIndex() {
         return kgi;
     }
 
+    /**
+     * Returns a sorted list of vocabulary from reading and converting
+     * series of bytes from the vocab.bin file
+     * @return the entire vocabulary represented as a list of strings
+     */
     @Override
     public List<String> getVocabulary() {
         List<String> result = new ArrayList<>();
@@ -358,16 +379,29 @@ public class DiskPositionalIndex implements Index {
         return result;
     }
 
+    /**
+     * implemented from index interface
+     * @param types HashSet<String> - unique list of all the types within an Index
+     */
     @Override
     public void addToKGI(HashSet<String> types) {
         return;
     }
 
+    /**
+     * implemented from index interface
+     * @param term String - the wildcard
+     * @return
+     */
     @Override
     public String[] getWildcardMatches(String term) {
         return kgi.getWildcardMatches(term);
     }
 
+    /**
+     * implemented from index interface
+     * @return
+     */
     @Override
     public TokenProcessor getProcessor() {
         return this.processor;
