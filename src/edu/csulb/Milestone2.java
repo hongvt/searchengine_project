@@ -19,18 +19,16 @@ import java.util.*;
 public class Milestone2 {
 
     /**
-     * @param index
-     * @param misspelledTerm
+     * Gets a misspelled term and returns a suggested word to search
+     *
+     * @param index - the index that contains the terms to suggest
+     * @param misspelledTerm - the misspelled term that returned less than 3 postings
+     * @return String - the suggested type for the user to search instead
      */
     private static String spellingCorrection(DiskPositionalIndex index, String misspelledTerm) {
-        //String[] misspelledterms = misspelledTerm.split(" ");
         HashSet<String> misspelledTermKG = new HashSet<>();
 
         //get the k-grams for the misspelledTerm
-
-        /*for (int i = 0; i < misspelledterms.length; i++) {
-            misspelledTermKG.addAll(getKGrams(misspelledterms[i]));
-        }*/
         misspelledTermKG.addAll(getKGrams(misspelledTerm));
 
         //get all the vocab types that share the same k-grams with the misspelledTerm
@@ -120,9 +118,11 @@ public class Milestone2 {
     }
 
     /**
-     * @param term
-     * @param candidate
-     * @return
+     * Gets the edit distance between 2 words
+     *
+     * @param term - mispelled word
+     * @param candidate - a type that passed the jaccard coef
+     * @return Double edit distance - the number of edits needed to make the 2 strings the same
      */
     private static Double getEditDistance(String term, String candidate) {
         int[][] dp = new int[term.length()][candidate.length()];
@@ -146,8 +146,10 @@ public class Milestone2 {
     }
 
     /**
-     * @param term
-     * @return
+     * Gets 1,2,3-grams for the parameter value string
+     *
+     * @param term - the term needed to get k-grams for
+     * @return a list of k-grams for the parameter value
      */
     private static ArrayList<String> getKGrams(String term) {
         ArrayList<String> kg = new ArrayList<>();
@@ -171,10 +173,13 @@ public class Milestone2 {
     }
 
     /**
-     * @param diskPosIndex
-     * @param word
-     * @param corpus
-     * @param keyboard
+     * Can search for phrase queries and all the other queries from Milestone 1.
+     * Includes spelling corrections
+     *
+     * @param diskPosIndex - index that gets the postings for the parameter word
+     * @param word  - the query
+     * @param corpus - the corpus contains the documents
+     * @param keyboard - to read user input when they want to view a document
      */
     private static void booleanQueryIndex(DiskPositionalIndex diskPosIndex, String word, DocumentCorpus corpus, Scanner keyboard) {
         BooleanQueryParser pa = new BooleanQueryParser();
@@ -203,6 +208,7 @@ public class Milestone2 {
             }
         }
         if (posts == null || posts.size() < 3) {
+            //spelling correction
             String searchInsteadFor = "";
             for (String x : pa.getQueryWordsList()) {
                 String stem = diskPosIndex.getProcessor().getStem(x);
@@ -211,21 +217,24 @@ public class Milestone2 {
                 else
                     searchInsteadFor = searchInsteadFor + " " + spellingCorrection(diskPosIndex, diskPosIndex.getProcessor().getStem(x));
             }
-
             System.out.println("Search instead for" + searchInsteadFor);
-            //spelling correction
-
         }
     }
 
 
     /**
-     * @param diskPosIndex
-     * @param docWeightBytes
-     * @param term
-     * @param corpus
+     * Score documents for relevance of each query and returns top k documents based on the score
+     * Spelling corrections included
+     * Can do wildcard queries.
+     * Cannot do phrase queries.
+     *
+     * @param diskPosIndex - the index that gets the postings for the parameter word
+     * @param docWeightBytes - the byte array contains all of docWeights.bin
+     * @param term - the query
+     * @param corpus - the corpus containing all the documents
+     * @param k - int number of documents to print out
      */
-    private static void rankedRetrieval(DiskPositionalIndex diskPosIndex, byte[] docWeightBytes, String term, DocumentCorpus corpus) {
+    private static void rankedRetrieval(DiskPositionalIndex diskPosIndex, byte[] docWeightBytes, String term, DocumentCorpus corpus, int k) {
         boolean needSpellCheck = false;
         String[] terms = term.split(" ");
         HashMap<Integer, Double> docIdsAds = new HashMap<>();
@@ -248,17 +257,17 @@ public class Milestone2 {
                     break;
                 } else {
                     termNeedSpellCheck[i] = false;
-                    for (int k = 0; k < docIdsTermFreq.length; k++) {
+                    for (int l = 0; l < docIdsTermFreq.length; l++) {
                         double wqtMinusOne = ((double) (corpus.getCorpusSize())) / (double) docIdsTermFreq.length;
                         double wqt = Math.log(1 + wqtMinusOne);
-                        double wdt = (1 + Math.log(docIdsTermFreq[k][1]));
+                        double wdt = (1 + Math.log(docIdsTermFreq[l][1]));
                         //System.out.println("wqt "+Math.log(1+wqtMinusOne)+" for "+corpus.getDocument(docIdsTermFreq[k][0]).getTitle()+", term="+stems[j]);
                         //System.out.println("wdt "+(1+Math.log(docIdsTermFreq[k][1]))+" for "+corpus.getDocument(docIdsTermFreq[k][0]).getTitle()+", term="+stems[j]);
                         double adTemp = wdt * wqt;
-                        if (!docIdsAds.isEmpty() && docIdsAds.containsKey(docIdsTermFreq[k][0])) {
-                            docIdsAds.replace(docIdsTermFreq[k][0], docIdsAds.get(docIdsTermFreq[k][0]), docIdsAds.get(docIdsTermFreq[k][0]) + adTemp);
+                        if (!docIdsAds.isEmpty() && docIdsAds.containsKey(docIdsTermFreq[l][0])) {
+                            docIdsAds.replace(docIdsTermFreq[l][0], docIdsAds.get(docIdsTermFreq[l][0]), docIdsAds.get(docIdsTermFreq[l][0]) + adTemp);
                         } else {
-                            docIdsAds.put(docIdsTermFreq[k][0], adTemp);
+                            docIdsAds.put(docIdsTermFreq[l][0], adTemp);
                         }
                     }
                 }
@@ -274,7 +283,7 @@ public class Milestone2 {
 
         if (!needSpellCheck) {
             //print results
-            printOutTopK(docIdsAds, docWeightBytes, corpus);
+            printOutTopK(docIdsAds, docWeightBytes, corpus, 10);
         }
         if (needSpellCheck || docIdsAds.size() < 3) {
             String searchInsteadFor = "";
@@ -290,11 +299,14 @@ public class Milestone2 {
     }
 
     /**
+     * Prints out the top K documents with the accumulator value (score)
+     *
      * @param docIdsAds
      * @param docWeightBytes
-     * @param corpus
+     * @param corpus -
+     * @param k - int how many to print out
      */
-    private static void printOutTopK(HashMap<Integer, Double> docIdsAds, byte[] docWeightBytes, DocumentCorpus corpus) {
+    private static void printOutTopK(HashMap<Integer, Double> docIdsAds, byte[] docWeightBytes, DocumentCorpus corpus, int k) {
         for (Integer docId : docIdsAds.keySet()) {
             if (docIdsAds.get(docId) != 0) {
                 int startPos = docId * 8;
@@ -313,13 +325,20 @@ public class Milestone2 {
         int i = 0;
         for (Object docId : result.keySet()) {
             System.out.println("Accum:" + result.get((Integer) docId) + "\tDoc ID: " + docId + "\t" + corpus.getDocument((Integer) docId).getTitle());
-            if (i == 9) {
+            if (i == k-1) {
                 break;
             }
             i++;
         }
     }
 
+    /**
+     * Sorts the HashMap by value which is a Double and returns a new Map with the sorted values
+     *
+     * @param unsorted - the unsorted HashMap with the wildcard key type
+     * @param isAscending boolean - true to get smallest to largest, false to get largest to smallest
+     * @return Map that is sorted <Object,Double>
+     */
     private static Map<Object, Double> getSortedMap(HashMap<?, Double> unsorted, boolean isAscending) {
         List<Map.Entry<?, Double>> list = new LinkedList<>(unsorted.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<?, Double>>() {
@@ -347,13 +366,15 @@ public class Milestone2 {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         //testing();
         Scanner keyboard = new Scanner(System.in);
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
         String dir = getDirectoryName(keyboard, corpusFolder);
         TokenProcessor tokenProcessor = new Milestone1TokenProcessor();
+        //ranked retrieval needs top 10
+        int k = 10;
 
         boolean changeDirectory = false;
 
@@ -372,7 +393,10 @@ public class Milestone2 {
 
             while ((!queryBuild.equals("quit") && !queryBuild.equals(":q"))) {
                 if (queryBuild.equals("build")) {
-                    buildIndex(currentPath, tokenProcessor, corpus);
+                    try {
+                        buildIndex(currentPath, tokenProcessor, corpus);
+                    }
+                    catch(IOException e) {System.out.println("Need some fixing in buildIndex()");}
                 } else if (queryBuild.equals("query") || changeDirectory) {
                     if (changeDirectory) {
                         changeDirectory = false;
@@ -419,7 +443,7 @@ public class Milestone2 {
                                         System.out.println(corpus.getCorpusSize());
                                         booleanQueryIndex(diskPosIndex, word, corpus, keyboard);
                                     } else if (queryType.equals("ranked")) {
-                                        rankedRetrieval(diskPosIndex, docWeightBytes, word, corpus);
+                                        rankedRetrieval(diskPosIndex, docWeightBytes, word, corpus, k);
                                     }
                                 }
                             }
@@ -519,8 +543,10 @@ public class Milestone2 {
     }
 
     /**
-     * @param currentPath
-     * @return
+     * Deserializes KGramIndex from kgrams.bin
+     *
+     * @param currentPath - the path of the current queried corpus to read kgrams.bin from
+     * @return - KGramIndex object read from Disk
      */
     private static KGramIndex readKGramFromDisk(Path currentPath) {
         //reading k-grams into k-gram object
@@ -546,9 +572,11 @@ public class Milestone2 {
     }
 
     /**
-     * @param currentPath
-     * @param tokenProcessor
-     * @param corpus
+     * Indexes the corpus, writes the corpus to disk (builds the index), serializes KGramIndex to disk
+     *
+     * @param currentPath - the path of the corpus to index and build
+     * @param tokenProcessor - the token processor used for Milestone 2
+     * @param corpus - the corpus that contains all the documents
      * @throws IOException
      */
     private static void buildIndex(Path currentPath, TokenProcessor tokenProcessor, DocumentCorpus corpus) throws IOException {
@@ -583,8 +611,10 @@ public class Milestone2 {
     }
 
     /**
-     * @param currentPath
-     * @return
+     * Reads docWeights.bin into a byte array
+     *
+     * @param currentPath - the path of the corpus that needs docWeights.bin
+     * @return - the byte array that contains all the bytes for docWeights.bin
      */
     private static byte[] readDocWeights(Path currentPath) {
         try {
@@ -665,7 +695,7 @@ public class Milestone2 {
     }
 
     /**
-     *
+     * Random stuff to test in the main
      */
     private static void testing() {
                 /*double x = 5;
