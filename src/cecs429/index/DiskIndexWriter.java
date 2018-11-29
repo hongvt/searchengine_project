@@ -13,17 +13,20 @@ import java.util.List;
 //% ! xxd
 
 /**
- *
+ * Responsible for writing out the entirety of the vocabulary, vocabulary table, doc weights,
+ * and postings of the vocabulary
+ * to disk.
  */
 public class DiskIndexWriter {
     /**
-     *
+     * Member variables of the class corresponding to their respective files they are writing
+     * to
      */
     private DataOutputStream postData, vocabData, vocabTableData, docWeightsData;
 
     /**
-     *
-     * @param indexFolder
+     *  Constructs and initializes file output streams for their corresponding files
+     * @param indexFolder Represents the index directory where all 4 files will be written to
      */
     public DiskIndexWriter(Path indexFolder) {
         try {
@@ -45,8 +48,8 @@ public class DiskIndexWriter {
     }
 
     /**
-     *
-     * @param docWeight
+     *  Responsible for writing out the docWeight to disk
+     * @param docWeight Value to be written out
      */
     public void writeDocWeight(double docWeight) {
         try {
@@ -58,7 +61,7 @@ public class DiskIndexWriter {
     }
 
     /**
-     *
+     *  Closes file output stream
      */
     public void closeDocWeights() {
         try {
@@ -70,8 +73,8 @@ public class DiskIndexWriter {
     }
 
     /**
-     *
-     * @param positionalInvertedIndex
+     *  Responsible for writing out the components of the index to disk
+     * @param positionalInvertedIndex The filled positional inverted index
      */
     public void writeIndex(PositionalInvertedIndex positionalInvertedIndex) {
         try {
@@ -96,7 +99,7 @@ public class DiskIndexWriter {
     }
 
     /**
-     *
+     *  Closes the vocab postings output
      */
     public void closeVocabPostOutput() {
         try {
@@ -110,10 +113,10 @@ public class DiskIndexWriter {
     }
 
     /**
-     *
-     * @param term
-     * @param positionalInvertedIndex
-     * @return
+     *  Responsible for writing out the postings of a given term to disk
+     * @param term term within the index's vocabulary
+     * @param positionalInvertedIndex retrieve the postings of a term from this index
+     * @return the amount of bytes the postings list for a term will take up on disk
      */
     private long writePostings(String term, PositionalInvertedIndex positionalInvertedIndex) {
         try {
@@ -151,8 +154,8 @@ public class DiskIndexWriter {
 
     /**
      *
-     * @param term
-     * @return
+     * @param term Term to be written out to disk
+     * @return amount of bytes term will take up on disk
      */
     private long writeVocab(String term) {
         try {
@@ -167,8 +170,8 @@ public class DiskIndexWriter {
 
     /**
      *
-     * @param nextVocabPos
-     * @param nextPostPos
+     * @param nextVocabPos  Position of the next vocabulary term to write in disk
+     * @param nextPostPos   Position of the next posting to write to disk
      */
     private void writeVocabTable(long nextVocabPos, long nextPostPos) {
         try {

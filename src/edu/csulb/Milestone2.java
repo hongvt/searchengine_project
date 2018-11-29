@@ -703,61 +703,49 @@ public class Milestone2 {
         System.out.println(x/y);*/
         /*String term = "0wowicantbelieveit";
         String term1 = "0cannibalistically";
-
         System.out.println(getEditDistance(term,term1));*/
 
         /*try
         {
             Path currentPath = Paths.get(System.getProperty("user.dir"));
-
             Path corpusFolder = Paths.get(currentPath.toString(), "corpora/vocab.bin");
             File vocabFile = new File(corpusFolder.toString());
             InputStream vocabIS = new FileInputStream(vocabFile);
             DataInputStream vocabDIS = new DataInputStream(vocabIS);
             byte[] vocabFileBytes = new byte[(int)vocabFile.length()];
             vocabDIS.read(vocabFileBytes);
-
             corpusFolder = Paths.get(currentPath.toString(), "corpora/vocabTable.bin");
             File vocabTableFile = new File(corpusFolder.toString());
             InputStream vocabTableIS = new FileInputStream(vocabTableFile);
             DataInputStream vocabTableDIS = new DataInputStream(vocabTableIS);
             byte[] vocabTableBytes = new byte[(int)vocabTableFile.length()];
             vocabTableDIS.read(vocabTableBytes);
-
             File postingsFile = new File(corpusFolder.toString()+"corpora/vocabTable.bin");
             InputStream postingsIS = new FileInputStream(postingsFile);
             DataInputStream postingsDIS = new DataInputStream(postingsIS);
             postingsBytes = new byte[(int)postingsFile.length()];
             postingsDIS.read(postingsBytes);
-
             int lowVTAIndex = 0;
             int highVTAIndex = (vocabTableBytes.length / 16) - 1;
             int maxVTAIndex = highVTAIndex;
             int midVTAIndex = -1;
             int midVTByteIndex = -1;
-
             String term = "catcher";
-
-
             while(lowVTAIndex <= highVTAIndex)
             {
                 String word = "";
                 midVTAIndex = (lowVTAIndex + highVTAIndex)/2;
                 midVTByteIndex = midVTAIndex * 16;
-
                 byte[] midLongBytes = new byte[8];
                 for (int i = 0; i < midLongBytes.length; i++) {
                     midLongBytes[i] = vocabTableBytes[midVTByteIndex + i];
                 }
                 long midVocabStartIndex = DiskPositionalIndex.bytesToLong(midLongBytes);
                 System.out.println("midVocabStartIndex="+midVocabStartIndex);
-
                 midVTAIndex++;
                 midVTByteIndex = midVTAIndex * 16;
-
                 System.out.println("lowVTAIndex="+lowVTAIndex);
                 System.out.println("highVTAIndex="+highVTAIndex);
-
                 if(lowVTAIndex == highVTAIndex && lowVTAIndex == maxVTAIndex)
                 {
                     byte[] vocabBytes = new byte[vocabFileBytes.length - (int) midVocabStartIndex];
@@ -772,24 +760,19 @@ public class Milestone2 {
                         midPLUS1LongBytes[i] = vocabTableBytes[midVTByteIndex + i];
                     }
                     long midPLUS1VocabStartIndex = DiskPositionalIndex.bytesToLong(midPLUS1LongBytes);
-
                     long vocabLength = midPLUS1VocabStartIndex - midVocabStartIndex;
-
                     byte[] vocabBytes = new byte[(int) vocabLength];
                     for (int i = 0; i < vocabBytes.length; i++) {
                         vocabBytes[i] = vocabFileBytes[(int) midVocabStartIndex + i];
                     }
-
                     word = new String(vocabBytes);
                 }
                 System.out.println("word=" + word);
-
                 if (term.compareTo(word) > 0) {
                     System.out.println("term is in the last half");
                     //term is in the last half
                     //highVTAIndex = 0;
                     lowVTAIndex = midVTAIndex;
-
                 } else if (term.compareTo(word) < 0) {
                     System.out.println("term is in the first half");
                     //term is in the first half
@@ -804,7 +787,6 @@ public class Milestone2 {
                 postingPos[i] = vocabTableBytes[(midVTAIndex-1)*16 + i + 8];
             }
             System.out.println(DiskPositionalIndex.bytesToLong(postingPos));
-
             byte[] numOfDocsBytes = new byte[4];
             for (int i = 0; i < numOfDocsBytes.length; i++) {
                 numOfDocsBytes[i] = postingsBytes[(int)postingPos + i];
@@ -818,68 +800,53 @@ public class Milestone2 {
             Path corpusFolder = Paths.get(currentPath.toString(), "corpora");
             FileOutputStream vocabFile = new FileOutputStream(corpusFolder.toString()+"/vocab.bin");
             DataOutputStream vocabData = new DataOutputStream(vocabFile);
-
             FileOutputStream vocabTableFile = new FileOutputStream(corpusFolder.toString()+"/vocabTable.bin");
             DataOutputStream vocabTableData = new DataOutputStream(vocabTableFile);
-
             FileOutputStream postingsFile = new FileOutputStream(corpusFolder.toString()+"/postings.bin");
             DataOutputStream postingsData = new DataOutputStream(postingsFile);
-
             String term = "aangelsbaseballcatcherdodgers";
             byte[] termBytes = term.getBytes();
             vocabData.write(termBytes);
-
 //0            //a
             vocabTableData.writeLong(0);
             vocabTableData.writeLong(0);
-
             postingsData.writeInt(1); //dft
             postingsData.writeInt(1); //id is actually 1
             postingsData.writeInt(1); //tftd
             postingsData.writeInt(1); //p
-
 //1            //angels
             vocabTableData.writeLong(1);
             vocabTableData.writeLong(16);
-
             postingsData.writeInt(1); //dft
             postingsData.writeInt(20); //id is actually 20
             postingsData.writeInt(2); //tftd
             postingsData.writeInt(1); //p
             postingsData.writeInt(10); //p
-
 //2            //baseball
             vocabTableData.writeLong(7);
             vocabTableData.writeLong(36);
-
             postingsData.writeInt(2); //dft
             postingsData.writeInt(30); //id is actually 30
             postingsData.writeInt(1); //tftd
             postingsData.writeInt(1); //p
-
             postingsData.writeInt(3); //id is actually 33
             postingsData.writeInt(1); //tftd
             postingsData.writeInt(1); //p
-
 //3            //catcher
             vocabTableData.writeLong(15);
             vocabTableData.writeLong(64);
-
             postingsData.writeInt(1); //dft
             postingsData.writeInt(4); //id is actually 4
             postingsData.writeInt(2); //tftd
             postingsData.writeInt(1); //p
             postingsData.writeInt(10); //p
-
 //4            //dodgers
             vocabTableData.writeLong(22);
             vocabTableData.writeLong(84);
-
             postingsData.writeInt(1); //dft
             postingsData.writeInt(5); //id is actually 5
             postingsData.writeInt(1); //tftd
             postingsData.writeInt(1); //p
-
             postingsData.close();
             vocabData.close();
             vocabTableData.close();
