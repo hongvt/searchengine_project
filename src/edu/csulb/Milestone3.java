@@ -33,32 +33,31 @@ public class Milestone3
 
         Path corpusFolderHam = Paths.get(currentPath.toString(), "corpora/federalist-papers/HAMILTON");
         DocumentCorpus corpusHAM = DirectoryCorpus.loadTextDirectory(corpusFolderHam, ".txt");
-        try {
+        /*try {
             buildIndex(corpusFolderHam, tokenProcessor, corpusHAM);
         }
-        catch(IOException e) {System.out.println("Need some fixing in buildIndex()");}
+        catch(IOException e) {System.out.println("Need some fixing in buildIndex()");}*/
         DiskPositionalIndex diskPosIndexHAM = new DiskPositionalIndex(corpusFolderHam, tokenProcessor, kgi);
 
         Path corpusFolderJay = Paths.get(currentPath.toString(), "corpora/federalist-papers/JAY");
         DocumentCorpus corpusJAY = DirectoryCorpus.loadTextDirectory(corpusFolderJay, ".txt");
-        try {
+        /*try {
             buildIndex(corpusFolderJay, tokenProcessor, corpusJAY);
         }
-        catch(IOException e) {System.out.println("Need some fixing in buildIndex()");}
+        catch(IOException e) {System.out.println("Need some fixing in buildIndex()");}*/
         DiskPositionalIndex diskPosIndexJAY = new DiskPositionalIndex(corpusFolderJay, tokenProcessor, kgi);
 
         Path corpusFolderMad = Paths.get(currentPath.toString(), "corpora/federalist-papers/MADISON");
         DocumentCorpus corpusMAD = DirectoryCorpus.loadTextDirectory(corpusFolderMad, ".txt");
-        try {
+        /*try {
             buildIndex(corpusFolderMad, tokenProcessor, corpusMAD);
         }
-        catch(IOException e) {System.out.println("Need some fixing in buildIndex()");}
+        catch(IOException e) {System.out.println("Need some fixing in buildIndex()");}*/
         DiskPositionalIndex diskPosIndexMAD = new DiskPositionalIndex(corpusFolderMad, tokenProcessor, kgi);
 
 
-
         Rocchio rocchio = new Rocchio(diskPosIndexHAM,diskPosIndexJAY,diskPosIndexMAD);
-        Bayesian bayesian = new Bayesian();
+        Bayesian bayesian = new Bayesian(diskPosIndexHAM,diskPosIndexJAY,diskPosIndexMAD);
     }
 
     /**
@@ -84,20 +83,6 @@ public class Milestone3
         long endTime1 = System.currentTimeMillis();
         int numSeconds1 = ((int) ((endTime1 - startTime1) / 1000));
         System.out.println("Building took " + numSeconds1 + " seconds");
-        //k-grams written to disk
-        long startTime3 = System.currentTimeMillis();
-        try {
-            FileOutputStream kGramsFile = new FileOutputStream(currentPath.toString() + "/index/kgrams.bin");
-            ObjectOutputStream kGramsOOS = new ObjectOutputStream(kGramsFile);
-            kGramsOOS.writeObject(index.getKGramIndex());
-            kGramsOOS.close();
-            kGramsFile.close();
-        } catch (IOException e) {
-            System.out.println("Kgrams ioexeception");
-        }
-        long endTime3 = System.currentTimeMillis();
-        int numSeconds3 = ((int) ((endTime3 - startTime3) / 1000));
-        System.out.println("Writing k-grams to disk took " + numSeconds3 + " seconds");
     }
 
     /**
