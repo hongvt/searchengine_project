@@ -3,6 +3,7 @@ package cecs429.index;
 import cecs429.text.TokenProcessor;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,22 +12,22 @@ import java.util.List;
 import java.nio.file.Path;
 
 /**
- *  Responsible for reading in the on disk files and translating them
- *  to their respective Java objects
+ * Responsible for reading in the on disk files and translating them
+ * to their respective Java objects
  */
 public class DiskPositionalIndex implements Index {
     /**
-     *  Represents the on disk index
+     * Represents the on disk index
      */
     private byte[] vocabFileBytes, vocabTableBytes, postingsBytes;
     /**
-     *  class values represented as bytes to be converted to higher level
-     *  objects
+     * class values represented as bytes to be converted to higher level
+     * objects
      */
     private TokenProcessor processor;
 
     /**
-     *  Processor for stemming tokens
+     * Processor for stemming tokens
      */
     private KGramIndex kgi;
 
@@ -35,6 +36,26 @@ public class DiskPositionalIndex implements Index {
      * @param processor Processor for processing tokens
      * @param kgi   the KGram Index
      */
+
+    private ArrayList<ArrayList<Double>> vector = new ArrayList<>();
+    private ArrayList<Double> Ld;
+
+    public void setVector(ArrayList<ArrayList<Double>> x){
+        vector = x;
+    }
+    public ArrayList<ArrayList<Double>> getVector() {
+        return vector;
+    }
+
+    public void setLd(ArrayList<Double> x) {
+        Ld = x;
+    }
+
+    public ArrayList<Double> getLd() {
+        return Ld;
+    }
+
+
     public DiskPositionalIndex(Path corpusFolder, TokenProcessor processor, KGramIndex kgi) {
         this.kgi = kgi;
         this.processor = processor;
@@ -65,6 +86,7 @@ public class DiskPositionalIndex implements Index {
     /**
      * Responsible for returning a list of postings without
      * positions
+     *
      * @param term term to retrieve the postings without positions for
      * @return returns a 2d array with the first index representing the
      * docid and with second index representing doc frequency [0] and
@@ -128,6 +150,7 @@ public class DiskPositionalIndex implements Index {
     /**
      * Responsible for returning and converting a series or bytes to their
      * respective equivalents (id , and positions)
+     *
      * @param term the term to retrieve the postings with positions for
      * @return return the final list of postings for the term
      */
@@ -201,7 +224,8 @@ public class DiskPositionalIndex implements Index {
     }
 
     /**
-     *  Binary searches the vocabTable
+     * Binary searches the vocabTable
+     *
      * @param term term to binary search the vocabtable.bin file for
      * @return return the byte value at which the term starts at in the vocabTable
      * @throws IOException
@@ -285,6 +309,7 @@ public class DiskPositionalIndex implements Index {
 
     /**
      * Converts a series of bytes to a long
+     *
      * @param bytes bytes to be converted
      * @return long representation of the bytes
      */
@@ -296,7 +321,8 @@ public class DiskPositionalIndex implements Index {
     }
 
     /**
-     *  Converts a series of bytes to a int
+     * Converts a series of bytes to a int
+     *
      * @param bytes bytes to be converted
      * @return int representation of the bytes
      */
@@ -308,7 +334,8 @@ public class DiskPositionalIndex implements Index {
     }
 
     /**
-     *  Converts a series of bytes to a double
+     * Converts a series of bytes to a double
+     *
      * @param bytes bytes to be converted
      * @return double representation of the bytes
      */
@@ -321,6 +348,7 @@ public class DiskPositionalIndex implements Index {
 
     /**
      * Retrieve the KGram index
+     *
      * @return KGram index
      */
     public KGramIndex getKGramIndex() {
@@ -330,6 +358,7 @@ public class DiskPositionalIndex implements Index {
     /**
      * Returns a sorted list of vocabulary from reading and converting
      * series of bytes from the vocab.bin file
+     *
      * @return the entire vocabulary represented as a list of strings
      */
     @Override
@@ -381,6 +410,7 @@ public class DiskPositionalIndex implements Index {
 
     /**
      * implemented from index interface
+     *
      * @param types HashSet<String> - unique list of all the types within an Index
      */
     @Override
@@ -390,6 +420,7 @@ public class DiskPositionalIndex implements Index {
 
     /**
      * implemented from index interface
+     *
      * @param term String - the wildcard
      * @return
      */
@@ -400,6 +431,7 @@ public class DiskPositionalIndex implements Index {
 
     /**
      * implemented from index interface
+     *
      * @return
      */
     @Override
