@@ -29,6 +29,21 @@ public class PositionalInvertedIndex implements Index {
      *
      * @param processor TokenProcessor - processor is set to this parameter value
      */
+    private ArrayList<ArrayList<Double>> vector = new ArrayList<>();
+    private ArrayList<Double> Ld;
+
+    public ArrayList<ArrayList<Double>> getVector() {
+        return vector;
+    }
+
+    public void setLd(double x, int counter) {
+        Ld.set(counter, x);
+    }
+
+    public ArrayList<Double> getLd() {
+        return Ld;
+    }
+
     public PositionalInvertedIndex(TokenProcessor processor) {
         index = new HashMap<>();
         kgi = new KGramIndex();
@@ -63,8 +78,7 @@ public class PositionalInvertedIndex implements Index {
         }
     }
 
-    public KGramIndex getKGramIndex()
-    {
+    public KGramIndex getKGramIndex() {
         return kgi;
     }
 
@@ -99,8 +113,7 @@ public class PositionalInvertedIndex implements Index {
     }
 
     @Override
-    public int[][] getPostingsNoPositions(String term)
-    {
+    public int[][] getPostingsNoPositions(String term) {
         return null;
     }
 

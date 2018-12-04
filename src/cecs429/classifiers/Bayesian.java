@@ -5,15 +5,18 @@ import cecs429.index.DiskPositionalIndex;
 
 import java.util.*;
 
-public class Bayesian
-{
+public class Bayesian {
     private DiskPositionalIndex hamIndex;
     private DiskPositionalIndex jayIndex;
     private DiskPositionalIndex madIndex;
     private HashSet<String> discriminatingSet;
 
+<<<<<<< HEAD
     public Bayesian(int numHamDocs,DiskPositionalIndex hamIndex, int numJayDocs,DiskPositionalIndex jayIndex, int numMadDocs,DiskPositionalIndex madIndex)
     {
+=======
+    public Bayesian(DiskPositionalIndex hamIndex, DiskPositionalIndex jayIndex, DiskPositionalIndex madIndex) {
+>>>>>>> 42ed3d84781a3ceaea1584e0d40e38f261dd6c9c
         this.hamIndex = hamIndex;
         this.jayIndex = jayIndex;
         this.madIndex = madIndex;
@@ -24,12 +27,13 @@ public class Bayesian
         allVocab.addAll(this.jayIndex.getVocabulary());
         allVocab.addAll(this.madIndex.getVocabulary());
 
-        HashMap<String,Double> hamITC = new HashMap<>();
-        HashMap<String,Double> jayITC = new HashMap<>();
-        HashMap<String,Double> madITC = new HashMap<>();
+        HashMap<String, Double> hamITC = new HashMap<>();
+        HashMap<String, Double> jayITC = new HashMap<>();
+        HashMap<String, Double> madITC = new HashMap<>();
 
         System.out.println(allVocab);
         //for each type, calculate I(T,C) for each class
+<<<<<<< HEAD
         int i = 0;
         for (String type : allVocab)
         {
@@ -80,6 +84,12 @@ public class Bayesian
             hamITC.put(type,getITC(numHamDocs,hamIndexPostings, (jayIndexPostings+madIndexPostings),(numJayDocs+numMadDocs)-(jayIndexPostings+madIndexPostings)));
             jayITC.put(type,getITC(numJayDocs,jayIndexPostings, (hamIndexPostings+madIndexPostings),(numHamDocs+numMadDocs)-(hamIndexPostings+madIndexPostings)));
             madITC.put(type,getITC(numMadDocs,madIndexPostings, (hamIndexPostings+jayIndexPostings),(numJayDocs+numHamDocs)-(hamIndexPostings+jayIndexPostings)));
+=======
+        for (String type : allVocab) {
+            hamITC.put(type, getITC(hamIndex, type));
+            jayITC.put(type, getITC(jayIndex, type));
+            madITC.put(type, getITC(madIndex, type));
+>>>>>>> 42ed3d84781a3ceaea1584e0d40e38f261dd6c9c
         }
 
         //for each class, get top K for I(T,C)
@@ -103,6 +113,7 @@ public class Bayesian
 
     }
 
+<<<<<<< HEAD
 
 
     private double getITC(double numDocs, double N11, double N10, double N00)
@@ -149,6 +160,10 @@ public class Bayesian
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
+=======
+    private double getITC(DiskPositionalIndex index, String type) {
+        return 1;
+>>>>>>> 42ed3d84781a3ceaea1584e0d40e38f261dd6c9c
     }
 
 }
