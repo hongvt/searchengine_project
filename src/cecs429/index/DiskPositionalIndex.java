@@ -38,7 +38,7 @@ public class DiskPositionalIndex implements Index {
      */
 
     private ArrayList<ArrayList<Double>> vector = new ArrayList<>();
-    private ArrayList<Double> Ld;
+    private ArrayList<Double> Ld = new ArrayList<>();
 
     public void setVector(ArrayList<ArrayList<Double>> x){
         vector = x;

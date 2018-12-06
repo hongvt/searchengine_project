@@ -1,6 +1,9 @@
 package cecs429.classifiers;
 
+import cecs429.documents.Document;
+import cecs429.documents.DocumentCorpus;
 import cecs429.index.DiskPositionalIndex;
+import cecs429.index.Posting;
 
 
 import java.util.*;
@@ -11,33 +14,29 @@ public class Bayesian {
     private DiskPositionalIndex madIndex;
     private HashSet<String> discriminatingSet;
 
-<<<<<<< HEAD
-    public Bayesian(int numHamDocs,DiskPositionalIndex hamIndex, int numJayDocs,DiskPositionalIndex jayIndex, int numMadDocs,DiskPositionalIndex madIndex)
+    public Bayesian(DocumentCorpus idkCorpus,DiskPositionalIndex idkIndex, float numHamDocs, DiskPositionalIndex hamIndex, float numJayDocs, DiskPositionalIndex jayIndex, float numMadDocs, DiskPositionalIndex madIndex)
     {
-=======
-    public Bayesian(DiskPositionalIndex hamIndex, DiskPositionalIndex jayIndex, DiskPositionalIndex madIndex) {
->>>>>>> 42ed3d84781a3ceaea1584e0d40e38f261dd6c9c
         this.hamIndex = hamIndex;
         this.jayIndex = jayIndex;
         this.madIndex = madIndex;
 
+        this.discriminatingSet = new HashSet<>();
+
         HashSet<String> allVocab = new HashSet<>();
         allVocab.addAll(this.hamIndex.getVocabulary());
-        System.out.println("hamIndexGetVocabLength="+this.hamIndex.getVocabulary().size());
         allVocab.addAll(this.jayIndex.getVocabulary());
         allVocab.addAll(this.madIndex.getVocabulary());
 
-        HashMap<String, Double> hamITC = new HashMap<>();
-        HashMap<String, Double> jayITC = new HashMap<>();
-        HashMap<String, Double> madITC = new HashMap<>();
+        HashMap<String, Float> hamITC = new HashMap<>();
+        HashMap<String, Float> jayITC = new HashMap<>();
+        HashMap<String, Float> madITC = new HashMap<>();
 
-        System.out.println(allVocab);
+        //System.out.println(allVocab);
         //for each type, calculate I(T,C) for each class
-<<<<<<< HEAD
         int i = 0;
         for (String type : allVocab)
         {
-            double hamIndexPostings = 0, jayIndexPostings = 0, madIndexPostings = 0;
+            float hamIndexPostings = 0, jayIndexPostings = 0, madIndexPostings = 0;
             try
             {
                 hamIndexPostings = hamIndex.getPostingsNoPositions(type).length;
@@ -53,117 +52,235 @@ public class Bayesian {
                 madIndexPostings = madIndex.getPostingsNoPositions(type).length;
             }
             catch(NullPointerException e) { }
-            if (i == 0)
-            {
-                System.out.println("type="+type);
-                System.out.println("hamIndexPostings="+hamIndexPostings);
-                System.out.println("jayIndexPostings="+jayIndexPostings);
-                System.out.println("madIndexPostings="+madIndexPostings);
-                System.out.println("hamITC="+getITC(numHamDocs,hamIndexPostings,(jayIndexPostings+madIndexPostings),((numJayDocs+numMadDocs)-(jayIndexPostings+madIndexPostings))));
-                System.out.println("jayITC="+getITC(numJayDocs,jayIndexPostings,(hamIndexPostings+madIndexPostings),((numHamDocs+numMadDocs)-(hamIndexPostings+madIndexPostings))));
-                System.out.println("madITC="+getITC(numMadDocs,madIndexPostings,(hamIndexPostings+jayIndexPostings),((numJayDocs+numHamDocs)-(hamIndexPostings+jayIndexPostings))));
-                double N10 = jayIndexPostings+madIndexPostings;
-                System.out.println("N10="+(jayIndexPostings+madIndexPostings));
-                double N00 = (numJayDocs+numMadDocs)-(jayIndexPostings+madIndexPostings);
-                System.out.println("N00="+((numJayDocs+numMadDocs)-(jayIndexPostings+madIndexPostings)));
-                double N11 = hamIndexPostings;
-                System.out.println("N11="+hamIndexPostings);
-                double N01 = (numHamDocs-hamIndexPostings);
-                System.out.println("N01="+(numHamDocs-hamIndexPostings));
-                double N = N10 + N00+N11+N01;
-                System.out.println("N="+(hamIndexPostings+(numJayDocs+numMadDocs-(jayIndexPostings+madIndexPostings))+jayIndexPostings+madIndexPostings+numHamDocs-hamIndexPostings));
-                System.out.println("((N10/N)*(Math.log(((N*N10)/((N10+N11)*(N00+N10))))/Math.log(2)))="+((N10/N)*(Math.log(((N*N10)/((N10+N11)*(N00+N10))))/Math.log(2))));
-                System.out.println("((N11/N)*((Math.log(((N*N11)/((N10+N11)*(N01+N11)))))/(Math.log(2))))="+((N11/N)*((Math.log(((N*N11)/((N10+N11)*(N01+N11)))))/(Math.log(2)))));
-                System.out.println("(N11/N)="+(N11/N));
-                System.out.println("((N*N11)/((N10+N11)*(N01+N11))="+(N*N11)/((N10+N11)*(N01+N11)));
-                System.out.println();
-                System.out.println("((N01/N)*((Math.log(((N*N01)/((N00+N01)*(N01+N11)))))/(Math.log(2))))="+((N01/N)*((Math.log(((N*N01)/((N00+N01)*(N01+N11)))))/(Math.log(2)))));
-                System.out.println("((N00/N)*((Math.log(((N*N00)/((N00+N01)*(N00+N10)))))/(Math.log(2))))="+((N00/N)*((Math.log(((N*N00)/((N00+N01)*(N00+N10)))))/(Math.log(2)))));
-            }
             i++;
             hamITC.put(type,getITC(numHamDocs,hamIndexPostings, (jayIndexPostings+madIndexPostings),(numJayDocs+numMadDocs)-(jayIndexPostings+madIndexPostings)));
             jayITC.put(type,getITC(numJayDocs,jayIndexPostings, (hamIndexPostings+madIndexPostings),(numHamDocs+numMadDocs)-(hamIndexPostings+madIndexPostings)));
             madITC.put(type,getITC(numMadDocs,madIndexPostings, (hamIndexPostings+jayIndexPostings),(numJayDocs+numHamDocs)-(hamIndexPostings+jayIndexPostings)));
-=======
-        for (String type : allVocab) {
-            hamITC.put(type, getITC(hamIndex, type));
-            jayITC.put(type, getITC(jayIndex, type));
-            madITC.put(type, getITC(madIndex, type));
->>>>>>> 42ed3d84781a3ceaea1584e0d40e38f261dd6c9c
         }
+
+        HashMap<String,Float> probHamContainsKeyType = new HashMap<>();
+        HashMap<String,Float> probJayContainsKeyType = new HashMap<>();
+        HashMap<String,Float> probMadContainsKeyType = new HashMap<>();
 
         //for each class, get top K for I(T,C)
-        /*Map<String,Double> hamSortedITC = getSortedMap(hamITC,true);
+        Map<String,Float> hamSortedITC = getSortedMap(hamITC,false);
+        int k = 0;
+        float sumFtHam = 0;
         for (String type : hamSortedITC.keySet())
         {
-            System.out.println(type+":"+hamSortedITC.get(type));
-        }*/
-
-        /*Map<String,Double> hamSortedITC = getSortedMap(hamITC,false);
-        for (String type : hamSortedITC.keySet())
-        {
-            System.out.println(type+":"+hamSortedITC.get(type));
+            if (k < 50)
+            {
+                float ftc = 0;
+                discriminatingSet.add(type);
+                try
+                {
+                    List<Posting> typeHamPost = hamIndex.getPostingsWithPositions(type);
+                    for (Posting p : typeHamPost)
+                    {
+                        ftc += p.getPositions().size();
+                        sumFtHam += p.getPositions().size();
+                    }
+                }
+                catch (NullPointerException e) {}
+                probHamContainsKeyType.put(type,ftc);
+            }
+            k++;
         }
 
-        Map<String,Double> hamSortedITC = getSortedMap(hamITC,false);
-        for (String type : hamSortedITC.keySet())
+        k = 0;
+        Map<String,Float> jaySortedITC = getSortedMap(jayITC,false);
+        float sumFtJay = 0;
+        for (String type : jaySortedITC.keySet())
         {
-            System.out.println(type+":"+hamSortedITC.get(type));
-        }*/
+            if (k < 50)
+            {
+                float ftc = 0;
+                discriminatingSet.add(type);
+                try
+                {
+                    List<Posting> typeJayPost = jayIndex.getPostingsWithPositions(type);
+                    for (Posting p : typeJayPost)
+                    {
+                        ftc += p.getPositions().size();
+                        sumFtJay += p.getPositions().size();
+                    }
+                }
+                catch (NullPointerException e) {}
+                probJayContainsKeyType.put(type,ftc);
+            }
+            k++;
+        }
 
+        k = 0;
+        Map<String,Float> madSortedITC = getSortedMap(madITC,false);
+        float sumFtMad = 0;
+        for (String type : madSortedITC.keySet())
+        {
+            if (k < 50)
+            {
+                float ftc = 0;
+                discriminatingSet.add(type);
+                try
+                {
+                    List<Posting> typeMadPost = madIndex.getPostingsWithPositions(type);
+                    for (Posting p : typeMadPost)
+                    {
+                        ftc += p.getPositions().size();
+                        sumFtMad += p.getPositions().size();
+                    }
+                }
+                catch (NullPointerException e) {}
+                probMadContainsKeyType.put(type,ftc);
+            }
+            k++;
+        }
+
+        for (String type : discriminatingSet)
+        {
+            if (!probHamContainsKeyType.containsKey(type))
+            {
+                float ftc = 0;
+                try
+                {
+                    List<Posting> typeHamPost = hamIndex.getPostingsWithPositions(type);
+                    for (Posting p : typeHamPost)
+                    {
+                        ftc += p.getPositions().size();
+                        sumFtHam += p.getPositions().size();
+                    }
+                }
+                catch (NullPointerException e) {}
+                probHamContainsKeyType.put(type,ftc);
+            }
+            if (!probJayContainsKeyType.containsKey(type))
+            {
+                float ftc = 0;
+                try
+                {
+                    List<Posting> typeJayPost = jayIndex.getPostingsWithPositions(type);
+                    for (Posting p : typeJayPost)
+                    {
+                        ftc += p.getPositions().size();
+                        sumFtJay += p.getPositions().size();
+                    }
+                }
+                catch (NullPointerException e) {}
+                probJayContainsKeyType.put(type,ftc);
+            }
+            if (!probMadContainsKeyType.containsKey(type))
+            {
+                float ftc = 0;
+                try
+                {
+                    List<Posting> typeMadPost = madIndex.getPostingsWithPositions(type);
+                    for (Posting p : typeMadPost)
+                    {
+                        ftc += p.getPositions().size();
+                        sumFtMad += p.getPositions().size();
+                    }
+                }
+                catch (NullPointerException e) {}
+                probMadContainsKeyType.put(type,ftc);
+            }
+        }
+        //System.out.println(probHamContainsKeyType);
+        //System.out.println("sumFtHam:"+sumFtHam);
+        //get probability that a class c contains the type t in discriminating set P(ti,c) - Laplace Smoothing
+        for (String type : discriminatingSet)
+        {
+            probHamContainsKeyType.replace(type,probHamContainsKeyType.get(type),((probHamContainsKeyType.get(type)+1)/(sumFtHam+discriminatingSet.size())));
+            probJayContainsKeyType.replace(type,probJayContainsKeyType.get(type),((probJayContainsKeyType.get(type)+1)/(sumFtJay+discriminatingSet.size())));
+            probMadContainsKeyType.replace(type,probMadContainsKeyType.get(type),((probMadContainsKeyType.get(type)+1)/(sumFtMad+discriminatingSet.size())));
+        }
+        //System.out.println(probHamContainsKeyType);
+
+        for (Document doc : idkCorpus.getDocuments())
+        {
+            int id = doc.getId();
+            System.out.println("DOC ID:"+id);
+            float sumOfLogPtiHam = 0, sumOfLogPtiJay = 0, sumOfLogPtiMad = 0;
+            for (String type :discriminatingSet)
+            {
+                try
+                {
+                    List<Posting> posts = idkIndex.getPostingsWithPositions(type);
+                    for (Posting post: posts) {
+                        if (post.equals(new Posting(id))) {
+                            sumOfLogPtiHam += (Math.log(probHamContainsKeyType.get(type)));
+                            sumOfLogPtiJay += (Math.log(probJayContainsKeyType.get(type)));
+                            sumOfLogPtiMad += (Math.log(probMadContainsKeyType.get(type)));
+                        }
+                    }
+                }
+                catch (NullPointerException e) {}
+            }
+
+            sumOfLogPtiHam += Math.log((numHamDocs/(numHamDocs+numJayDocs+numMadDocs)));
+            sumOfLogPtiJay += Math.log((numJayDocs/(numHamDocs+numJayDocs+numMadDocs)));
+            sumOfLogPtiMad += Math.log((numMadDocs/(numHamDocs+numJayDocs+numMadDocs)));
+
+            float max = sumOfLogPtiHam > sumOfLogPtiJay ? sumOfLogPtiHam : sumOfLogPtiJay;
+            max = max > sumOfLogPtiMad ? max : sumOfLogPtiMad;
+            if (max == sumOfLogPtiHam)
+            {
+                System.out.println(doc.getTitle() + "doc ID: "+id + " class: HAMILTON");
+            }
+            else if (max == sumOfLogPtiJay)
+            {
+                System.out.println(doc.getTitle() + "doc ID: "+id + " class: JAY");
+            }
+            else if (max == sumOfLogPtiMad)
+            {
+                System.out.println(doc.getTitle() + "doc ID: "+id + " class: MAD");
+            }
+        }
     }
 
-<<<<<<< HEAD
 
-
-    private double getITC(double numDocs, double N11, double N10, double N00)
+    private float getITC(float numDocs, float N11, float N10, float N00)
     {
         /**
          *              in C: Nt1   not in C: Nt0
-         *  has T:  N1c
-         *  no T:   N0c
+         *  has T:  N1c     N11         N10
+         *  no T:   N0c     N01         N00
          *
-         *  N = N11 + N01, + N10 + N00
-         */
-        double N01 = numDocs - N11;
-        double N = N10 + N00 + N11 + N01;
+         *  N = N11 + N01, + N10 + Float
+         **/
+        float N01 = numDocs - N11;
+        float N = N10 + N00 + N11 + N01;
 
-        return ((N11/N)*((Math.log(((N*N11)/((N10+N11)*(N01+N11)))))/(Math.log(2)))) +
-                ((N10/N)*((Math.log(((N*N10)/((N10+N11)*(N00+N10)))))/(Math.log(2)))) +
-                ((N01/N)*((Math.log(((N*N01)/((N00+N01)*(N01+N11)))))/(Math.log(2)))) +
-                ((N00/N)*((Math.log(((N*N00)/((N00+N01)*(N00+N10)))))/(Math.log(2))));
+        double N11Calc = Double.isNaN(((N11/N)*((Math.log(((N*N11)/((N10+N11)*(N01+N11)))))/(Math.log(2))))) ? 0 : (((N11/N)*((Math.log(((N*N11)/((N10+N11)*(N01+N11)))))/(Math.log(2)))));
+        double N10Calc = Double.isNaN((N10/N)*((Math.log(((N*N10)/((N10+N11)*(N00+N10)))))/(Math.log(2)))) ? 0 : (N10/N)*((Math.log(((N*N10)/((N10+N11)*(N00+N10)))))/(Math.log(2)));
+        double N01Calc = Double.isNaN((N01/N)*((Math.log(((N*N01)/((N00+N01)*(N01+N11)))))/(Math.log(2)))) ? 0 : ((N01/N)*((Math.log(((N*N01)/((N00+N01)*(N01+N11)))))/(Math.log(2))));
+        double N00Calc = Double.isNaN(((N00/N)*((Math.log(((N*N00)/((N00+N01)*(N00+N10)))))/(Math.log(2))))) ? 0 : ((N00/N)*((Math.log(((N*N00)/((N00+N01)*(N00+N10)))))/(Math.log(2))));
+
+        return (float)(N11Calc + N10Calc + N01Calc + N00Calc);
     }
 
     /**
-     * Sorts the HashMap by value which is a Double and returns a new Map with the sorted values
+     * Sorts the HashMap by value which is a Float and returns a new Map with the sorted values
      *
      * @param unsorted - the unsorted HashMap with the wildcard key type
      * @param isAscending boolean - true to get smallest to largest, false to get largest to smallest
-     * @return Map that is sorted <Object,Double>
+     * @return Map that is sorted <Object,Float>
      */
-    private static Map<String, Double> getSortedMap(HashMap<String, Double> unsorted, boolean isAscending) {
-        List<Map.Entry<String, Double>> list = new LinkedList<>(unsorted.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
+    private static Map<String, Float> getSortedMap(HashMap<String, Float> unsorted, boolean isAscending) {
+        List<Map.Entry<String, Float>> list = new LinkedList<>(unsorted.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Float>>() {
             @Override
-            public int compare(Map.Entry<String, Double> e1, Map.Entry<String, Double> e2) {
+            public int compare(Map.Entry<String, Float> e1, Map.Entry<String, Float> e2) {
                 if (!isAscending) {
                     return (e2.getValue()).compareTo(e1.getValue());
                 } else {
                     return (e1.getValue()).compareTo(e2.getValue());
                 }
-
             }
         });
 
-        Map<String, Double> result = new LinkedHashMap<>();
-        for (Map.Entry<String, Double> entry : list) {
+        Map<String, Float> result = new LinkedHashMap<>();
+        for (Map.Entry<String, Float> entry : list) {
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
-=======
-    private double getITC(DiskPositionalIndex index, String type) {
-        return 1;
->>>>>>> 42ed3d84781a3ceaea1584e0d40e38f261dd6c9c
     }
-
 }

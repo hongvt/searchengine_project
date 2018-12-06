@@ -30,7 +30,7 @@ public class PositionalInvertedIndex implements Index {
      * @param processor TokenProcessor - processor is set to this parameter value
      */
     private ArrayList<ArrayList<Double>> vector = new ArrayList<>();
-    private ArrayList<Double> Ld;
+    private ArrayList<Double> Ld = new ArrayList<>();
 
     public ArrayList<ArrayList<Double>> getVector() {
         return vector;
