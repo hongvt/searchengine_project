@@ -77,7 +77,7 @@ public class Milestone3 {
         }
 
 
-        Rocchio rocchio = new Rocchio(diskPosIndexHAM, diskPosIndexJAY, diskPosIndexMAD, diskPosIndexAll, diskPosIndexDisputed);
+        Rocchio rocchio = new Rocchio(diskPosIndexHAM, diskPosIndexJAY, diskPosIndexMAD, diskPosIndexAll, diskPosIndexDisputed, corpusDisputed);
         rocchio.applyRocchio();
         Bayesian bayesian = new Bayesian(corpusDisputed,diskPosIndexDisputed,corpusHAM.getCorpusSize(), diskPosIndexHAM, corpusJAY.getCorpusSize(), diskPosIndexJAY, corpusMAD.getCorpusSize(), diskPosIndexMAD);
     }

@@ -1,5 +1,6 @@
 package cecs429.classifiers;
 
+import cecs429.documents.DocumentCorpus;
 import cecs429.index.DiskPositionalIndex;
 
 import java.util.ArrayList;
@@ -8,17 +9,19 @@ import java.util.Collections;
 
 public class Rocchio {
     private DiskPositionalIndex hamIndex, jayIndex, madIndex, allIndex, disputedIndex;
+    private DocumentCorpus corpusDisputed;
     private ArrayList<ArrayList<Double>> componentsVectorHam = new ArrayList<>();
     private ArrayList<ArrayList<Double>> componentsVectorJay = new ArrayList<>();
     private ArrayList<ArrayList<Double>> componentsVectorMad = new ArrayList<>();
     private ArrayList<ArrayList<Double>> componentsVectorDisputed = new ArrayList<>();
 
-    public Rocchio(DiskPositionalIndex hamIndex, DiskPositionalIndex jayIndex, DiskPositionalIndex madIndex, DiskPositionalIndex allIndex, DiskPositionalIndex disputedIndex) {
+    public Rocchio(DiskPositionalIndex hamIndex, DiskPositionalIndex jayIndex, DiskPositionalIndex madIndex, DiskPositionalIndex allIndex, DiskPositionalIndex disputedIndex, DocumentCorpus corpusDisputed) {
         this.hamIndex = hamIndex;
         this.jayIndex = jayIndex;
         this.madIndex = madIndex;
         this.allIndex = allIndex;
         this.disputedIndex = disputedIndex;
+        this.corpusDisputed = corpusDisputed;
     }
 
     public void applyRocchio() {
@@ -199,6 +202,7 @@ public class Rocchio {
         ArrayList<Double> hamResults = new ArrayList<>();
         ArrayList<Double> madResults = new ArrayList<>();
         ArrayList<Double> jayResults = new ArrayList<>();
+
         for (int i = 0; i < componentsVectorDisputed.size(); i++) {
             hamScore = 0;
             madScore = 0;
@@ -213,14 +217,16 @@ public class Rocchio {
             jayResults.add(Math.sqrt(jayScore));
         }
 
-        for (int i = 0; i < hamResults.size(); i++) {
+        System.out.println("Rocchio Classification");
+        for (int i = 0; i < corpusDisputed.getCorpusSize(); i++) {
             if (hamResults.get(i) < madResults.get(i) && hamResults.get(i) < jayResults.get(i)) {
-                System.out.println(i + " written by Hamilton");
+                System.out.println(corpusDisputed.getDocument(i).getTitle() + " written by Hamilton");
             } else if (madResults.get(i) < hamResults.get(i) && madResults.get(i) < jayResults.get(i)) {
-                System.out.println(i + " written by Madison");
+                System.out.println(corpusDisputed.getDocument(i).getTitle() + " written by Madison");
             } else {
-                System.out.println(i + " was written by Jay");
+                System.out.println(corpusDisputed.getDocument(i).getTitle() + " was written by Jay");
             }
         }
+        System.out.println("\n\n");
     }
 }
