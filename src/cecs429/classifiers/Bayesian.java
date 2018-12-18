@@ -66,12 +66,17 @@ public class Bayesian {
         Map<String,Float> hamSortedITC = getSortedMap(hamITC,false);
         int k = 0;
         float sumFtHam = 0;
+        //System.out.println("Hamilton:");
         for (String type : hamSortedITC.keySet())
         {
             if (k < 50)
             {
                 float ftc = 0;
                 discriminatingSet.add(type);
+                if (k < 10)
+                {
+                    //System.out.println("type: "+type+"\tITC: "+hamSortedITC.get(type));
+                }
                 try
                 {
                     List<Posting> typeHamPost = hamIndex.getPostingsWithPositions(type);
@@ -83,6 +88,7 @@ public class Bayesian {
                 }
                 catch (NullPointerException e) {}
                 probHamContainsKeyType.put(type,ftc);
+
             }
             k++;
         }
@@ -90,12 +96,17 @@ public class Bayesian {
         k = 0;
         Map<String,Float> jaySortedITC = getSortedMap(jayITC,false);
         float sumFtJay = 0;
+        //System.out.println("Jay:");
         for (String type : jaySortedITC.keySet())
         {
             if (k < 50)
             {
                 float ftc = 0;
                 discriminatingSet.add(type);
+                if (k < 10)
+                {
+                    //System.out.println("type: "+type+"\tITC: "+jaySortedITC.get(type));
+                }
                 try
                 {
                     List<Posting> typeJayPost = jayIndex.getPostingsWithPositions(type);
@@ -114,12 +125,17 @@ public class Bayesian {
         k = 0;
         Map<String,Float> madSortedITC = getSortedMap(madITC,false);
         float sumFtMad = 0;
+        //System.out.println("Madison:");
         for (String type : madSortedITC.keySet())
         {
             if (k < 50)
             {
                 float ftc = 0;
                 discriminatingSet.add(type);
+                if (k < 10)
+                {
+                    //System.out.println("type: "+type+"\tITC: "+madSortedITC.get(type));
+                }
                 try
                 {
                     List<Posting> typeMadPost = madIndex.getPostingsWithPositions(type);
@@ -135,7 +151,7 @@ public class Bayesian {
             k++;
         }
 
-        System.out.println("discriminating set size:"+discriminatingSet.size());
+        //System.out.println("discriminating set size:"+discriminatingSet.size());
 
         for (String type : discriminatingSet)
         {
@@ -225,15 +241,15 @@ public class Bayesian {
             max = max > sumOfLogPtiMad ? max : sumOfLogPtiMad;
             if (max == sumOfLogPtiHam)
             {
-                System.out.println(doc.getTitle() + "doc ID: "+id + " class: HAMILTON");
+                System.out.println(doc.getTitle() + " class: HAMILTON");
             }
             else if (max == sumOfLogPtiJay)
             {
-                System.out.println(doc.getTitle() + "doc ID: "+id + " class: JAY");
+                System.out.println(doc.getTitle() + " class: JAY");
             }
             else if (max == sumOfLogPtiMad)
             {
-                System.out.println(doc.getTitle() + "doc ID: "+id + " class: MAD");
+                System.out.println(doc.getTitle() +  " class: MAD");
             }
         }
     }
