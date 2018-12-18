@@ -29,15 +29,15 @@ public class PositionalInvertedIndex implements Index {
      *
      * @param processor TokenProcessor - processor is set to this parameter value
      */
-    private ArrayList<ArrayList<Double>> vector = new ArrayList<>();
+    private ArrayList<HashMap<String, Double>> vector = new ArrayList<>();
     private ArrayList<Double> Ld = new ArrayList<>();
 
-    public ArrayList<ArrayList<Double>> getVector() {
+    public ArrayList<HashMap<String, Double>> getVector() {
         return vector;
     }
 
-    public void setLd(double x, int counter) {
-        Ld.set(counter, x);
+    public void setLd(ArrayList<Double> x) {
+        Ld = x;
     }
 
     public ArrayList<Double> getLd() {

@@ -135,6 +135,8 @@ public class Bayesian {
             k++;
         }
 
+        System.out.println("discriminating set size:"+discriminatingSet.size());
+
         for (String type : discriminatingSet)
         {
             if (!probHamContainsKeyType.containsKey(type))

@@ -31,44 +31,55 @@ public class Milestone3 {
         Path corpusFolderHam = Paths.get(currentPath.toString(), "corpora/federalist-papers/HAMILTON");
         DocumentCorpus corpusHAM = DirectoryCorpus.loadTextDirectory(corpusFolderHam, ".txt");
         DiskPositionalIndex diskPosIndexHAM = new DiskPositionalIndex(corpusFolderHam, tokenProcessor, kgi);
-        /*try {
-            buildIndex(corpusFolderHam, tokenProcessor, corpusHAM, diskPosIndexHAM);
-        } catch (IOException e) {
-            System.out.println("Need some fixing in buildIndex()");
-        }*/
-
-
-        Path corpusFolderJay = Paths.get(currentPath.toString(), "corpora/federalist-papers/JAY");
-        DocumentCorpus corpusJAY = DirectoryCorpus.loadTextDirectory(corpusFolderJay, ".txt");
-        DiskPositionalIndex diskPosIndexJAY = new DiskPositionalIndex(corpusFolderJay, tokenProcessor, kgi);
-        /*try {
-            buildIndex(corpusFolderJay, tokenProcessor, corpusJAY, diskPosIndexJAY);
-        } catch (IOException e) {
-            System.out.println("Need some fixing in buildIndex()");
-        }*/
-
-
-        Path corpusFolderMad = Paths.get(currentPath.toString(), "corpora/federalist-papers/MADISON");
-        DocumentCorpus corpusMAD = DirectoryCorpus.loadTextDirectory(corpusFolderMad, ".txt");
-        DiskPositionalIndex diskPosIndexMAD = new DiskPositionalIndex(corpusFolderMad, tokenProcessor, kgi);
-        /*try {
-            buildIndex(corpusFolderMad, tokenProcessor, corpusMAD, diskPosIndexMAD);
-        } catch (IOException e) {
-            System.out.println("Need some fixing in buildIndex()");
-        }*/
-
-        Path corpusFolderIdk = Paths.get(currentPath.toString(), "corpora/federalist-papers/DISPUTED");
-        DocumentCorpus corpusIDK = DirectoryCorpus.loadTextDirectory(corpusFolderIdk, ".txt");
-        DiskPositionalIndex diskPosIndexIDK = new DiskPositionalIndex(corpusFolderIdk, tokenProcessor, kgi);
         try {
-            buildIndex(corpusFolderIdk, tokenProcessor, corpusIDK, diskPosIndexMAD);
+            buildIndex(corpusFolderHam, tokenProcessor, corpusHAM, diskPosIndexHAM);
         } catch (IOException e) {
             System.out.println("Need some fixing in buildIndex()");
         }
 
 
-        Rocchio rocchio = new Rocchio(diskPosIndexHAM, diskPosIndexJAY, diskPosIndexMAD);
-        Bayesian bayesian = new Bayesian(corpusIDK,diskPosIndexIDK,corpusHAM.getCorpusSize(),diskPosIndexHAM, corpusJAY.getCorpusSize(),diskPosIndexJAY, corpusMAD.getCorpusSize(),diskPosIndexMAD);
+        Path corpusFolderJay = Paths.get(currentPath.toString(), "corpora/federalist-papers/JAY");
+        DocumentCorpus corpusJAY = DirectoryCorpus.loadTextDirectory(corpusFolderJay, ".txt");
+        DiskPositionalIndex diskPosIndexJAY = new DiskPositionalIndex(corpusFolderJay, tokenProcessor, kgi);
+        try {
+            buildIndex(corpusFolderJay, tokenProcessor, corpusJAY, diskPosIndexJAY);
+        } catch (IOException e) {
+            System.out.println("Need some fixing in buildIndex()");
+        }
+
+
+        Path corpusFolderMad = Paths.get(currentPath.toString(), "corpora/federalist-papers/MADISON");
+        DocumentCorpus corpusMAD = DirectoryCorpus.loadTextDirectory(corpusFolderMad, ".txt");
+        DiskPositionalIndex diskPosIndexMAD = new DiskPositionalIndex(corpusFolderMad, tokenProcessor, kgi);
+        try {
+            buildIndex(corpusFolderMad, tokenProcessor, corpusMAD, diskPosIndexMAD);
+        } catch (IOException e) {
+            System.out.println("Need some fixing in buildIndex()");
+        }
+
+        Path corpusFolderAll = Paths.get(currentPath.toString(), "corpora/federalist-papers/ALL");
+        DocumentCorpus corpusAll = DirectoryCorpus.loadTextDirectory(corpusFolderAll, ".txt");
+        DiskPositionalIndex diskPosIndexAll = new DiskPositionalIndex(corpusFolderMad, tokenProcessor, kgi);
+
+        try {
+            buildIndex(corpusFolderAll, tokenProcessor, corpusAll, diskPosIndexAll);
+        } catch (IOException e) {
+            System.out.println("Need some fixing in buildIndex()");
+        }
+        Path corpusFolderDisputed = Paths.get(currentPath.toString(), "corpora/federalist-papers/DISPUTED");
+        DocumentCorpus corpusDisputed = DirectoryCorpus.loadTextDirectory(corpusFolderDisputed, ".txt");
+        DiskPositionalIndex diskPosIndexDisputed = new DiskPositionalIndex(corpusFolderDisputed, tokenProcessor, kgi);
+
+        try {
+            buildIndex(corpusFolderDisputed, tokenProcessor, corpusDisputed, diskPosIndexDisputed);
+        } catch (IOException e) {
+            System.out.println("Need some fixing in buildIndex()");
+        }
+
+
+        Rocchio rocchio = new Rocchio(diskPosIndexHAM, diskPosIndexJAY, diskPosIndexMAD, diskPosIndexAll, diskPosIndexDisputed);
+        rocchio.applyRocchio();
+        Bayesian bayesian = new Bayesian(corpusDisputed,diskPosIndexDisputed,corpusHAM.getCorpusSize(), diskPosIndexHAM, corpusJAY.getCorpusSize(), diskPosIndexJAY, corpusMAD.getCorpusSize(), diskPosIndexMAD);
     }
 
     /**
@@ -116,7 +127,7 @@ public class Milestone3 {
         int numWritten = 0;
 
         for (Document doc : itrDoc) {
-            posInvertedIndex.getVector().add(new ArrayList<Double>());
+            posInvertedIndex.getVector().add(new HashMap<>());
             positionCounter = 0;
             Reader readDoc = doc.getContent();
             EnglishTokenStream ets = new EnglishTokenStream(readDoc);
@@ -153,7 +164,7 @@ public class Milestone3 {
             double sumWDT = 0;
             for (String type : typeTermFreq.keySet()) {
                 double wdt = (1 + Math.log((double) typeTermFreq.get(type)));
-                posInvertedIndex.getVector().get(numWritten).add(wdt);
+                posInvertedIndex.getVector().get(numWritten).put(type, wdt);
                 wdt *= wdt;
                 sumWDT += wdt;
             }

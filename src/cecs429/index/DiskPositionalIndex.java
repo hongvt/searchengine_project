@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.nio.file.Path;
@@ -37,13 +38,10 @@ public class DiskPositionalIndex implements Index {
      * @param kgi   the KGram Index
      */
 
-    private ArrayList<ArrayList<Double>> vector = new ArrayList<>();
+    private ArrayList<HashMap<String, Double>> vector = new ArrayList<>();
     private ArrayList<Double> Ld = new ArrayList<>();
 
-    public void setVector(ArrayList<ArrayList<Double>> x){
-        vector = x;
-    }
-    public ArrayList<ArrayList<Double>> getVector() {
+    public ArrayList<HashMap<String, Double>> getVector() {
         return vector;
     }
 
@@ -55,6 +53,9 @@ public class DiskPositionalIndex implements Index {
         return Ld;
     }
 
+    public void setVector(ArrayList<HashMap<String, Double>> x){
+        vector = x;
+    }
 
     public DiskPositionalIndex(Path corpusFolder, TokenProcessor processor, KGramIndex kgi) {
         this.kgi = kgi;
